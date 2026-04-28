@@ -1,0 +1,61 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.logs
+target/
+.idea/
+*.iml
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Build tools
+bin/
+build/
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Backup files
+*.zip
+*.rar
+*.7z
+backup/
+
+# Database
+*.db
+*.sqlite
+
+# Environment
+.env
+.env.local
+*.local
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# IDE specific
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
