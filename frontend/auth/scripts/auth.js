@@ -247,9 +247,26 @@ const AuthModule = (function() {
      * 后端登录
      */
     async function loginWithBackend(username, password) {
-        // 这里可以替换为真实的API调用
-        // 目前返回null，表示使用本地模拟
-        return null;
+        try {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password })
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || '登录失败');
+            }
+            
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('后端登录失败:', error);
+            return null;
+        }
     }
     
     /**
@@ -277,7 +294,17 @@ const AuthModule = (function() {
     /**
      * 处理登录成功
      */
-    function handleLoginSuccess(user) {
+    function handleLoginSuccess(result) {
+        // 解析登录结果
+        const user = result.data ? result.data.user : result;
+        const prestige = result.data ? result.data.prestige : null;
+        
+        // 设置token
+        if (result.data && result.data.token) {
+            authToken = result.data.token;
+            localStorage.setItem('tavern_token', authToken);
+        }
+        
         currentUser = user;
         
         // 更新导航栏
@@ -289,11 +316,32 @@ const AuthModule = (function() {
         // 跳转到用户中心
         window.location.hash = '#profile';
         
-        // 显示通知
+        // 显示登录奖励通知
+        if (prestige && prestige.dailyBonusReceived) {
+            const bonusMsg = prestige.continuousDays >= 30 
+                ? `🎁 登录奖励 +50，连续登录30天额外奖励 +500！共计 +550 声望！`
+                : prestige.continuousDays >= 7
+                ? `🎁 登录奖励 +50，连续登录7天额外奖励 +200！共计 +250 声望！`
+                : `🎁 登录奖励 +50 声望！连续登录 ${prestige.continuousDays} 天`;
+            showNotification(bonusMsg, 'success');
+        } else if (prestige) {
+            showNotification(`今日登录奖励已领取`, 'info');
+        }
+        
+        // 显示欢迎通知
         showNotification(`🎉 ${user.nickname}，欢迎进入江湖！`, 'success');
         
+        // 更新声望系统
+        if (prestige && typeof PrestigeSystemV1 !== 'undefined') {
+            PrestigeSystemV1.init({ 
+                prestige: prestige.prestige || 2850, 
+                level: prestige.level || '初级猎人', 
+                continuousDays: prestige.continuousDays || 0 
+            });
+        }
+        
         // 触发自定义事件通知其他模块
-        dispatchAuthEvent('login', user);
+        dispatchAuthEvent('login', { ...user, prestige });
     }
     
     /**

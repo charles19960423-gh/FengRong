@@ -476,6 +476,152 @@
             to { opacity: 1; transform: scale(1.3); }
         }
 
+        .tier-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .tier-bronze {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+            color: white;
+        }
+        .tier-silver {
+            background: linear-gradient(135deg, #C0C0C0, #808080);
+            color: #1A120B;
+        }
+        .tier-gold {
+            background: linear-gradient(135deg, #FFD700, #D4AF37);
+            color: #1A120B;
+        }
+        .tier-legendary {
+            background: linear-gradient(135deg, #FFD700, #FF6B6B, #FFD700);
+            background-size: 200% auto;
+            animation: goldShine 2s linear infinite;
+            color: #1A120B;
+        }
+
+        /* 登录日历样式 */
+        .login-calendar {
+            background: rgba(45, 30, 23, 0.8);
+            border: 1px solid #5d4037;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #5d4037;
+        }
+        .calendar-title {
+            color: var(--gold);
+            font-weight: bold;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .calendar-nav {
+            display: flex;
+            gap: 5px;
+        }
+        .calendar-nav button {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #5d4037;
+            background: rgba(139, 90, 43, 0.3);
+            color: #d4af37;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .calendar-nav button:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: #d4af37;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .calendar-day-name {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #a68b6d;
+            padding: 6px 0;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .calendar-day.empty {
+            background: transparent;
+            cursor: default;
+        }
+        .calendar-day.past {
+            background: rgba(139, 90, 43, 0.2);
+            color: #a68b6d;
+        }
+        .calendar-day.today {
+            background: rgba(212, 175, 55, 0.3);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+        .calendar-day.future {
+            background: rgba(139, 90, 43, 0.1);
+            color: #6b5b4f;
+        }
+        .calendar-day.logged {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.4), rgba(39, 174, 96, 0.2));
+            color: #27ae60;
+        }
+        .calendar-day.logged.today {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.6), rgba(39, 174, 96, 0.3));
+        }
+        .calendar-day:hover:not(.empty):not(.future) {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        .calendar-day .streak-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            font-size: 0.5rem;
+        }
+        .calendar-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #5d4037;
+            font-size: 0.8rem;
+        }
+        .calendar-stat {
+            text-align: center;
+        }
+        .calendar-stat-value {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+        .calendar-stat-label {
+            color: #a68b6d;
+            font-size: 0.7rem;
+        }
+
         .bounty-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -1981,7 +2127,7 @@
                     </div>
                     <div style="margin-top: 20px; display: flex; gap: 10px;">
                         <button onclick="closeEditModal()" style="flex: 1;">取消</button>
-                        <button onclick="saveNickname();" style="flex: 1;">保存修改</button>
+                        <button onclick="saveNickname('${currentUser ? currentUser.id : ''}');" style="flex: 1;">保存修改</button>
                     </div>
                 </div>
             `;
@@ -1995,7 +2141,7 @@
         }
 
         // 保存昵称
-        function saveNickname() {
+        function saveNickname(userId) {
             const newNickname = document.getElementById('newNickname').value.trim();
             
             if (!newNickname || newNickname.length < 1) {
@@ -2011,11 +2157,6 @@
             if (!/^[\u4e00-\u9fa5a-zA-Z0-9]+$/.test(newNickname)) {
                 showNotification('名号只能包含中文、英文和数字', 'error');
                 return;
-            }
-
-            // 更新当前用户昵称
-            if (currentUser) {
-                currentUser.nickname = newNickname;
             }
 
             // 更新导航栏显示（使用AuthModule）
@@ -3546,20 +3687,26 @@
                     </h3>
                     <span style="color: #a68b6d; font-size: 0.85rem;">流派 · 影像 · 007</span>
                 </div>
-                <span style="background: var(--maple-red); color: white; padding: 3px 15px; border-radius: 3px; font-size: 0.85rem;">
-                    等级: 中坚力量
-                </span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="prestige-tier" class="tier-badge tier-bronze">Bronze 🥉</span>
+                    <span style="background: var(--maple-red); color: white; padding: 3px 15px; border-radius: 3px; font-size: 0.85rem;">
+                        <span id="prestige-level">中坚力量</span>
+                    </span>
+                </div>
             </div>
 
             <div style="margin-bottom: 15px;">
                 <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #a68b6d; margin-bottom: 5px;">
                     <span>引信声望</span>
-                    <span>2850 / 4000</span>
+                    <span><span id="prestige-value">2850</span> / <span id="prestige-next-threshold">3000</span></span>
                 </div>
-                <div class="fuse-progress">
-                    <div class="fuse-fill" style="width: 71%;">
+                <div id="prestige-progress-bar" class="fuse-progress">
+                    <div id="prestige-progress-fill" class="fuse-fill" style="width: 71%;">
                         <span class="spark">🔥</span>
                     </div>
+                </div>
+                <div id="next-level-hint" style="font-size: 0.75rem; color: var(--gold); margin-top: 5px; text-align: right;">
+                    距离「资深猎人」还差 150 声望
                 </div>
             </div>
 
@@ -3569,8 +3716,40 @@
                     <span class="mana-display" style="color: #4facfe;">⚡ 3/3</span>
                 </div>
                 <div>
-                    <span style="color: #a68b6d;">今日揭榜:</span>
-                    <span>1次</span>
+                    <span style="color: #a68b6d;">连续活跃:</span>
+                    <span id="continuous-days" style="color: var(--gold);">0</span> 天
+                </div>
+            </div>
+
+            <!-- 登录日历 -->
+            <div class="login-calendar" id="login-calendar">
+                <div class="calendar-header">
+                    <div class="calendar-title">
+                        📅 江湖签到日历
+                    </div>
+                    <div class="calendar-nav">
+                        <button id="calendar-prev" style="width: 30px; height: 30px; font-size: 16px;">‹</button>
+                        <span id="calendar-month-year" style="color: #d4af37; padding: 0 8px;"></span>
+                        <button id="calendar-next" style="width: 30px; height: 30px; font-size: 16px;">›</button>
+                        <button id="calendar-reset" style="margin-left: 10px; font-size: 12px; padding: 4px 12px; cursor: pointer; background: #8B4513; color: #FFD700; border: 1px solid #FFD700; border-radius: 4px;">重置</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- 日历内容将通过JS渲染 -->
+                </div>
+                <div class="calendar-stats">
+                    <div class="calendar-stat">
+                        <span class="calendar-stat-value" id="calendar-total-days">0</span>
+                        <span class="calendar-stat-label">本月签到</span>
+                    </div>
+                    <div class="calendar-stat">
+                        <span class="calendar-stat-value" id="calendar-current-streak">0</span>
+                        <span class="calendar-stat-label">当前连续</span>
+                    </div>
+                    <div class="calendar-stat">
+                        <span class="calendar-stat-value" id="calendar-best-streak">0</span>
+                        <span class="calendar-stat-label">最长连续</span>
+                    </div>
                 </div>
             </div>
 
@@ -4095,6 +4274,323 @@
         }
     };
 
+    // 登录日历模块
+    const LoginCalendar = {
+        currentYear: new Date().getFullYear(),
+        currentMonth: new Date().getMonth(),
+        loggedDays: new Set(), // 存储已登录的日期 YYYY-MM-DD
+        
+        init() {
+            console.log('LoginCalendar.init() called');
+            this.loadLoggedDays();
+            console.log('LoginCalendar loggedDays size:', this.loggedDays.size);
+            this.bindEvents();
+            this.render();
+        },
+        
+        bindEvents() {
+            console.log('LoginCalendar.bindEvents() called');
+            const prevBtn = document.getElementById('calendar-prev');
+            const nextBtn = document.getElementById('calendar-next');
+            const resetBtn = document.getElementById('calendar-reset');
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => this.prevMonth());
+                console.log('Bound prev button click');
+            } else {
+                console.log('prevBtn not found');
+            }
+            
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => this.nextMonth());
+                console.log('Bound next button click');
+            } else {
+                console.log('nextBtn not found');
+            }
+            
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => this.resetData());
+                console.log('Bound reset button click');
+            } else {
+                console.log('resetBtn not found');
+            }
+        },
+        
+        resetData() {
+            console.log('LoginCalendar.resetData() called');
+            localStorage.removeItem('login_days');
+            this.loggedDays.clear();
+            this.generateMockData();
+            this.render();
+            if (typeof showNotification === 'function') {
+                showNotification('日历数据已重置', 'success');
+            } else {
+                alert('日历数据已重置！');
+            }
+        },
+        
+        loadLoggedDays() {
+            console.log('LoginCalendar.loadLoggedDays() called');
+            // 从localStorage加载登录记录
+            const stored = localStorage.getItem('login_days');
+            console.log('Stored login_days:', stored);
+            if (stored) {
+                try {
+                    const days = JSON.parse(stored);
+                    console.log('Parsed days:', days);
+                    days.forEach(day => this.loggedDays.add(day));
+                    console.log('Loaded days count:', this.loggedDays.size);
+                } catch (e) {
+                    console.error('Failed to parse login_days:', e);
+                    this.generateMockData();
+                }
+            } else {
+                // 生成一些模拟数据用于演示
+                console.log('No stored data, generating mock data');
+                this.generateMockData();
+            }
+        },
+        
+        generateMockData() {
+            console.log('LoginCalendar.generateMockData() called');
+            // 生成最近30天的模拟登录数据
+            const today = new Date();
+            let count = 0;
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                // 随机决定是否登录，大约70%的概率
+                if (Math.random() > 0.3) {
+                    const dateStr = this.formatDate(date);
+                    this.loggedDays.add(dateStr);
+                    count++;
+                }
+            }
+            // 确保今天已登录
+            const todayStr = this.formatDate(today);
+            this.loggedDays.add(todayStr);
+            count++;
+            console.log('Generated', count, 'mock login days');
+            this.saveLoggedDays();
+        },
+        
+        formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        },
+        
+        saveLoggedDays() {
+            localStorage.setItem('login_days', JSON.stringify([...this.loggedDays]));
+        },
+        
+        addLoggedDay(date = new Date()) {
+            const dateStr = this.formatDate(date);
+            this.loggedDays.add(dateStr);
+            this.saveLoggedDays();
+            this.render();
+        },
+        
+        prevMonth() {
+            if (this.currentMonth === 0) {
+                this.currentMonth = 11;
+                this.currentYear--;
+            } else {
+                this.currentMonth--;
+            }
+            this.render();
+        },
+        
+        nextMonth() {
+            const today = new Date();
+            if (this.currentYear === today.getFullYear() && this.currentMonth === today.getMonth()) {
+                return; // 不能查看未来月份
+            }
+            if (this.currentMonth === 11) {
+                this.currentMonth = 0;
+                this.currentYear++;
+            } else {
+                this.currentMonth++;
+            }
+            this.render();
+        },
+        
+        render() {
+            const grid = document.getElementById('calendar-grid');
+            console.log('LoginCalendar.render() called, grid:', !!grid);
+            if (!grid) {
+                console.log('Calendar grid not found, retrying in 100ms');
+                setTimeout(() => this.render(), 100);
+                return;
+            }
+            
+            const year = this.currentYear;
+            const month = this.currentMonth;
+            
+            // 更新月份年份显示
+            const monthYearEl = document.getElementById('calendar-month-year');
+            console.log('monthYearEl:', !!monthYearEl);
+            if (monthYearEl) {
+                const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
+                monthYearEl.textContent = `${year}年${monthNames[month]}`;
+            }
+            
+            // 获取当月第一天和最后一天
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            
+            // 计算当月有多少天
+            const daysInMonth = lastDay.getDate();
+            const startDayOfWeek = firstDay.getDay(); // 0-6, 0是周日
+            
+            // 计算统计数据
+            this.updateStats(year, month);
+            
+            let html = '';
+            
+            // 添加星期标题
+            const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
+            dayNames.forEach(name => {
+                html += `<div class="calendar-day-name">${name}</div>`;
+            });
+            
+            // 添加空白日期（上月）
+            for (let i = 0; i < startDayOfWeek; i++) {
+                html += '<div class="calendar-day empty"></div>';
+            }
+            
+            // 添加当月日期
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const dateStr = this.formatDate(date);
+                const isToday = date.toDateString() === today.toDateString();
+                const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                const isFuture = !isPast && !isToday;
+                const isLogged = this.loggedDays.has(dateStr);
+                
+                let className = 'calendar-day';
+                if (isPast && !isToday) className += ' past';
+                if (isToday) className += ' today';
+                if (isFuture) className += ' future';
+                if (isLogged) className += ' logged';
+                
+                const streakBadge = isLogged ? '<span class="streak-indicator">✓</span>' : '';
+                
+                html += `<div class="${className}" data-date="${dateStr}" onclick="LoginCalendar.showDayInfo('${dateStr}')">${day}${streakBadge}</div>`;
+            }
+            
+            grid.innerHTML = html;
+        },
+        
+        updateStats(year, month) {
+            console.log('LoginCalendar.updateStats() called, loggedDays size:', this.loggedDays.size);
+            
+            // 计算本月签到天数
+            let monthlyCount = 0;
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                if (this.loggedDays.has(dateStr)) {
+                    monthlyCount++;
+                }
+            }
+            console.log('Monthly count:', monthlyCount);
+            
+            // 计算当前连续登录天数
+            let currentStreak = 0;
+            const today = new Date();
+            for (let i = 0; i < 365; i++) {
+                const checkDate = new Date(today);
+                checkDate.setDate(checkDate.getDate() - i);
+                const dateStr = this.formatDate(checkDate);
+                if (this.loggedDays.has(dateStr)) {
+                    currentStreak++;
+                } else if (i > 0) {
+                    break;
+                }
+            }
+            console.log('Current streak:', currentStreak);
+            
+            // 计算最长连续登录天数
+            let bestStreak = 0;
+            let tempStreak = 0;
+            const sortedDays = [...this.loggedDays].sort();
+            
+            for (let i = 0; i < sortedDays.length; i++) {
+                if (i === 0) {
+                    tempStreak = 1;
+                } else {
+                    const prevDate = new Date(sortedDays[i - 1]);
+                    const currDate = new Date(sortedDays[i]);
+                    const diffDays = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 1) {
+                        tempStreak++;
+                    } else {
+                        tempStreak = 1;
+                    }
+                }
+                bestStreak = Math.max(bestStreak, tempStreak);
+            }
+            console.log('Best streak:', bestStreak);
+            
+            // 更新DOM
+            const totalDaysEl = document.getElementById('calendar-total-days');
+            const currentStreakEl = document.getElementById('calendar-current-streak');
+            const bestStreakEl = document.getElementById('calendar-best-streak');
+            console.log('Stats elements:', { totalDaysEl: !!totalDaysEl, currentStreakEl: !!currentStreakEl, bestStreakEl: !!bestStreakEl });
+            
+            if (totalDaysEl) totalDaysEl.textContent = monthlyCount;
+            if (currentStreakEl) currentStreakEl.textContent = currentStreak;
+            if (bestStreakEl) bestStreakEl.textContent = bestStreak;
+        },
+        
+        showDayInfo(dateStr) {
+            const date = new Date(dateStr);
+            const isLogged = this.loggedDays.has(dateStr);
+            
+            let message = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+            if (isLogged) {
+                message += ' ✓ 已签到';
+            } else {
+                message += ' ✗ 未签到';
+            }
+            
+            showNotification(message, isLogged ? 'success' : 'info');
+        }
+    };
+    
+    // 将 LoginCalendar 暴露到全局作用域
+    window.LoginCalendar = LoginCalendar;
+    
+    // ========== 日历初始化逻辑 ==========
+    const initCalendar = () => {
+        console.log('initCalendar() called, looking for calendar-grid...');
+        if (document.getElementById('calendar-grid')) {
+            console.log('Calendar grid found! Initializing LoginCalendar...');
+            LoginCalendar.init();
+        } else {
+            console.log('Calendar grid not found, checking again in 200ms...');
+            setTimeout(initCalendar, 200);
+        }
+    };
+    
+    // 监听页面切换
+    window.addEventListener('hashchange', () => {
+        console.log('Hash changed to:', window.location.hash);
+        if (window.location.hash === '#profile') {
+            setTimeout(initCalendar, 100);
+        }
+    });
+    
+    // DOM加载完成后尝试初始化
+    window.addEventListener('DOMContentLoaded', () => {
+        console.log('DOMContentLoaded, starting calendar init...');
+        setTimeout(initCalendar, 300);
+    });
+
     // 江湖实时传闻引擎
     const GossipEngine = {
         messages: [
@@ -4149,38 +4645,271 @@
         }
     };
 
-    // 声望系统
-    const PrestigeSystem = {
+    // 声望系统 V1.0
+    const PrestigeSystemV1 = {
         currentValue: 2850,
-        
-        add(amount) {
-            const startValue = this.currentValue;
+        level: '初级猎人',
+        tier: 'bronze',
+        continuousDays: 0,
+        progressPercent: 0,
+        prestigeToNextLevel: 150,
+        nextLevelThreshold: 3000,
+
+        PRESTIGE_THRESHOLDS: [0, 3000, 6000, 10000, 15000],
+        LEVEL_NAMES: ['初级猎人', '中坚力量', '资深猎人', '法器大师', '一代宗师'],
+
+        init(userData = {}) {
+            this.currentValue = userData.prestige || 2850;
+            this.level = userData.level || this.calculateLevel(this.currentValue);
+            this.tier = this.calculateTier(this.currentValue);
+            this.continuousDays = userData.continuousDays || 0;
+            this.updateProgress();
+            this.updateUI();
+        },
+
+        calculateLevel(prestige) {
+            if (prestige >= this.PRESTIGE_THRESHOLDS[4]) return this.LEVEL_NAMES[4];
+            if (prestige >= this.PRESTIGE_THRESHOLDS[3]) return this.LEVEL_NAMES[3];
+            if (prestige >= this.PRESTIGE_THRESHOLDS[2]) return this.LEVEL_NAMES[2];
+            if (prestige >= this.PRESTIGE_THRESHOLDS[1]) return this.LEVEL_NAMES[1];
+            return this.LEVEL_NAMES[0];
+        },
+
+        calculateTier(prestige) {
+            if (prestige >= 10000) return 'legendary';
+            if (prestige >= 5000) return 'gold';
+            if (prestige >= 2000) return 'silver';
+            return 'bronze';
+        },
+
+        getNextLevelThreshold(prestige) {
+            for (let threshold of this.PRESTIGE_THRESHOLDS) {
+                if (prestige < threshold) return threshold;
+            }
+            return this.PRESTIGE_THRESHOLDS[this.PRESTIGE_THRESHOLDS.length - 1];
+        },
+
+        updateProgress() {
+            this.level = this.calculateLevel(this.currentValue);
+            this.tier = this.calculateTier(this.currentValue);
+            this.nextLevelThreshold = this.getNextLevelThreshold(this.currentValue);
+
+            if (this.currentValue >= this.PRESTIGE_THRESHOLDS[4]) {
+                this.progressPercent = 100;
+                this.prestigeToNextLevel = 0;
+            } else {
+                for (let i = this.PRESTIGE_THRESHOLDS.length - 2; i >= 0; i--) {
+                    if (this.currentValue >= this.PRESTIGE_THRESHOLDS[i]) {
+                        let currentThreshold = this.PRESTIGE_THRESHOLDS[i];
+                        let nextThreshold = this.PRESTIGE_THRESHOLDS[i + 1];
+                        this.progressPercent = Math.floor(
+                            ((this.currentValue - currentThreshold) / (nextThreshold - currentThreshold)) * 100
+                        );
+                        this.prestigeToNextLevel = nextThreshold - this.currentValue;
+                        break;
+                    }
+                }
+            }
+        },
+
+        add(amount, source = 'task') {
+            const oldLevel = this.level;
+            const oldPrestige = this.currentValue;
             this.currentValue += amount;
-            this.animateValue('prestige-value', startValue, this.currentValue, 1000);
+            this.updateProgress();
+            const newLevel = this.level;
+            const isPromoted = newLevel !== oldLevel;
+            this.animateValue('prestige-value', oldPrestige, this.currentValue, 1000);
+            setTimeout(() => {
+                this.updateUI();
+                this.updateProgressBar();
+                if (isPromoted) {
+                    this.showPromotionEffect(oldLevel, newLevel);
+                }
+                this.showFloatingGain(amount, source);
+            }, 500);
+        },
+
+        deduct(amount) {
+            const oldPrestige = this.currentValue;
+            this.currentValue = Math.max(0, this.currentValue - amount);
+            this.updateProgress();
+            this.animateValue('prestige-value', oldPrestige, this.currentValue, 500);
+            setTimeout(() => {
+                this.updateUI();
+                this.updateProgressBar();
+            }, 300);
         },
 
         animateValue(id, start, end, duration) {
             const obj = document.getElementById(id);
             if (!obj) return;
-
             obj.classList.add('number-pulse');
             setTimeout(() => obj.classList.remove('number-pulse'), 500);
-
             let startTimestamp = null;
             const step = (timestamp) => {
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const currentDisplay = Math.floor(progress * (end - start) + start);
-                
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                const currentDisplay = Math.floor(easeProgress * (end - start) + start);
                 obj.innerHTML = currentDisplay.toLocaleString();
-                
                 if (progress < 1) {
                     window.requestAnimationFrame(step);
                 }
             };
             window.requestAnimationFrame(step);
+        },
+
+        updateUI() {
+            const levelEl = document.getElementById('prestige-level');
+            if (levelEl) levelEl.textContent = this.level;
+            const tierEl = document.getElementById('prestige-tier');
+            if (tierEl) {
+                tierEl.textContent = this.getTierDisplayName(this.tier);
+                tierEl.className = `tier-badge tier-${this.tier}`;
+            }
+            const continuousDaysEl = document.getElementById('continuous-days');
+            if (continuousDaysEl) continuousDaysEl.textContent = this.continuousDays;
+            const prestigeValueEl = document.getElementById('prestige-value');
+            if (prestigeValueEl) prestigeValueEl.innerHTML = this.currentValue.toLocaleString();
+            const nextThresholdEl = document.getElementById('prestige-next-threshold');
+            if (nextThresholdEl) nextThresholdEl.textContent = this.nextLevelThreshold.toLocaleString();
+            const nextLevelHintEl = document.getElementById('next-level-hint');
+            if (nextLevelHintEl) {
+                if (this.prestigeToNextLevel > 0) {
+                    nextLevelHintEl.textContent = `距离「${this.getNextLevelName()}」还差 ${this.prestigeToNextLevel.toLocaleString()} 声望`;
+                } else {
+                    nextLevelHintEl.textContent = '已达到最高等级！';
+                }
+            }
+        },
+
+        updateProgressBar() {
+            const progressFillEl = document.getElementById('prestige-progress-fill');
+            if (progressFillEl) {
+                progressFillEl.style.width = `${this.progressPercent}%`;
+            }
+        },
+
+        getNextLevelName() {
+            for (let i = 0; i < this.PRESTIGE_THRESHOLDS.length; i++) {
+                if (this.currentValue < this.PRESTIGE_THRESHOLDS[i]) {
+                    return this.LEVEL_NAMES[i];
+                }
+            }
+            return this.LEVEL_NAMES[this.LEVEL_NAMES.length - 1];
+        },
+
+        getTierDisplayName(tier) {
+            const names = {
+                'bronze': 'Bronze 🥉',
+                'silver': 'Silver 🥈',
+                'gold': 'Gold 🥇',
+                'legendary': 'Legendary 👑'
+            };
+            return names[tier] || names['bronze'];
+        },
+
+        showFloatingGain(amount, source) {
+            const gainEl = document.createElement('div');
+            gainEl.className = 'floating-gain';
+            gainEl.textContent = `+${amount}`;
+            gainEl.style.left = '50%';
+            gainEl.style.top = '-20px';
+            const prestigeValueEl = document.getElementById('prestige-value');
+            if (prestigeValueEl && prestigeValueEl.parentElement) {
+                const parent = prestigeValueEl.parentElement;
+                parent.style.position = 'relative';
+                parent.appendChild(gainEl);
+                setTimeout(() => gainEl.remove(), 1500);
+            }
+        },
+
+        showPromotionEffect(oldLevel, newLevel) {
+            this.createPromotionModal(oldLevel, newLevel);
+        },
+
+        createPromotionModal(oldLevel, newLevel) {
+            const modal = document.createElement('div');
+            modal.id = 'promotion-modal';
+            modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:10000;opacity:0;transition:opacity 0.5s ease;';
+            modal.innerHTML = `
+                <div style="background:linear-gradient(145deg,#2D1E17,#1A120B);border:4px solid #D4AF37;border-radius:20px;padding:50px;text-align:center;max-width:450px;box-shadow:0 0 60px rgba(212,175,55,0.5);transform:scale(0.8);transition:transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);">
+                    <div style="font-size:4rem;margin-bottom:20px;animation:bounce 1s infinite;">🎉</div>
+                    <h2 style="color:#D4AF37;font-size:2rem;margin-bottom:15px;text-shadow:0 0 20px rgba(212,175,55,0.5);">段位晋升！</h2>
+                    <div style="background:rgba(212,175,55,0.1);border:2px solid rgba(212,175,55,0.3);border-radius:10px;padding:20px;margin:20px 0;">
+                        <div style="color:#a68b6d;font-size:0.9rem;margin-bottom:10px;">从「${oldLevel}」</div>
+                        <div style="color:#D4AF37;font-size:1.5rem;font-weight:bold;">晋升为「${newLevel}」</div>
+                    </div>
+                    <p style="color:#a68b6d;font-style:italic;margin-bottom:25px;">"江湖已传遍你的传说！"</p>
+                    <div style="display:flex;gap:15px;justify-content:center;flex-wrap:wrap;">
+                        <button onclick="PrestigeSystemV1.sharePromotion('${newLevel}')" style="padding:12px 25px;background:linear-gradient(135deg,#07c160,#06ad56);border:none;border-radius:25px;color:white;font-size:0.9rem;cursor:pointer;">📤 分享成就</button>
+                        <button onclick="PrestigeSystemV1.closePromotionModal()" style="padding:12px 25px;background:rgba(212,175,55,0.2);border:2px solid rgba(212,175,55,0.5);border-radius:25px;color:#D4AF37;font-size:0.9rem;cursor:pointer;">收到！</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(modal);
+            requestAnimationFrame(() => {
+                modal.style.opacity = '1';
+                const innerBox = modal.querySelector('div > div');
+                if (innerBox) innerBox.style.transform = 'scale(1)';
+            });
+            this.addPromotionKeyframes();
+        },
+
+        closePromotionModal() {
+            const modal = document.getElementById('promotion-modal');
+            if (modal) {
+                modal.style.opacity = '0';
+                setTimeout(() => modal.remove(), 500);
+            }
+        },
+
+        sharePromotion(level) {
+            const shareText = `我在枫榕赏金酒馆晋升为「${level}」！江湖已传遍我的传说！`;
+            if (navigator.share) {
+                navigator.share({ title: '枫榕赏金酒馆 - 段位晋升', text: shareText, url: window.location.href }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(shareText).then(() => this.showToast('已复制到剪贴板！')).catch(() => {});
+            }
+            this.closePromotionModal();
+        },
+
+        showToast(message) {
+            const toast = document.createElement('div');
+            toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(26,18,11,0.95);border:2px solid #D4AF37;color:#D4AF37;padding:12px 25px;border-radius:25px;font-size:0.9rem;z-index:10001;animation:fadeInUp 0.3s ease;';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        },
+
+        addPromotionKeyframes() {
+            if (document.getElementById('promotion-styles')) return;
+            const style = document.createElement('style');
+            style.id = 'promotion-styles';
+            style.textContent = '@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}@keyframes fadeInUp{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}';
+            document.head.appendChild(style);
+        },
+
+        async loginBonus() {
+            try {
+                const response = await fetch('/api/prestige/login-bonus', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+                const data = await response.json();
+                if (data.success) {
+                    await this.add(data.bonusAmount, 'daily_login');
+                    if (data.continuousDays >= 7) {
+                        this.showToast(`连续登录 ${data.continuousDays} 天！额外奖励 +${data.bonusAmount - 50}`);
+                    }
+                }
+            } catch (error) {
+                console.error('Login bonus error:', error);
+            }
         }
     };
+
+    window.PrestigeSystemV1 = PrestigeSystemV1;
 
     // 视图管理器
     const ViewManager = {
@@ -4271,11 +5000,15 @@
         showRandomQuote();
         updateEnvironment();
         ViewManager.init();
-        
+
         console.log('DOMContentLoaded: Initializing achievement modules...');
         console.log('AchievementModule:', typeof AchievementModule);
         console.log('MainAchievementModule:', typeof MainAchievementModule);
-        
+
+        if (typeof PrestigeSystemV1 !== 'undefined') {
+            PrestigeSystemV1.init({ prestige: 2850, level: '初级猎人', continuousDays: 0 });
+        }
+
         // 初始化成就核心模块（必须先调用）
         if (typeof AchievementModule !== 'undefined') {
             AchievementModule.init();
@@ -4517,5 +5250,5 @@
         }
     }
 
-    
+</script>
 
