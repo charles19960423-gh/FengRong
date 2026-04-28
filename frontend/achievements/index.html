@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成就殿堂 - 枫榕管理平台</title>
+    <link rel="stylesheet" href="styles/achievements.css">
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header class="achievements-header">
+        <div class="header-content">
+            <div class="header-title">
+                <span style="font-size: 2rem;">🏆</span>
+                <h1>成就殿堂</h1>
+            </div>
+            <a href="../index.html" class="back-btn">
+                <span>←</span>
+                <span>返回</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- 统计区域 -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="stat-total">0</div>
+                <div class="stat-label">总成就</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-unlocked">0</div>
+                <div class="stat-label">已解锁</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-progress">0%</div>
+                <div class="stat-label">完成进度</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stat-legendary">0</div>
+                <div class="stat-label">传说成就</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 搜索框 -->
+    <section class="search-section">
+        <div class="search-container">
+            <input type="text" id="achievement-search" placeholder="搜索成就名称或描述..." class="search-input" oninput="searchAchievements()">
+            <button class="search-btn" onclick="clearSearch()">✕</button>
+        </div>
+    </section>
+
+    <!-- 分类筛选 - 标签云 -->
+    <section class="category-filter">
+        <div class="category-cloud" id="category-cloud">
+            <!-- 动态生成 -->
+        </div>
+    </section>
+
+    <!-- 成就卡片网格 -->
+    <section class="achievements-grid" id="achievements-grid">
+        <!-- 动态生成 -->
+    </section>
+
+    <!-- 成就详情弹窗 -->
+    <div class="modal-overlay" id="achievement-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <div class="modal-icon" id="modal-icon">🏆</div>
+                    <div>
+                        <div class="modal-name" id="modal-name">成就名称</div>
+                        <div class="modal-rarity" id="modal-rarity"></div>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-description" id="modal-description"></div>
+                <div class="modal-story" id="modal-story"></div>
+                <div class="modal-progress" id="modal-progress">
+                    <div class="progress-header">
+                        <span>解锁进度</span>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="modal-rewards">
+                    <div class="rewards-title">🎁 解锁奖励</div>
+                    <div id="modal-rewards"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                    <button class="modal-btn btn-target" id="set-target-btn" onclick="setTargetAchievementClick()">🎯 设为目标</button>
+                    <button class="modal-btn btn-share" onclick="shareCurrentAchievement()">📤 分享成就</button>
+                    <button class="modal-btn btn-close" onclick="closeModal()">关闭</button>
+                </div>
+        </div>
+    </div>
+
+    <!-- 分享弹窗 -->
+    <div class="modal-overlay" id="share-modal">
+        <div class="modal-content share-modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span style="font-size: 1.5rem;">📤</span>
+                    <div>
+                        <div class="modal-name">分享成就</div>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closeShareModal()">×</button>
+            </div>
+            <div class="share-options">
+                <div class="share-option" onclick="shareToWeChatFriend()">
+                    <div class="share-icon">💬</div>
+                    <div class="share-text">微信好友</div>
+                </div>
+                <div class="share-option" onclick="shareToWeChatTimeline()">
+                    <div class="share-icon">📱</div>
+                    <div class="share-text">朋友圈</div>
+                </div>
+                <div class="share-option" onclick="generateAchievementPoster()">
+                    <div class="share-icon">🖼️</div>
+                    <div class="share-text">生成海报</div>
+                </div>
+                <div class="share-option" onclick="copyAchievementLink()">
+                    <div class="share-icon">🔗</div>
+                    <div class="share-text">复制链接</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 海报预览弹窗 -->
+    <div class="modal-overlay" id="poster-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <span style="font-size: 1.5rem;">🖼️</span>
+                    <div>
+                        <div class="modal-name">成就海报</div>
+                    </div>
+                </div>
+                <button class="close-btn" onclick="closePosterModal()">×</button>
+            </div>
+            <div class="poster-preview">
+                <canvas id="poster-canvas" class="poster-canvas"></canvas>
+                <button class="download-btn" onclick="downloadPoster()">📥 保存海报</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入脚本 -->
+    <script src="scripts/achievement.js"></script>
+    <script src="scripts/share-module.js"></script>
+    
+    <!-- 引入组件 -->
+    <script src="components/common/event-bus.js"></script>
+    <script src="components/common/state-manager.js"></script>
+    <script src="components/cards/AchievementCard.js"></script>
+    <script src="components/modals/AchievementModal.js"></script>
+    <script src="components/tabs/CategoryTabs.js"></script>
+    <script src="components/index.js"></script>
+</body>
+</html>

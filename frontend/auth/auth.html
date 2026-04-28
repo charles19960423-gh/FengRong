@@ -1,0 +1,50 @@
+<div class="auth-modal-overlay" id="authModal">
+    <div class="auth-modal-content" style="background: linear-gradient(145deg, #2D1E17 0%, #1A120B 100%);">
+        <span class="auth-modal-close" onclick="AuthModule.closeModal()">✕</span>
+        <h3 style="color: #d4af37; margin-bottom: 20px; text-align: center;">🔐 冒险者登录</h3>
+        
+        <!-- 登录表单 -->
+        <div id="authLoginForm" class="auth-form" style="padding: 20px;">
+            <div class="auth-form-group">
+                <label style="color: #8C2B1B;">【账号 / Username】</label>
+                <input type="text" id="authLoginUsername" placeholder="输入你的冒险者ID">
+            </div>
+            <div class="auth-form-group">
+                <label style="color: #8C2B1B;">【秘钥 / Password】</label>
+                <input type="password" id="authLoginPassword" placeholder="输入你的秘钥">
+            </div>
+            <button class="auth-btn-main" id="authLoginBtn" onclick="AuthModule.handleLogin()" style="margin-bottom: 15px;">
+                🗡️ 进入江湖
+            </button>
+            <p style="text-align: center; color: #a68b6d; font-size: 0.85rem;">
+                还没有身份？ <a href="javascript:void(0)" onclick="AuthModule.showRegisterForm()" style="color: #d4af37;">前往注册</a>
+            </p>
+        </div>
+
+        <!-- 注册表单 -->
+        <div id="authRegisterForm" class="auth-form" style="padding: 20px; display: none;">
+            <div class="auth-form-group">
+                <label style="color: #8C2B1B;">【冒险者ID / Username】</label>
+                <input type="text" id="authRegUsername" placeholder="创建你的冒险者ID">
+            </div>
+            <div class="auth-form-group">
+                <label style="color: #8C2B1B;">【秘钥 / Password】</label>
+                <input type="password" id="authRegPassword" placeholder="设置你的秘钥">
+            </div>
+            <div class="auth-form-group">
+                <label style="color: #8C2B1B;">【江湖名号 / Nickname】</label>
+                <input type="text" id="authRegNickname" placeholder="你的江湖称号">
+            </div>
+            <div class="auth-form-group">
+                <label style="color: #8C2B1B;">【联络方式 / Email】</label>
+                <input type="email" id="authRegEmail" placeholder="你的邮箱">
+            </div>
+            <button class="auth-btn-main" id="authRegisterBtn" onclick="AuthModule.handleRegister()" style="margin-bottom: 15px;">
+                📜 注册成为冒险者
+            </button>
+            <p style="text-align: center; color: #a68b6d; font-size: 0.85rem;">
+                已有身份？ <a href="javascript:void(0)" onclick="AuthModule.showLoginForm()" style="color: #d4af37;">返回登录</a>
+            </p>
+        </div>
+    </div>
+</div>

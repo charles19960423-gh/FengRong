@@ -784,6 +784,262 @@
             border-color: #666;
         }
 
+        /* 成就卡片样式 */
+        .achievements-grid-main {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .achievement-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        .achievement-card.unlocked {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(0,0,0,0.3));
+        }
+        .achievement-card.locked {
+            opacity: 0.6;
+            border-color: rgba(102,102,102,0.3);
+        }
+        .achievement-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        /* 目标成就高亮 */
+        .achievement-card.target {
+            border-color: #f59e0b;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+            animation: targetPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes targetPulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+            }
+        }
+        
+        /* 徽章 */
+        .target-badge, .equip-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+        
+        .target-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            animation: bounce 1s ease-in-out infinite;
+        }
+        
+        .equip-badge {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+        .achievement-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+        .achievement-card.unlocked .achievement-icon {
+            background: rgba(212, 175, 55, 0.15);
+        }
+        .achievement-card.target .achievement-icon {
+            background: rgba(245, 158, 11, 0.2);
+        }
+        .achievement-info {
+            flex: 1;
+        }
+        .achievement-name {
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        .achievement-card.locked .achievement-name {
+            color: #8b7355;
+        }
+        .achievement-card.target .achievement-name {
+            color: #f59e0b;
+        }
+        .achievement-desc {
+            color: #8b7355;
+            font-size: 0.75rem;
+        }
+        
+        /* 迷你进度条 */
+        .achievement-progress-mini {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .progress-bar-mini {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill-mini {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+        .progress-text-mini {
+            font-size: 0.65rem;
+            color: #3b82f6;
+            font-weight: bold;
+        }
+        .achievement-status {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        .achievement-status.unlocked {
+            background: #27ae60;
+            color: white;
+        }
+        .achievement-status.locked {
+            background: #4a3520;
+            color: #8b7355;
+        }
+        .achievement-equip-btn {
+            padding: 5px 12px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .achievement-equip-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.4);
+        }
+        .achievement-equip-btn.disabled {
+            background: #4a3520;
+            color: #8b7355;
+            cursor: not-allowed;
+        }
+        .achievement-card.equipped {
+            border-color: #27ae60;
+            box-shadow: 0 0 15px rgba(39, 174, 96, 0.2);
+        }
+        .achievement-card.equipped .achievement-equip-btn {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        /* 装备槽位样式 */
+        .equip-slot {
+            flex: 1;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+        .equip-slot.empty {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(212, 175, 55, 0.3);
+        }
+        .equip-slot.filled {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+            border: 2px solid rgba(212, 175, 55, 0.5);
+        }
+        .equip-slot:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .equip-slot .slot-icon {
+            font-size: 2rem;
+        }
+        .equip-slot.filled .slot-icon {
+            font-size: 2.5rem;
+        }
+        .equip-slot .slot-label {
+            font-size: 0.65rem;
+            color: #a68b6d;
+        }
+        .equip-slot.filled .slot-label {
+            color: var(--gold);
+        }
+        .equip-slot .slot-name {
+            font-size: 0.7rem;
+            color: #fff;
+            text-align: center;
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .equip-slot .remove-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 18px;
+            height: 18px;
+            background: #e74c3c;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 0.6rem;
+            cursor: pointer;
+            display: none;
+        }
+        .equip-slot:hover .remove-btn {
+            display: block;
+        }
+
         /* 任务历史样式 */
         .task-history-grid {
             display: grid;
@@ -1404,6 +1660,12 @@
         .share-btn.copy-link:hover {
             background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
         }
+        .share-btn.generate-poster {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+        .share-btn.generate-poster:hover {
+            background: linear-gradient(135deg, #ff8787 0%, #ff6b6b 100%);
+        }
         .share-preview {
             margin-top: 25px;
             padding: 15px;
@@ -1416,6 +1678,61 @@
             color: #8b7355;
             word-break: break-all;
         }
+        
+        /* 海报生成器样式 */
+        .poster-canvas {
+            display: none;
+        }
+        .poster-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30000;
+            padding: 20px;
+            gap: 20px;
+        }
+        .poster-image {
+            max-width: 100%;
+            max-height: 70vh;
+            border: 4px solid var(--gold);
+            border-radius: 10px;
+        }
+        .poster-download-btn {
+            padding: 12px 30px;
+            background: var(--maple-red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .poster-download-btn:hover {
+            background: #c23a2b;
+            transform: translateY(-2px);
+        }
+        .poster-close-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.1);
+            color: #d4c39e;
+            border: 1px solid #5d4037;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .poster-close-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
         .share-btn-container {
             display: flex;
             gap: 10px;
@@ -1450,80 +1767,17 @@
     </style>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
+    <script src="achievements/scripts/achievement.js"></script>
+    <script src="auth/scripts/auth.js"></script>
+    <link rel="stylesheet" href="auth/styles/auth.css">
+    <link rel="stylesheet" href="achievements/styles/achievements.css">
     <script>
         // 后端API配置
         const API_BASE_URL = 'http://localhost:8080/api';
 
-        // 当前用户状态
-        let currentUser = null;
-        let authToken = localStorage.getItem('tavern_token');
-
-        // 简单登录函数（供内联事件调用）
-        function doLogin() {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!username || !password) {
-                alert('请填写完整的账号和秘钥');
-                return;
-            }
-
-            // 本地模拟用户数据
-            const mockUsers = {
-                'admin': { username: 'admin', nickname: '馆主大人', email: 'admin@example.com', role: 'admin', password: 'password' },
-                'user1': { username: 'user1', nickname: '江湖游侠', email: 'user1@example.com', role: 'user', password: 'password' },
-                'user2': { username: 'user2', nickname: '赏金猎人', email: 'user2@example.com', role: 'user', password: 'password' }
-            };
-
-            // 合并已注册用户
-            const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '{}');
-            const allUsers = { ...mockUsers, ...registeredUsers };
-
-            if (allUsers[username] && allUsers[username].password === password) {
-                // 登录成功
-                authToken = 'mock_token_' + username;
-                localStorage.setItem('tavern_token', authToken);
-                currentUser = allUsers[username];
-                
-                // 更新导航栏
-                const authNav = document.getElementById('authNav');
-                authNav.innerHTML = `
-                    <a href="#profile" style="background: var(--maple-red); color: white;">
-                        👤 ${currentUser.nickname}
-                    </a>
-                    <a href="javascript:void(0)" id="logoutLink" onclick="doLogout()" style="background: #666; color: white;">
-                        登出
-                    </a>
-                `;
-                
-                // 关闭模态框
-                document.getElementById('loginModal').style.display = 'none';
-                
-                // 跳转到用户中心
-                window.location.hash = '#profile';
-                
-                // 显示通知
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed; top: 100px; right: 20px; background: var(--maple-red); 
-                    color: white; padding: 15px 25px; border-radius: 8px; z-index: 2000;
-                    box-shadow: 0 4px 15px rgba(0,0,0,0.3); animation: slideIn 0.3s ease;
-                `;
-                notification.innerHTML = `🎉 ${currentUser.nickname}，欢迎进入江湖！`;
-                document.body.appendChild(notification);
-                setTimeout(() => notification.remove(), 3000);
-                
-                // 更新用户中心页面显示当前用户信息
-                updateProfilePage(currentUser);
-                
-                return;
-            }
-            
-            alert('登录失败：账号或密码错误');
-        }
-
         // 编辑昵称
         function editNickname() {
+            const currentUser = AuthModule.getCurrentUser();
             const currentNickname = currentUser ? currentUser.nickname : '冒险者';
             
             const modal = document.createElement('div');
@@ -1580,17 +1834,11 @@
                 currentUser.nickname = newNickname;
             }
 
-            // 更新导航栏显示
-            const authNav = document.getElementById('authNav');
-            if (authNav) {
-                authNav.innerHTML = `
-                    <a href="#profile" style="background: var(--maple-red); color: white;">
-                        👤 ${newNickname}
-                    </a>
-                    <a href="javascript:void(0)" id="logoutLink" onclick="doLogout()" style="background: #666; color: white;">
-                        登出
-                    </a>
-                `;
+            // 更新导航栏显示（使用AuthModule）
+            const user = AuthModule.getCurrentUser();
+            if (user) {
+                user.nickname = newNickname;
+                AuthModule.updateUserNav(user);
             }
 
             // 更新用户中心页面显示
@@ -1762,53 +2010,212 @@
             }
         }
 
-        // 成就数据
-        const achievementData = {
-            'first-bounty': {
-                id: 'first-bounty',
-                icon: '🪵',
-                name: '首次揭榜',
-                description: '完成你的首个赏金任务',
-                rarity: 'common',
-                rarityText: '普通',
-                unlockedAt: '2024-01-15',
-                story: '你的江湖之路从此开始。当你第一次揭下悬赏榜单上的任务时，命运的齿轮开始转动。'
-            },
-            'regular': {
-                id: 'regular',
-                icon: '🔑',
-                name: '酒馆熟客',
-                description: '累计登录30天',
-                rarity: 'rare',
-                rarityText: '稀有',
-                unlockedAt: '2024-02-14',
-                story: '酒馆的灯火见证了你的坚持。日复一日，你已成为这里最熟悉的身影。'
-            },
-            'whiskey': {
-                id: 'whiskey',
-                icon: '🥃',
-                name: '威士忌收藏家',
-                description: '完成10次酒水免单任务',
-                rarity: 'epic',
-                rarityText: '史诗',
-                unlockedAt: '2024-03-20',
-                story: '杯中琥珀色的液体，是你辛勤付出的见证。每一滴都是江湖的故事。'
-            },
-            'legend': {
-                id: 'legend',
-                icon: '🏆',
-                name: '江湖传说',
-                description: '累计获得10000声望',
-                rarity: 'legendary',
-                rarityText: '传奇',
-                unlockedAt: null,
-                story: '当你的名字传遍整个江湖，所有冒险者都将仰望你的传说。'
+        // ===== 佩戴状态管理（使用 achievementData.js）=====
+        
+        // 佩戴成就（自动找空槽位）
+        function handleEquipOnMain(achievementId) {
+            const achievement = AchievementModule.getAchievementData(achievementId);
+            if (!achievement || achievement.unlockedAt === null) {
+                alert('无法佩戴该成就！');
+                return;
             }
-        };
+            
+            if (AchievementModule.isEquipped(achievementId)) {
+                const equipped = AchievementModule.getEquipped();
+                const index = equipped.findIndex(e => e && e.id === achievementId);
+                if (index !== -1) {
+                    AchievementModule.unequip(index);
+                    alert(`成就「${achievement.name}」已卸下！`);
+                }
+                refreshEquippedDisplay();
+                return;
+            }
+            
+            const equipped = AchievementModule.getEquipped();
+            const emptySlotIndex = equipped.findIndex(e => e === null);
+            if (emptySlotIndex === -1) {
+                alert('佩戴槽已满！请先取下一个成就。');
+                return;
+            }
+            
+            AchievementModule.equip(achievementId, emptySlotIndex);
+            alert(`成就「${achievement.name}」佩戴成功！`);
+            refreshEquippedDisplay();
+        }
+
+        // 从指定槽位取下成就
+        function unequipFromSlot(slotIndex) {
+            const equipped = AchievementModule.getEquipped();
+            if (equipped[slotIndex]) {
+                const achievement = AchievementModule.getAchievementData(equipped[slotIndex].id);
+                AchievementModule.unequip(slotIndex);
+                alert(`成就「${achievement.name}」已取下！`);
+                refreshEquippedDisplay();
+            }
+        }
+
+        // 刷新佩戴槽位显示
+        function refreshEquippedDisplay() {
+            const equipped = AchievementModule.getEquipped();
+            const slotsContainer = document.getElementById('equip-slots');
+            const countElement = document.getElementById('equipped-count');
+            
+            slotsContainer.innerHTML = '';
+            let filledCount = 0;
+            
+            for (let i = 0; i < AchievementModule.getMaxSlots(); i++) {
+                const slotData = equipped[i];
+                const slotDiv = document.createElement('div');
+                
+                if (slotData) {
+                    const achievement = AchievementModule.getAchievementData(slotData.id);
+                    slotDiv.className = 'equip-slot filled';
+                    slotDiv.innerHTML = `
+                        <span class="slot-icon">${achievement ? achievement.icon : '📦'}</span>
+                        <span class="slot-name">${achievement ? achievement.name : '未知'}</span>
+                        <span class="slot-label">槽位${i + 1}</span>
+                        <button class="remove-btn" onclick="unequipFromSlot(${i})">×</button>
+                    `;
+                    filledCount++;
+                } else {
+                    slotDiv.className = 'equip-slot empty';
+                    slotDiv.innerHTML = `
+                        <span class="slot-icon">📭</span>
+                        <span class="slot-label">槽位${i + 1}</span>
+                    `;
+                }
+                
+                slotsContainer.appendChild(slotDiv);
+            }
+            
+            countElement.textContent = `${filledCount}/${AchievementModule.getMaxSlots()}`;
+            updateAchievementCards();
+        }
+
+        // 渲染主页面成就卡片（包含进度条和目标成就高亮）
+        function renderMainAchievements() {
+            const grid = document.getElementById('achievements-grid-main');
+            if (!grid) return;
+            
+            grid.innerHTML = '';
+            
+            const targetAchievement = AchievementModule.getTarget();
+            const achievements = AchievementModule.getAllAchievements();
+            
+            Object.values(achievements).forEach(achievement => {
+                const isEquipped = AchievementModule.isEquipped(achievement.id);
+                const isTarget = targetAchievement && targetAchievement.id === achievement.id;
+                const isUnlocked = achievement.unlockedAt !== null;
+                const progress = achievement.progress || 0;
+                
+                const card = document.createElement('div');
+                card.className = `achievement-card ${isUnlocked ? 'unlocked' : 'locked'} ${isEquipped ? 'equipped' : ''} ${isTarget ? 'target' : ''}`;
+                card.dataset.achievementId = achievement.id;
+                card.style.borderColor = AchievementModule.getRarityColor(achievement.rarity);
+                
+                card.innerHTML = `
+                    ${isTarget ? '<div class="target-badge">🎯</div>' : ''}
+                    ${isEquipped ? '<div class="equip-badge">⚡</div>' : ''}
+                    <div class="achievement-icon">${isUnlocked ? achievement.icon : '❓'}</div>
+                    <div class="achievement-info">
+                        <div class="achievement-name">${achievement.name}</div>
+                        <div class="achievement-desc">${isUnlocked ? achievement.description : '???'}</div>
+                        ${!isUnlocked && progress > 0 ? `
+                            <div class="achievement-progress-mini">
+                                <div class="progress-bar-mini">
+                                    <div class="progress-fill-mini" style="width: ${progress}%"></div>
+                                </div>
+                                <span class="progress-text-mini">${progress}%</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="achievement-status ${isUnlocked ? 'unlocked' : 'locked'}">
+                        ${isUnlocked ? '✓' : '🔒'}
+                    </div>
+                    <button class="achievement-equip-btn ${!isUnlocked ? 'disabled' : ''}" onclick="handleEquipOnMain('${achievement.id}')">
+                        ${isEquipped ? '取下' : (isUnlocked ? '佩戴' : '未解锁')}
+                    </button>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // 更新成就卡片佩戴状态
+        function updateAchievementCards() {
+            document.querySelectorAll('.achievement-card').forEach(card => {
+                const cardId = card.getAttribute('data-achievement-id');
+                const btn = card.querySelector('.achievement-equip-btn');
+                const isEquipped = AchievementModule.isEquipped(cardId);
+                
+                if (isEquipped) {
+                    card.classList.add('equipped');
+                    btn.textContent = '取下';
+                } else {
+                    card.classList.remove('equipped');
+                    const achievement = AchievementModule.getAchievementData(cardId);
+                    btn.textContent = achievement && achievement.unlockedAt ? '佩戴' : '未解锁';
+                }
+            });
+        }
+
+        // 目标成就管理
+        function clearTargetAchievementMain() {
+            AchievementModule.clearTarget();
+            refreshTargetDisplay();
+            alert('目标成就已清除！');
+        }
+
+        function refreshTargetDisplay() {
+            const target = AchievementModule.getTarget();
+            const targetSection = document.getElementById('target-achievement');
+            
+            if (target) {
+                const achievement = AchievementModule.getAchievementData(target.id);
+                if (achievement) {
+                    document.getElementById('target-icon').textContent = achievement.icon;
+                    document.getElementById('target-name').textContent = achievement.name;
+                    document.getElementById('target-desc').textContent = achievement.description;
+                    
+                    const progress = achievement.progress || 0;
+                    document.getElementById('target-progress-text').textContent = `${progress}%`;
+                    document.getElementById('target-progress-fill').style.width = `${progress}%`;
+                    
+                    targetSection.style.display = 'block';
+                } else {
+                    targetSection.style.display = 'none';
+                }
+            } else {
+                targetSection.style.display = 'none';
+            }
+        }
+
+        // 页面加载时显示佩戴和目标成就
+        function loadEquippedAchievement() {
+            renderMainAchievements();
+            refreshEquippedDisplay();
+            refreshTargetDisplay();
+        }
+
+        // 监听localStorage变化（跨页面联动）
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'equippedAchievements') {
+                refreshEquippedDisplay();
+                renderMainAchievements();
+            } else if (e.key === 'targetAchievement') {
+                refreshTargetDisplay();
+                renderMainAchievements();
+            }
+        });
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEquippedAchievement();
+        });
 
         // 显示成就详情弹窗
         function showAchievementDetail(achievementId) {
-            const achievement = achievementData[achievementId];
+            const achievement = AchievementModule.getAchievementData(achievementId);
             if (!achievement) return;
 
             const modal = document.createElement('div');
@@ -1818,7 +2225,7 @@
                     <button class="close-btn" onclick="closeAchievementModal()">✖️</button>
                     <div style="text-align: center;">
                         <span style="font-size: 3rem;">${achievement.icon}</span>
-                        <h3 style="color: ${getRarityColor(achievement.rarity)}; margin: 10px 0;">${achievement.name}</h3>
+                        <h3 style="color: ${AchievementModule.getRarityColor(achievement.rarity)}; margin: 10px 0;">${achievement.name}</h3>
                         <span style="font-size: 0.85rem; color: #a68b6d;">${achievement.rarityText}</span>
                     </div>
                     <div style="margin-top: 20px;">
@@ -1853,18 +2260,12 @@
 
         // 获取稀有度颜色
         function getRarityColor(rarity) {
-            const colors = {
-                'common': '#9e9e9e',
-                'rare': '#4facfe',
-                'epic': '#9b59b6',
-                'legendary': '#ffd700'
-            };
-            return colors[rarity] || '#9e9e9e';
+            return AchievementModule.getRarityColor(rarity);
         }
 
         // 分享成就
         function shareAchievement(achievementId) {
-            const achievement = achievementData[achievementId];
+            const achievement = AchievementModule.getAchievementData(achievementId);
             if (!achievement) return;
             
             const text = `我在枫榕赏金酒馆获得了成就：${achievement.icon} ${achievement.name}！${achievement.description}`;
@@ -1888,29 +2289,97 @@
             // 分享描述
             shareDesc: '在传媒江湖中接单任务，提升声望，收集法器装备！',
 
+            // 分享图片
+            shareImage: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=medieval%20tavern%20bounty%20hunter%20guild%20fantasy%20game%20style%20poster&image_size=portrait_4_3',
+
             // 微信好友分享
             shareToWeChatFriend: function(title = this.shareTitle, desc = this.shareDesc, url = this.shareUrl) {
-                // 微信内置浏览器分享
                 if (this.isWeChatBrowser()) {
-                    // 微信JS-SDK分享需要配置，这里用通用方式
-                    this.copyShareLink(title, desc, url);
-                    showNotification('已复制分享链接到剪贴板，粘贴到微信即可分享！', 'success');
+                    // 尝试使用微信JS-SDK分享
+                    if (typeof WeixinJSBridge !== 'undefined') {
+                        this.wechatShareAppMessage(title, desc, url, this.shareImage);
+                    } else {
+                        document.addEventListener('WeixinJSBridgeReady', () => {
+                            this.wechatShareAppMessage(title, desc, url, this.shareImage);
+                        }, false);
+                        this.copyShareLink(title, desc, url);
+                        showNotification('准备分享到微信好友...', 'info');
+                    }
                 } else {
-                    // 非微信环境，生成分享链接
                     this.copyShareLink(title, desc, url);
                     showNotification('已复制分享链接，请打开微信粘贴给好友！', 'success');
+                    // 尝试唤起微信
+                    this.tryOpenWeChat(url);
                 }
             },
 
             // 微信朋友圈分享
             shareToWeChatTimeline: function(title = this.shareTitle, desc = this.shareDesc, url = this.shareUrl) {
                 if (this.isWeChatBrowser()) {
-                    this.copyShareLink(title, desc, url);
-                    showNotification('已复制分享链接，到朋友圈粘贴分享！', 'success');
+                    if (typeof WeixinJSBridge !== 'undefined') {
+                        this.wechatShareTimeline(title, url, this.shareImage);
+                    } else {
+                        document.addEventListener('WeixinJSBridgeReady', () => {
+                            this.wechatShareTimeline(title, url, this.shareImage);
+                        }, false);
+                        this.copyShareLink(title, desc, url);
+                        showNotification('准备分享到朋友圈...', 'info');
+                    }
                 } else {
                     this.copyShareLink(title, desc, url);
                     showNotification('已复制分享链接，请打开微信分享到朋友圈！', 'success');
+                    // 尝试唤起微信
+                    this.tryOpenWeChat(url);
                 }
+            },
+
+            // 微信JS-SDK分享给好友
+            wechatShareAppMessage: function(title, desc, link, imgUrl) {
+                try {
+                    WeixinJSBridge.invoke('sendAppMessage', {
+                        title: title,
+                        desc: desc,
+                        link: link,
+                        img_url: imgUrl,
+                        type: 'link',
+                        dataUrl: ''
+                    }, (res) => {
+                        if (res.err_msg === 'send_app_msg:ok') {
+                            showNotification('分享成功！', 'success');
+                        }
+                    });
+                } catch (e) {
+                    this.copyShareLink(title, desc, link);
+                    showNotification('分享链接已复制，可手动分享！', 'info');
+                }
+            },
+
+            // 微信JS-SDK分享到朋友圈
+            wechatShareTimeline: function(title, link, imgUrl) {
+                try {
+                    WeixinJSBridge.invoke('shareTimeline', {
+                        title: title,
+                        link: link,
+                        img_url: imgUrl,
+                        type: 'link',
+                        dataUrl: ''
+                    }, (res) => {
+                        if (res.err_msg === 'share_timeline:ok') {
+                            showNotification('分享到朋友圈成功！', 'success');
+                        }
+                    });
+                } catch (e) {
+                    this.copyShareLink(title, '', link);
+                    showNotification('分享链接已复制，可手动分享到朋友圈！', 'info');
+                }
+            },
+
+            // 尝试唤起微信
+            tryOpenWeChat: function(url) {
+                const wechatUrl = 'weixin://';
+                const a = document.createElement('a');
+                a.href = wechatUrl;
+                a.click();
             },
 
             // 复制分享链接
@@ -1942,6 +2411,10 @@
                                 <span class="share-icon">📱</span>
                                 <span class="share-text">朋友圈</span>
                             </button>
+                            <button class="share-btn generate-poster" onclick="shareModule.generatePoster(); closeShareModal()">
+                                <span class="share-icon">🖼️</span>
+                                <span class="share-text">生成海报</span>
+                            </button>
                             <button class="share-btn copy-link" onclick="shareModule.copyLinkOnly(); closeShareModal()">
                                 <span class="share-icon">🔗</span>
                                 <span class="share-text">复制链接</span>
@@ -1960,6 +2433,153 @@
                     navigator.clipboard.writeText(this.shareUrl);
                     showNotification('链接已复制到剪贴板！', 'success');
                 }
+            },
+
+            // 生成分享海报
+            generatePoster: function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = 600;
+                canvas.height = 800;
+                const ctx = canvas.getContext('2d');
+                
+                // 绘制背景 - 古风卷轴风格
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradient.addColorStop(0, '#2D1E17');
+                gradient.addColorStop(0.5, '#1A120B');
+                gradient.addColorStop(1, '#2D1E17');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // 添加纹理效果
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.03)';
+                for (let i = 0; i < 200; i++) {
+                    ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
+                }
+                
+                // 绘制边框装饰
+                ctx.strokeStyle = '#D4AF37';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+                
+                // 绘制内边框
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.5)';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(35, 35, canvas.width - 70, canvas.height - 70);
+                
+                // 绘制标题
+                ctx.font = 'bold 36px "PingFang SC", "Microsoft YaHei", sans-serif';
+                ctx.fillStyle = '#D4AF37';
+                ctx.textAlign = 'center';
+                ctx.fillText(this.shareTitle, canvas.width / 2, 120);
+                
+                // 绘制副标题
+                ctx.font = '18px "PingFang SC", "Microsoft YaHei", sans-serif';
+                ctx.fillStyle = '#D4C39E';
+                ctx.fillText(this.shareDesc, canvas.width / 2, 170);
+                
+                // 绘制装饰线
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(100, 200);
+                ctx.lineTo(canvas.width - 100, 200);
+                ctx.stroke();
+                
+                // 绘制装饰图案
+                ctx.font = '48px serif';
+                ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
+                ctx.fillText('⚔️', 60, 100);
+                ctx.fillText('🏮', canvas.width - 60, 100);
+                
+                // 绘制二维码区域
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillRect(canvas.width / 2 - 120, 250, 240, 240);
+                
+                // 绘制二维码占位符（实际项目中应生成真实二维码）
+                ctx.fillStyle = '#333';
+                for (let row = 0; row < 21; row++) {
+                    for (let col = 0; col < 21; col++) {
+                        if ((row < 7 && col < 7) || (row < 7 && col > 13) || (row > 13 && col < 7)) {
+                            if ((row + col) % 2 === 0) {
+                                ctx.fillRect(canvas.width / 2 - 115 + col * 11.5, 255 + row * 11.5, 10, 10);
+                            }
+                        } else if (Math.random() > 0.5) {
+                            ctx.fillRect(canvas.width / 2 - 115 + col * 11.5, 255 + row * 11.5, 10, 10);
+                        }
+                    }
+                }
+                
+                // 二维码下方文字
+                ctx.font = '16px "PingFang SC", "Microsoft YaHei", sans-serif';
+                ctx.fillStyle = '#D4C39E';
+                ctx.fillText('扫码访问', canvas.width / 2, 530);
+                
+                // 绘制底部信息
+                ctx.font = '14px "PingFang SC", "Microsoft YaHei", sans-serif';
+                ctx.fillStyle = '#8b7355';
+                ctx.fillText(this.shareUrl, canvas.width / 2, 580);
+                
+                // 绘制底部装饰
+                ctx.font = '24px serif';
+                ctx.fillStyle = 'rgba(140, 43, 27, 0.6)';
+                ctx.fillText('【枫榕酒馆】', canvas.width / 2, 650);
+                
+                // 绘制火漆印章效果
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, 720, 45, 0, Math.PI * 2);
+                ctx.fillStyle = '#8C2B1B';
+                ctx.fill();
+                ctx.strokeStyle = '#D4AF37';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                
+                // 印章文字
+                ctx.font = 'bold 18px serif';
+                ctx.fillStyle = '#D4AF37';
+                ctx.fillText('传', canvas.width / 2 - 25, 728);
+                ctx.fillText('媒', canvas.width / 2 + 5, 728);
+                
+                // 将canvas转换为图片并显示
+                const posterDataUrl = canvas.toDataURL('image/png');
+                this.showPosterModal(posterDataUrl);
+            },
+
+            // 显示海报预览弹窗
+            showPosterModal: function(imageDataUrl) {
+                const modal = document.createElement('div');
+                modal.className = 'poster-modal';
+                modal.innerHTML = `
+                    <img src="${imageDataUrl}" class="poster-image" alt="分享海报">
+                    <div style="display: flex; gap: 15px;">
+                        <button class="poster-download-btn" onclick="shareModule.downloadPoster('${imageDataUrl}')">📥 保存海报</button>
+                        <button class="poster-close-btn" onclick="shareModule.closePosterModal()">关闭</button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        this.closePosterModal();
+                    }
+                });
+            },
+
+            // 关闭海报弹窗
+            closePosterModal: function() {
+                const modal = document.querySelector('.poster-modal');
+                if (modal) {
+                    document.body.removeChild(modal);
+                }
+            },
+
+            // 下载海报
+            downloadPoster: function(imageDataUrl) {
+                const link = document.createElement('a');
+                link.download = '枫榕赏金酒馆分享海报.png';
+                link.href = imageDataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showNotification('海报已保存到相册！', 'success');
             },
 
             // 分享任务
@@ -1985,13 +2605,30 @@
 
         // 打开分享弹窗
         function openShareModal() {
-            const modalContent = shareModule.generateShareCard();
-            showModal('分享', modalContent);
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="modal-content" style="background: linear-gradient(145deg, #2D1E17 0%, #1A120B 100%); max-width: 500px;">
+                    <span class="modal-close" onclick="closeShareModal()">✕</span>
+                    ${shareModule.generateShareCard()}
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeShareModal();
+                }
+            });
         }
 
         // 关闭分享弹窗
         function closeShareModal() {
-            hideModal();
+            document.querySelectorAll('.modal-overlay').forEach(m => {
+                if (m.querySelector('.share-card')) {
+                    m.remove();
+                }
+            });
         }
 
         // 玩家状态数据
@@ -2520,88 +3157,6 @@
             }
         }
 
-        // 显示注册表单
-        function showRegisterForm() {
-            console.log('showRegisterForm 开始');
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
-            console.log('loginForm:', loginForm);
-            console.log('registerForm:', registerForm);
-            if (loginForm) loginForm.style.display = 'none';
-            if (registerForm) registerForm.style.display = 'block';
-            console.log('表单切换完成');
-        }
-
-        // 显示登录表单
-        function showLoginForm() {
-            document.getElementById('registerForm').style.display = 'none';
-            document.getElementById('loginForm').style.display = 'block';
-        }
-
-        // 简单注册函数
-        function doRegister() {
-            const username = document.getElementById('regUsername').value;
-            const password = document.getElementById('regPassword').value;
-            const nickname = document.getElementById('regNickname').value;
-            const email = document.getElementById('regEmail').value;
-            
-            if (!username || !password || !nickname) {
-                alert('请填写完整的注册信息（账号、密码、江湖名号）');
-                return;
-            }
-
-            // 简单验证：用户名不能包含特殊字符
-            if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-                alert('冒险者ID只能包含字母、数字和下划线');
-                return;
-            }
-
-            // 本地模拟注册（存储到localStorage）
-            const registeredUsers = JSON.parse(localStorage.getItem('registered_users') || '{}');
-            
-            if (registeredUsers[username]) {
-                alert('该冒险者ID已被注册');
-                return;
-            }
-
-            // 保存新用户
-            registeredUsers[username] = {
-                username: username,
-                password: password, // 注意：实际项目中密码应该加密存储
-                nickname: nickname,
-                email: email,
-                role: 'user'
-            };
-            localStorage.setItem('registered_users', JSON.stringify(registeredUsers));
-            
-            alert('注册成功！请登录');
-            showLoginForm();
-        }
-
-        // 简单登出函数
-        function doLogout() {
-            authToken = null;
-            currentUser = null;
-            localStorage.removeItem('tavern_token');
-            
-            const authNav = document.getElementById('authNav');
-            authNav.innerHTML = `
-                <a href="javascript:void(0)" onclick="document.getElementById('loginModal').style.display='flex'; document.getElementById('loginForm').style.display='block'; document.getElementById('registerForm').style.display='none';" style="background: var(--gold); color: #1A120B;">
-                    👤 登录/注册
-                </a>
-            `;
-            
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed; top: 100px; right: 20px; background: #666; 
-                color: white; padding: 15px 25px; border-radius: 8px; z-index: 2000;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.3); animation: slideIn 0.3s ease;
-            `;
-            notification.innerHTML = '已安全退出江湖';
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
-        }
-
         // API请求工具
         const TavernAPI = {
             async request(url, method = 'GET', data = null, requiresAuth = true) {
@@ -2609,6 +3164,7 @@
                     'Content-Type': 'application/json',
                 };
                 
+                const authToken = AuthModule.getAuthToken();
                 if (requiresAuth && authToken) {
                     headers['Authorization'] = `Bearer ${authToken}`;
                 }
@@ -2637,14 +3193,9 @@
                 }
             },
 
-            // 用户认证
+            // 用户认证（AuthModule 已处理）
             async login(username, password) {
                 const data = await this.request('/auth/login', 'POST', { username, password }, false);
-                if (data.token) {
-                    authToken = data.token;
-                    localStorage.setItem('tavern_token', data.token);
-                    currentUser = data.user;
-                }
                 return data;
             },
 
@@ -2660,16 +3211,13 @@
 
             async logout() {
                 await this.request('/auth/logout', 'POST');
-                authToken = null;
-                currentUser = null;
-                localStorage.removeItem('tavern_token');
             },
 
             async getCurrentUser() {
+                const authToken = AuthModule.getAuthToken();
                 if (!authToken) return null;
                 try {
                     const data = await this.request('/auth/me', 'GET');
-                    currentUser = data;
                     return data;
                 } catch {
                     return null;
@@ -2916,7 +3464,7 @@
                 </a>
             </li>
             <li id="authNav">
-                <a href="javascript:void(0)" onclick="document.getElementById('loginModal').style.display='flex'; document.getElementById('loginForm').style.display='block'; document.getElementById('registerForm').style.display='none';" style="background: var(--gold); color: #1A120B;">
+                <a href="javascript:void(0)" id="loginLink" style="background: var(--gold); color: #1A120B;">
                     👤 登录/注册
                 </a>
             </li>
@@ -3008,31 +3556,58 @@
                 </div>
             </div>
 
-            <div style="font-size: 0.8rem;">
-                <strong style="color: var(--gold);">已获成就：</strong>
-                <div style="display: flex; gap: 15px; margin-top: 8px;">
-                    <span class="achievement-tag" data-achievement-id="first-bounty" style="cursor: pointer;">
-                        🪵 首次揭榜
-                    </span>
-                    <span class="achievement-tag" data-achievement-id="regular" style="cursor: pointer;">
-                        🔑 酒馆熟客
-                    </span>
-                    <span class="achievement-tag" data-achievement-id="whiskey" style="cursor: pointer;">
-                        🥃 威士忌收藏家
-                    </span>
-                    <span class="achievement-tag locked" data-achievement-id="legend" style="cursor: pointer;">
-                        🔒 江湖传说
-                    </span>
+            <div style="margin-top: 20px;">
+                <!-- 目标成就展示 -->
+                <div id="target-achievement" style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.05)); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 8px; display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="color: #ffc107; font-weight: bold;">🎯 目标成就</span>
+                        <button onclick="clearTargetAchievementMain()" style="padding: 4px 10px; background: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; border-radius: 12px; font-size: 0.65rem; color: #e74c3c; cursor: pointer;">
+                            清除
+                        </button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span id="target-icon" style="font-size: 2.5rem;"></span>
+                        <div style="flex: 1;">
+                            <div id="target-name" style="color: #fff; font-weight: bold; font-size: 1.1rem;"></div>
+                            <div id="target-desc" style="color: #a68b6d; font-size: 0.85rem; margin-top: 3px;"></div>
+                            <div style="margin-top: 10px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #a68b6d; margin-bottom: 5px;">
+                                    <span>解锁进度</span>
+                                    <span id="target-progress-text">0%</span>
+                                </div>
+                                <div class="fuse-progress" style="height: 8px;">
+                                    <div id="target-progress-fill" class="fuse-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- 装备槽位区域 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <div>
+                        <span style="color: #a68b6d; font-size: 0.85rem;">🏆 已获成就</span>
+                        <span style="color: var(--gold); font-weight: bold; margin-left: 8px;">3/4</span>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="achievements/index.html" style="padding: 6px 14px; background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 20px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; color: var(--gold); text-decoration: none;">
+                            📖 成就殿堂
+                        </a>
+                        <button onclick="openShareModal()" style="padding: 6px 14px; background: linear-gradient(135deg, #07c160, #06ad56); color: white; border: none; border-radius: 20px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;">
+                            📤 分享成就
+                        </button>
+                    </div>
+                </div>
+                <div class="achievements-grid-main" id="achievements-grid-main">
+                    <!-- 成就卡片将通过JS动态渲染 -->
+                </div>
+
+            <!-- 佩戴槽位区域 -->
             <div class="equipment-section">
                 <div class="equipment-header">
-                    <span>🎒 装备槽位</span>
+                    <span>🎒 佩戴槽位</span>
                 </div>
                 <div class="equipment-slots" id="equipment-slots-container">
-                    <!-- 装备槽位将通过JS渲染 -->
+                    <!-- 佩戴槽位将通过JS渲染 -->
                 </div>
             </div>
 
@@ -3243,6 +3818,32 @@
                 </div>
             </div>
         </div>
+
+        <!-- 成就分享模块 -->
+        <div style="margin-top: 40px; padding: 25px; background: rgba(212, 175, 55, 0.1); border: 2px solid rgba(212, 175, 55, 0.3); border-radius: 10px;">
+            <h3 style="color: var(--gold); margin-bottom: 20px; text-align: center;">📤 分享你的荣耀</h3>
+            <p style="color: #a68b6d; font-size: 0.9rem; text-align: center; margin-bottom: 20px;">
+                将你的成就分享到社交媒体，邀请更多伙伴加入传媒江湖！
+            </p>
+            <div class="share-buttons">
+                <button class="share-btn wechat-friend" onclick="shareModule.shareToWeChatFriend()">
+                    <span class="share-icon">💬</span>
+                    <span class="share-text">微信好友</span>
+                </button>
+                <button class="share-btn wechat-timeline" onclick="shareModule.shareToWeChatTimeline()">
+                    <span class="share-icon">📱</span>
+                    <span class="share-text">朋友圈</span>
+                </button>
+                <button class="share-btn generate-poster" onclick="shareModule.generatePoster()">
+                    <span class="share-icon">🖼️</span>
+                    <span class="share-text">生成海报</span>
+                </button>
+                <button class="share-btn copy-link" onclick="shareModule.copyLinkOnly()">
+                    <span class="share-icon">🔗</span>
+                    <span class="share-text">复制链接</span>
+                </button>
+            </div>
+        </div>
     </section>
 
     <section id="about" class="section-box">
@@ -3349,55 +3950,6 @@
             <textarea placeholder="简单介绍一下自己和相关经验..." style="min-height: 80px;"></textarea>
         </div>
         <button class="btn-main" onclick="submitResume()">📜 递交回执</button>
-    </div>
-</div>
-
-<div class="modal-overlay" id="loginModal">
-    <div class="modal-content" style="background: linear-gradient(145deg, #2D1E17 0%, #1A120B 100%);">
-        <span class="modal-close" onclick="closeLoginModal()">✕</span>
-        <h3 style="color: var(--gold); margin-bottom: 20px; text-align: center;">🔐 冒险者登录</h3>
-        
-        <div id="loginForm" class="scroll-ui" style="padding: 20px;">
-            <div class="form-group">
-                <label style="color: #8C2B1B;">【账号 / Username】</label>
-                <input type="text" id="loginUsername" placeholder="输入你的冒险者ID">
-            </div>
-            <div class="form-group">
-                <label style="color: #8C2B1B;">【秘钥 / Password】</label>
-                <input type="password" id="loginPassword" placeholder="输入你的秘钥">
-            </div>
-            <button class="btn-main" id="loginBtn" onclick="doLogin()" style="margin-bottom: 15px;">
-                🗡️ 进入江湖
-            </button>
-            <p style="text-align: center; color: #a68b6d; font-size: 0.85rem;">
-                还没有身份？ <a href="javascript:void(0)" onclick="alert('注册链接点击!'); showRegisterForm();" style="color: var(--gold);">前往注册</a>
-            </p>
-        </div>
-
-        <div id="registerForm" class="scroll-ui" style="padding: 20px; display: none;">
-            <div class="form-group">
-                <label style="color: #8C2B1B;">【冒险者ID / Username】</label>
-                <input type="text" id="regUsername" placeholder="创建你的冒险者ID">
-            </div>
-            <div class="form-group">
-                <label style="color: #8C2B1B;">【秘钥 / Password】</label>
-                <input type="password" id="regPassword" placeholder="设置你的秘钥">
-            </div>
-            <div class="form-group">
-                <label style="color: #8C2B1B;">【江湖名号 / Nickname】</label>
-                <input type="text" id="regNickname" placeholder="你的江湖称号">
-            </div>
-            <div class="form-group">
-                <label style="color: #8C2B1B;">【联络方式 / Email】</label>
-                <input type="email" id="regEmail" placeholder="你的邮箱">
-            </div>
-            <button class="btn-main" id="registerBtn" onclick="doRegister()" style="margin-bottom: 15px;">
-                📜 注册成为冒险者
-            </button>
-            <p style="text-align: center; color: #a68b6d; font-size: 0.85rem;">
-                已有身份？ <a href="javascript:void(0)" onclick="showLoginForm()" style="color: var(--gold);">返回登录</a>
-            </p>
-        </div>
     </div>
 </div>
 
@@ -3696,103 +4248,6 @@
     }
 
     // 登录/注册相关函数
-    function openLoginModal() {
-        document.getElementById('loginModal').style.display = 'flex';
-        showLogin();
-    }
-
-    function closeLoginModal() {
-        document.getElementById('loginModal').style.display = 'none';
-    }
-
-    function showLogin() {
-        document.getElementById('loginForm').style.display = 'block';
-        document.getElementById('registerForm').style.display = 'none';
-    }
-
-    function showRegister() {
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('registerForm').style.display = 'block';
-    }
-
-    async function handleLogin() {
-        console.log('handleLogin 开始');
-        const username = document.getElementById('loginUsername').value;
-        const password = document.getElementById('loginPassword').value;
-        console.log('用户名:', username, '密码:', password);
-
-        if (!username || !password) {
-            alert('请填写完整的账号和秘钥');
-            return;
-        }
-
-        try {
-            console.log('准备调用 TavernAPI.login');
-            const result = await TavernAPI.login(username, password);
-            console.log('登录成功:', result);
-            updateUserNav(result.user);
-            closeLoginModal();
-            TavernNotifier.send(`🎉 ${result.user.nickname}，欢迎进入江湖！`);
-        } catch (error) {
-            console.error('登录失败:', error);
-            // 尝试本地模拟登录作为备选方案
-            const mockUser = mockLogin(username, password);
-            if (mockUser) {
-                updateUserNav(mockUser);
-                closeLoginModal();
-                TavernNotifier.send(`🎉 ${mockUser.nickname}，欢迎进入江湖！(本地模式)`);
-            } else {
-                alert('登录失败：' + error.message);
-            }
-        }
-    }
-
-    // 本地模拟登录（当后端不可用时使用）
-    function mockLogin(username, password) {
-        const mockUsers = {
-            'admin': { username: 'admin', nickname: '馆主大人', email: 'admin@example.com', role: 'admin' },
-            'user1': { username: 'user1', nickname: '江湖游侠', email: 'user1@example.com', role: 'user' },
-            'user2': { username: 'user2', nickname: '赏金猎人', email: 'user2@example.com', role: 'user' }
-        };
-        // 所有用户的默认密码都是 password
-        if (mockUsers[username] && password === 'password') {
-            authToken = 'mock_token_' + username;
-            localStorage.setItem('tavern_token', authToken);
-            return mockUsers[username];
-        }
-        return null;
-    }
-
-    async function handleRegister() {
-        const username = document.getElementById('regUsername').value;
-        const password = document.getElementById('regPassword').value;
-        const nickname = document.getElementById('regNickname').value;
-        const email = document.getElementById('regEmail').value;
-
-        if (!username || !password || !nickname) {
-            alert('请填写完整的注册信息');
-            return;
-        }
-
-        try {
-            await TavernAPI.register(username, password, nickname, email);
-            alert('注册成功！请登录');
-            showLogin();
-        } catch (error) {
-            alert('注册失败：' + error.message);
-        }
-    }
-
-    async function handleLogout() {
-        try {
-            await TavernAPI.logout();
-            updateUserNav(null);
-            TavernNotifier.send('已安全退出江湖');
-        } catch (error) {
-            console.error('登出失败:', error);
-        }
-    }
-
     // 将所有初始化代码放在 DOMContentLoaded 中确保正确顺序
     window.addEventListener('DOMContentLoaded', () => {
         showRandomQuote();
@@ -3801,14 +4256,7 @@
 
         // 绑定导航链接事件
         document.querySelectorAll('nav a').forEach(link => {
-            if (link.id === 'loginLink') {
-                link.addEventListener('click', openLoginModal);
-                return;
-            }
-            if (link.id === 'logoutLink') {
-                link.addEventListener('click', handleLogout);
-                return;
-            }
+            if (link.id === 'loginLink' || link.id === 'logoutLink') return;
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const href = this.getAttribute('href');
@@ -3823,37 +4271,14 @@
         document.getElementById('commissionModal').addEventListener('click', function(e) {
             if (e.target === this) closeCommissionModal();
         });
-        document.getElementById('loginModal').addEventListener('click', function(e) {
-            if (e.target === this) closeLoginModal();
-        });
 
-        // 绑定登录/注册按钮事件
-        const loginBtn = document.getElementById('loginBtn');
-        console.log('loginBtn:', loginBtn);
-        if (loginBtn) {
-            loginBtn.addEventListener('click', function() {
-                alert('登录按钮点击触发!');
-                handleLogin();
-            });
-        }
-        const registerBtn = document.getElementById('registerBtn');
-        console.log('registerBtn:', registerBtn);
-        if (registerBtn) {
-            registerBtn.addEventListener('click', function() {
-                alert('注册按钮点击触发!');
-                handleRegister();
-            });
-        }
-
-        // 绑定登录/注册切换链接事件
-        document.getElementById('toRegisterLink').addEventListener('click', showRegister);
-        document.getElementById('toLoginLink').addEventListener('click', showLogin);
-
-        // 绑定模态框内其他链接事件
-        document.querySelectorAll('.modal-content a').forEach(link => {
-            if (link.id === 'toRegisterLink' || link.id === 'toLoginLink') return;
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
+        // 绑定成就卡片点击事件
+        document.querySelectorAll('.achievement-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const achievementId = card.getAttribute('data-achievement-id');
+                if (achievementId) {
+                    showAchievementDetail(achievementId);
+                }
             });
         });
 
@@ -3911,8 +4336,7 @@
             hideGearTooltip();
         });
 
-        // 初始化认证和加载任务
-        initAuth();
+        // 加载任务（认证由 AuthModule 模块处理）
         loadTasksFromBackend();
     });
 
@@ -3935,54 +4359,9 @@
         document.getElementById('commissionModal').style.display = 'none';
     }
 
-    // 登录/注册相关函数
-    async function initAuth() {
-        if (authToken) {
-            try {
-                const user = await TavernAPI.getCurrentUser();
-                if (user) {
-                    updateUserNav(user);
-                    TavernNotifier.send(`欢迎回来，${user.nickname}！`);
-                }
-            } catch (e) {
-                console.error('自动登录失败:', e);
-                authToken = null;
-                localStorage.removeItem('tavern_token');
-            }
-        }
-    }
-
-    function updateUserNav(user) {
-        const authNav = document.getElementById('authNav');
-        if (user) {
-            authNav.innerHTML = `
-                <a href="#profile" style="background: var(--maple-red); color: white;">
-                    👤 ${user.nickname}
-                </a>
-                <a href="javascript:void(0)" id="logoutLink" style="background: #666; color: white;">
-                    登出
-                </a>
-            `;
-            const logoutLink = document.getElementById('logoutLink');
-            if (logoutLink) {
-                logoutLink.addEventListener('click', handleLogout);
-            }
-        } else {
-            authNav.innerHTML = `
-                <a href="javascript:void(0)" id="loginLink" style="background: var(--gold); color: #1A120B;">
-                    👤 登录/注册
-                </a>
-            `;
-            const loginLink = document.getElementById('loginLink');
-            if (loginLink) {
-                loginLink.addEventListener('click', openLoginModal);
-            }
-        }
-    }
-
     // 从后端加载任务列表
     async function loadTasksFromBackend() {
-        if (!authToken) {
+        if (!AuthModule.getAuthToken()) {
             console.log('未登录，使用本地模拟数据');
             return;
         }
@@ -4026,9 +4405,9 @@
 
     // 更新发布任务功能
     async function submitBounty() {
-        if (!authToken) {
+        if (!AuthModule.getAuthToken()) {
             alert('请先登录以发布委托');
-            openLoginModal();
+            AuthModule.openModal();
             return;
         }
 

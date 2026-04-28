@@ -1,0 +1,119 @@
+/* 认证模块样式 */
+.auth-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.auth-modal-content {
+    background: #2D1E17;
+    border: 4px solid #8C2B1B;
+    max-width: 450px;
+    width: 100%;
+    padding: 40px;
+    position: relative;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.auth-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #a68b6d;
+    transition: color 0.2s;
+}
+
+.auth-modal-close:hover {
+    color: white;
+}
+
+.auth-form {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-form-group {
+    margin-bottom: 15px;
+}
+
+.auth-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.auth-form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #4a3520;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.auth-form-group input:focus {
+    outline: none;
+    border-color: #d4af37;
+}
+
+.auth-form-group input::placeholder {
+    color: #6b5344;
+}
+
+.auth-btn-main {
+    width: 100%;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #8C2B1B, #a6341b);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.auth-btn-main:hover {
+    background: linear-gradient(135deg, #a6341b, #8C2B1B);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(140, 43, 27, 0.4);
+}
+
+.auth-form p {
+    margin: 0;
+}
+
+.auth-form a {
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.auth-form a:hover {
+    color: #ffd700;
+}
