@@ -266,6 +266,20 @@ const AchievementModule = (function() {
     }
 
     /**
+     * 获取稀有度中文名称
+     */
+    function getRarityText(rarity) {
+        const rarityTexts = {
+            common: '普通',
+            uncommon: '优秀',
+            rare: '稀有',
+            epic: '史诗',
+            legendary: '传说'
+        };
+        return rarityTexts[rarity] || '普通';
+    }
+
+    /**
      * 获取成就分类列表
      */
     function getCategories() {
@@ -726,7 +740,113 @@ const AchievementModule = (function() {
             `;
         }
 
+        // 渲染目标追踪面板
+        renderTargetProgressPanel(achievement);
+
         modal.classList.add('show');
+    }
+
+    /**
+     * 渲染目标追踪面板
+     */
+    function renderTargetProgressPanel(achievement) {
+        const targetPanel = document.getElementById('target-progress-panel');
+        if (!targetPanel) return;
+
+        // 如果成就已完成，不显示目标追踪面板
+        if (achievement.progress >= 100) {
+            targetPanel.style.display = 'none';
+            return;
+        }
+
+        const progressCircle = document.getElementById('target-progress-circle');
+        const progressValue = document.getElementById('target-progress-value');
+        const progressDetail = document.getElementById('target-progress-detail');
+        const milestoneList = document.getElementById('milestone-list');
+        const suggestionContent = document.getElementById('suggestion-content');
+
+        // 更新进度圆圈
+        if (progressCircle) {
+            const progress = achievement.progress;
+            progressCircle.style.background = `conic-gradient(var(--gold) ${progress * 3.6}deg, rgba(212, 175, 55, 0.2) ${progress * 3.6}deg)`;
+        }
+
+        if (progressValue) {
+            progressValue.textContent = achievement.progress + '%';
+        }
+
+        if (progressDetail) {
+            progressDetail.textContent = `${achievement.requirements.current}/${achievement.requirements.target}`;
+        }
+
+        // 生成里程碑
+        if (milestoneList) {
+            milestoneList.innerHTML = generateMilestones(achievement);
+        }
+
+        // 生成行动建议
+        if (suggestionContent) {
+            suggestionContent.innerHTML = generateSuggestion(achievement);
+        }
+
+        targetPanel.style.display = 'block';
+    }
+
+    /**
+     * 生成里程碑列表HTML
+     */
+    function generateMilestones(achievement) {
+        const current = achievement.requirements.current;
+        const target = achievement.requirements.target;
+        const milestones = [];
+
+        // 生成4个里程碑
+        const step = Math.ceil(target / 4);
+        for (let i = 1; i <= 4; i++) {
+            const milestoneTarget = step * i;
+            const isCompleted = current >= milestoneTarget;
+            const actualTarget = Math.min(milestoneTarget, target);
+            milestones.push({
+                target: actualTarget,
+                completed: isCompleted,
+                percentage: Math.round((actualTarget / target) * 100)
+            });
+        }
+
+        return milestones.map(m => `
+            <div class="milestone-item">
+                <div class="milestone-check ${m.completed ? 'completed' : ''}">
+                    ${m.completed ? '✓' : ''}
+                </div>
+                <div class="milestone-text">达成 ${m.target} 次</div>
+                <div class="milestone-progress">${m.percentage}%</div>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * 生成智能行动建议
+     */
+    function generateSuggestion(achievement) {
+        const current = achievement.requirements.current;
+        const target = achievement.requirements.target;
+        const remaining = target - current;
+        const progress = achievement.progress;
+
+        let suggestion = '';
+        
+        // 根据进度生成不同的建议
+        if (progress < 25) {
+            suggestion = `刚刚起步！您还需要完成 <strong>${remaining}</strong> 次来解锁此成就。每天坚持完成几个，很快就能看到进展！`;
+        } else if (progress < 50) {
+            suggestion = `进展不错！已经完成了一半，再坚持一下，还需要 <strong>${remaining}</strong> 次就能达成目标！`;
+        } else if (progress < 75) {
+            suggestion = `即将突破！只剩 <strong>${remaining}</strong> 次了，加油！您离成功只差一步之遥！`;
+        } else {
+            suggestion = `最后冲刺！仅剩 <strong>${remaining}</strong> 次，胜利就在眼前，不要放弃！`;
+        }
+
+        return suggestion;
     }
 
     /**
@@ -750,10 +870,57 @@ const AchievementModule = (function() {
     // ===== 初始化 =====
 
     /**
+     * 初始化默认佩戴数据
+     */
+    function initDefaultEquipped() {
+        let stored = localStorage.getItem('equippedAchievements');
+        
+        // 验证存储的数据格式
+        let equipped = [];
+        if (stored) {
+            try {
+                equipped = JSON.parse(stored);
+                // 确保数组长度正确
+                if (!Array.isArray(equipped)) {
+                    equipped = [];
+                }
+                // 清理无效数据，确保只保留有效的成就ID
+                equipped = equipped.map(e => {
+                    if (e && e.id && achievementData[e.id]) {
+                        return { id: e.id };
+                    }
+                    return null;
+                });
+                // 确保数组长度为MAX_EQUIP_SLOTS
+                while (equipped.length < MAX_EQUIP_SLOTS) {
+                    equipped.push(null);
+                }
+                equipped = equipped.slice(0, MAX_EQUIP_SLOTS);
+            } catch (e) {
+                equipped = [];
+            }
+        }
+        
+        // 如果没有有效数据，初始化默认佩戴
+        if (!stored || equipped.every(e => e === null)) {
+            const unlocked = Object.values(achievementData).filter(a => a.unlockedAt !== null).slice(0, MAX_EQUIP_SLOTS);
+            for (let i = 0; i < MAX_EQUIP_SLOTS; i++) {
+                equipped[i] = unlocked[i] ? { id: unlocked[i].id } : null;
+            }
+        }
+        
+        localStorage.setItem('equippedAchievements', JSON.stringify(equipped));
+        console.log('初始化佩戴数据:', equipped);
+    }
+
+    /**
      * 初始化成就模块
      */
     function init() {
         console.log('AchievementModule 初始化');
+        
+        // 初始化默认佩戴数据（如果localStorage中没有数据）
+        initDefaultEquipped();
 
         renderStats();
         renderCategories();
@@ -780,6 +947,7 @@ const AchievementModule = (function() {
         getCategories: getCategories,
         getStatus: getStatus,
         getRarityColor: getRarityColor,
+        getRarityText: getRarityText,
 
         // 佩戴管理
         equip: equip,

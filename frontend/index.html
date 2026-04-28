@@ -944,6 +944,73 @@
             background: #4a3520;
             color: #8b7355;
         }
+        /* 成就悬停Tooltip */
+        .achievement-tooltip {
+            position: fixed;
+            background: linear-gradient(135deg, #2d1810 0%, #1a0f0a 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            width: 280px;
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.2s ease-out;
+            pointer-events: none;
+        }
+        .tooltip-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        .tooltip-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 10px;
+        }
+        .tooltip-name {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        .tooltip-rarity {
+            font-size: 0.75rem;
+            margin-top: 2px;
+        }
+        .tooltip-body {
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        .tooltip-desc {
+            color: #e8dcc8;
+            margin-bottom: 8px;
+        }
+        .tooltip-story {
+            color: #a68b6d;
+            font-style: italic;
+            margin-bottom: 10px;
+            font-size: 0.75rem;
+        }
+        .tooltip-rewards {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            color: #d4af37;
+            font-size: 0.75rem;
+        }
+        .tooltip-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
         .achievement-equip-btn {
             padding: 5px 12px;
             background: linear-gradient(135deg, #27ae60, #2ecc71);
@@ -1768,9 +1835,11 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
     <script src="achievements/scripts/achievement.js"></script>
+    <script src="modules/main-achievement-module.js"></script>
     <script src="auth/scripts/auth.js"></script>
     <link rel="stylesheet" href="auth/styles/auth.css">
     <link rel="stylesheet" href="achievements/styles/achievements.css">
+    <link rel="stylesheet" href="components/achievement-card/achievement-card.css">
     <script>
         // 后端API配置
         const API_BASE_URL = 'http://localhost:8080/api';
@@ -2010,208 +2079,7 @@
             }
         }
 
-        // ===== 佩戴状态管理（使用 achievementData.js）=====
-        
-        // 佩戴成就（自动找空槽位）
-        function handleEquipOnMain(achievementId) {
-            const achievement = AchievementModule.getAchievementData(achievementId);
-            if (!achievement || achievement.unlockedAt === null) {
-                alert('无法佩戴该成就！');
-                return;
-            }
-            
-            if (AchievementModule.isEquipped(achievementId)) {
-                const equipped = AchievementModule.getEquipped();
-                const index = equipped.findIndex(e => e && e.id === achievementId);
-                if (index !== -1) {
-                    AchievementModule.unequip(index);
-                    alert(`成就「${achievement.name}」已卸下！`);
-                }
-                refreshEquippedDisplay();
-                return;
-            }
-            
-            const equipped = AchievementModule.getEquipped();
-            const emptySlotIndex = equipped.findIndex(e => e === null);
-            if (emptySlotIndex === -1) {
-                alert('佩戴槽已满！请先取下一个成就。');
-                return;
-            }
-            
-            AchievementModule.equip(achievementId, emptySlotIndex);
-            alert(`成就「${achievement.name}」佩戴成功！`);
-            refreshEquippedDisplay();
-        }
-
-        // 从指定槽位取下成就
-        function unequipFromSlot(slotIndex) {
-            const equipped = AchievementModule.getEquipped();
-            if (equipped[slotIndex]) {
-                const achievement = AchievementModule.getAchievementData(equipped[slotIndex].id);
-                AchievementModule.unequip(slotIndex);
-                alert(`成就「${achievement.name}」已取下！`);
-                refreshEquippedDisplay();
-            }
-        }
-
-        // 刷新佩戴槽位显示
-        function refreshEquippedDisplay() {
-            const equipped = AchievementModule.getEquipped();
-            const slotsContainer = document.getElementById('equip-slots');
-            const countElement = document.getElementById('equipped-count');
-            
-            slotsContainer.innerHTML = '';
-            let filledCount = 0;
-            
-            for (let i = 0; i < AchievementModule.getMaxSlots(); i++) {
-                const slotData = equipped[i];
-                const slotDiv = document.createElement('div');
-                
-                if (slotData) {
-                    const achievement = AchievementModule.getAchievementData(slotData.id);
-                    slotDiv.className = 'equip-slot filled';
-                    slotDiv.innerHTML = `
-                        <span class="slot-icon">${achievement ? achievement.icon : '📦'}</span>
-                        <span class="slot-name">${achievement ? achievement.name : '未知'}</span>
-                        <span class="slot-label">槽位${i + 1}</span>
-                        <button class="remove-btn" onclick="unequipFromSlot(${i})">×</button>
-                    `;
-                    filledCount++;
-                } else {
-                    slotDiv.className = 'equip-slot empty';
-                    slotDiv.innerHTML = `
-                        <span class="slot-icon">📭</span>
-                        <span class="slot-label">槽位${i + 1}</span>
-                    `;
-                }
-                
-                slotsContainer.appendChild(slotDiv);
-            }
-            
-            countElement.textContent = `${filledCount}/${AchievementModule.getMaxSlots()}`;
-            updateAchievementCards();
-        }
-
-        // 渲染主页面成就卡片（包含进度条和目标成就高亮）
-        function renderMainAchievements() {
-            const grid = document.getElementById('achievements-grid-main');
-            if (!grid) return;
-            
-            grid.innerHTML = '';
-            
-            const targetAchievement = AchievementModule.getTarget();
-            const achievements = AchievementModule.getAllAchievements();
-            
-            Object.values(achievements).forEach(achievement => {
-                const isEquipped = AchievementModule.isEquipped(achievement.id);
-                const isTarget = targetAchievement && targetAchievement.id === achievement.id;
-                const isUnlocked = achievement.unlockedAt !== null;
-                const progress = achievement.progress || 0;
-                
-                const card = document.createElement('div');
-                card.className = `achievement-card ${isUnlocked ? 'unlocked' : 'locked'} ${isEquipped ? 'equipped' : ''} ${isTarget ? 'target' : ''}`;
-                card.dataset.achievementId = achievement.id;
-                card.style.borderColor = AchievementModule.getRarityColor(achievement.rarity);
-                
-                card.innerHTML = `
-                    ${isTarget ? '<div class="target-badge">🎯</div>' : ''}
-                    ${isEquipped ? '<div class="equip-badge">⚡</div>' : ''}
-                    <div class="achievement-icon">${isUnlocked ? achievement.icon : '❓'}</div>
-                    <div class="achievement-info">
-                        <div class="achievement-name">${achievement.name}</div>
-                        <div class="achievement-desc">${isUnlocked ? achievement.description : '???'}</div>
-                        ${!isUnlocked && progress > 0 ? `
-                            <div class="achievement-progress-mini">
-                                <div class="progress-bar-mini">
-                                    <div class="progress-fill-mini" style="width: ${progress}%"></div>
-                                </div>
-                                <span class="progress-text-mini">${progress}%</span>
-                            </div>
-                        ` : ''}
-                    </div>
-                    <div class="achievement-status ${isUnlocked ? 'unlocked' : 'locked'}">
-                        ${isUnlocked ? '✓' : '🔒'}
-                    </div>
-                    <button class="achievement-equip-btn ${!isUnlocked ? 'disabled' : ''}" onclick="handleEquipOnMain('${achievement.id}')">
-                        ${isEquipped ? '取下' : (isUnlocked ? '佩戴' : '未解锁')}
-                    </button>
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
-
-        // 更新成就卡片佩戴状态
-        function updateAchievementCards() {
-            document.querySelectorAll('.achievement-card').forEach(card => {
-                const cardId = card.getAttribute('data-achievement-id');
-                const btn = card.querySelector('.achievement-equip-btn');
-                const isEquipped = AchievementModule.isEquipped(cardId);
-                
-                if (isEquipped) {
-                    card.classList.add('equipped');
-                    btn.textContent = '取下';
-                } else {
-                    card.classList.remove('equipped');
-                    const achievement = AchievementModule.getAchievementData(cardId);
-                    btn.textContent = achievement && achievement.unlockedAt ? '佩戴' : '未解锁';
-                }
-            });
-        }
-
-        // 目标成就管理
-        function clearTargetAchievementMain() {
-            AchievementModule.clearTarget();
-            refreshTargetDisplay();
-            alert('目标成就已清除！');
-        }
-
-        function refreshTargetDisplay() {
-            const target = AchievementModule.getTarget();
-            const targetSection = document.getElementById('target-achievement');
-            
-            if (target) {
-                const achievement = AchievementModule.getAchievementData(target.id);
-                if (achievement) {
-                    document.getElementById('target-icon').textContent = achievement.icon;
-                    document.getElementById('target-name').textContent = achievement.name;
-                    document.getElementById('target-desc').textContent = achievement.description;
-                    
-                    const progress = achievement.progress || 0;
-                    document.getElementById('target-progress-text').textContent = `${progress}%`;
-                    document.getElementById('target-progress-fill').style.width = `${progress}%`;
-                    
-                    targetSection.style.display = 'block';
-                } else {
-                    targetSection.style.display = 'none';
-                }
-            } else {
-                targetSection.style.display = 'none';
-            }
-        }
-
-        // 页面加载时显示佩戴和目标成就
-        function loadEquippedAchievement() {
-            renderMainAchievements();
-            refreshEquippedDisplay();
-            refreshTargetDisplay();
-        }
-
-        // 监听localStorage变化（跨页面联动）
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'equippedAchievements') {
-                refreshEquippedDisplay();
-                renderMainAchievements();
-            } else if (e.key === 'targetAchievement') {
-                refreshTargetDisplay();
-                renderMainAchievements();
-            }
-        });
-
-        // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            loadEquippedAchievement();
-        });
+        // ===== 主页面成就模块（通过外部模块引入）=====
 
         // 显示成就详情弹窗
         function showAchievementDetail(achievementId) {
@@ -3561,7 +3429,7 @@
                 <div id="target-achievement" style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 193, 7, 0.05)); border: 1px solid rgba(255, 193, 7, 0.3); border-radius: 8px; display: none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                         <span style="color: #ffc107; font-weight: bold;">🎯 目标成就</span>
-                        <button onclick="clearTargetAchievementMain()" style="padding: 4px 10px; background: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; border-radius: 12px; font-size: 0.65rem; color: #e74c3c; cursor: pointer;">
+                        <button onclick="MainAchievementModule.clearTargetAchievementMain()" style="padding: 4px 10px; background: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; border-radius: 12px; font-size: 0.65rem; color: #e74c3c; cursor: pointer;">
                             清除
                         </button>
                     </div>
@@ -3586,7 +3454,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                     <div>
                         <span style="color: #a68b6d; font-size: 0.85rem;">🏆 已获成就</span>
-                        <span style="color: var(--gold); font-weight: bold; margin-left: 8px;">3/4</span>
+                        <span style="color: var(--gold); font-weight: bold; margin-left: 8px;" id="achievement-count">0/0</span>
                     </div>
                     <div style="display: flex; gap: 10px;">
                         <a href="achievements/index.html" style="padding: 6px 14px; background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 20px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; color: var(--gold); text-decoration: none;">
@@ -4253,6 +4121,9 @@
         showRandomQuote();
         updateEnvironment();
         ViewManager.init();
+        
+        // 初始化主页面成就模块
+        MainAchievementModule.init();
 
         // 绑定导航链接事件
         document.querySelectorAll('nav a').forEach(link => {

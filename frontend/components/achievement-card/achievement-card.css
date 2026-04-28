@@ -1,0 +1,424 @@
+/* 成就卡片样式 */
+.achievements-grid-main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.achievement-card {
+    position: relative;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.achievement-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.achievement-card.unlocked {
+    border-color: rgba(212, 175, 55, 0.5);
+}
+
+.achievement-card.locked {
+    opacity: 0.7;
+    border-color: rgba(100, 100, 100, 0.3);
+}
+
+.achievement-card.equipped {
+    border-color: #07c160;
+    box-shadow: 0 0 10px rgba(7, 193, 96, 0.3);
+}
+
+.achievement-card.target {
+    border-color: #ff9500;
+    box-shadow: 0 0 10px rgba(255, 149, 0, 0.3);
+}
+
+.target-badge,
+.equip-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff9500;
+    border-radius: 50%;
+    font-size: 12px;
+    box-shadow: 0 2px 8px rgba(255, 149, 0, 0.5);
+}
+
+.equip-badge {
+    background: #07c160;
+    box-shadow: 0 2px 8px rgba(7, 193, 96, 0.5);
+}
+
+.achievement-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    font-size: 24px;
+}
+
+.achievement-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.achievement-name {
+    font-weight: bold;
+    color: #e8dcc8;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.achievement-desc {
+    font-size: 0.75rem;
+    color: #8b7355;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.achievement-progress-mini {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.progress-bar-mini {
+    flex: 1;
+    height: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill-mini {
+    height: 100%;
+    background: linear-gradient(90deg, #d4af37, #ffd700);
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.progress-text-mini {
+    font-size: 0.65rem;
+    color: #d4af37;
+    font-weight: bold;
+    min-width: 35px;
+}
+
+.achievement-status {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 12px;
+}
+
+.achievement-status.unlocked {
+    background: rgba(7, 193, 96, 0.2);
+    color: #07c160;
+}
+
+.achievement-status.locked {
+    background: rgba(100, 100, 100, 0.2);
+    color: #888;
+}
+
+.achievement-equip-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: linear-gradient(135deg, #d4af37, #b89500);
+    color: #1a0f0a;
+}
+
+.achievement-equip-btn:hover:not(.disabled) {
+    transform: scale(1.05);
+}
+
+.achievement-equip-btn.disabled {
+    background: #333;
+    color: #666;
+    cursor: not-allowed;
+}
+
+/* 成就悬停Tooltip */
+.achievement-tooltip {
+    position: fixed;
+    background: linear-gradient(135deg, #2d1810 0%, #1a0f0a 100%);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    width: 280px;
+    z-index: 1000;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.2s ease-out;
+    pointer-events: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tooltip-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.tooltip-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    font-size: 28px;
+}
+
+.tooltip-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #e8dcc8;
+    margin-bottom: 4px;
+}
+
+.tooltip-rarity {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.tooltip-body {
+    font-size: 0.85rem;
+}
+
+.tooltip-desc {
+    color: #c9b896;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.tooltip-story {
+    color: #8b7355;
+    font-style: italic;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.tooltip-rewards {
+    display: flex;
+    gap: 12px;
+    color: #d4af37;
+    font-size: 0.75rem;
+}
+
+.tooltip-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #d4af37;
+    font-size: 0.8rem;
+}
+
+/* 佩戴槽位样式 */
+.equip-slots {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.equip-slot {
+    flex: 1;
+    min-height: 80px;
+    border: 2px dashed rgba(212, 175, 55, 0.3);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.equip-slot.filled {
+    border-style: solid;
+    border-color: rgba(212, 175, 55, 0.5);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.equip-slot.empty:hover {
+    border-color: rgba(212, 175, 55, 0.5);
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.slot-icon {
+    font-size: 28px;
+}
+
+.slot-name {
+    font-size: 0.75rem;
+    color: #e8dcc8;
+    text-align: center;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.slot-label {
+    font-size: 0.65rem;
+    color: #6b5344;
+}
+
+.remove-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    background: #ff4757;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.remove-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(255, 71, 87, 0.5);
+}
+
+/* 目标成就样式 */
+.target-achievement {
+    background: linear-gradient(135deg, rgba(255, 149, 0, 0.1), rgba(255, 149, 0, 0.05));
+    border: 1px solid rgba(255, 149, 0, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.target-achievement .target-icon {
+    font-size: 36px;
+}
+
+.target-achievement .target-info {
+    flex: 1;
+}
+
+.target-achievement .target-name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ff9500;
+    margin-bottom: 4px;
+}
+
+.target-achievement .target-desc {
+    font-size: 0.8rem;
+    color: #c9b896;
+    margin-bottom: 8px;
+}
+
+.target-achievement .target-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.target-achievement .target-progress-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.target-achievement .target-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff9500, #ffc107);
+    border-radius: 4px;
+    transition: width 0.3s;
+}
+
+.target-achievement .target-progress-text {
+    font-size: 0.8rem;
+    color: #ff9500;
+    font-weight: bold;
+    min-width: 40px;
+}
+
+.target-achievement .clear-target-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    background: rgba(255, 149, 0, 0.2);
+    color: #ff9500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.target-achievement .clear-target-btn:hover {
+    background: rgba(255, 149, 0, 0.3);
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    .achievements-grid-main {
+        grid-template-columns: 1fr;
+    }
+    
+    .equip-slots {
+        flex-wrap: wrap;
+    }
+    
+    .equip-slot {
+        min-width: calc(50% - 6px);
+    }
+}

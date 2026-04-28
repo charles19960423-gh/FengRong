@@ -92,6 +92,30 @@
                     <div class="rewards-title">🎁 解锁奖励</div>
                     <div id="modal-rewards"></div>
                 </div>
+                <!-- 目标追踪面板 -->
+                <div class="target-progress-panel" id="target-progress-panel" style="display: none;">
+                    <div class="target-panel-header">
+                        <span class="target-icon">🎯</span>
+                        <span class="target-title">目标进度追踪</span>
+                    </div>
+                    <div class="progress-circle-container">
+                        <div class="progress-circle" id="target-progress-circle">
+                            <span id="target-progress-value">0%</span>
+                        </div>
+                        <div class="progress-labels">
+                            <div class="progress-label">当前进度</div>
+                            <div class="progress-detail" id="target-progress-detail"></div>
+                        </div>
+                    </div>
+                    <div class="milestone-section">
+                        <div class="milestone-title">📌 里程碑</div>
+                        <div class="milestone-list" id="milestone-list"></div>
+                    </div>
+                    <div class="suggestion-section" id="suggestion-section">
+                        <div class="suggestion-title">💡 行动建议</div>
+                        <div class="suggestion-content" id="suggestion-content"></div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                     <button class="modal-btn btn-target" id="set-target-btn" onclick="setTargetAchievementClick()">🎯 设为目标</button>
