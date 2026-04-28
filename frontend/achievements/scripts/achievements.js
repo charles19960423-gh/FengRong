@@ -1,6 +1,53 @@
 // 当前选中的成就
 let currentAchievement = null;
 
+// Toast 通知函数
+function showNotification(message, type = 'success') {
+    const existingToast = document.querySelector('.notification');
+    if (existingToast) existingToast.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = `notification notification-${type}`;
+    toast.textContent = message;
+    
+    const style = document.createElement('style');
+    style.textContent = `
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .notification-success {
+            background: linear-gradient(135deg, #07c160, #06ad56);
+        }
+        .notification-error {
+            background: linear-gradient(135deg, #ff4d4f, #ff7875);
+        }
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
 // 页面初始化
 document.addEventListener('DOMContentLoaded', function() {
     renderStats();
@@ -18,7 +65,7 @@ window.addEventListener('storage', function(e) {
 
 // 渲染统计数据
 function renderStats() {
-    const stats = getAchievementStats();
+    const stats = AchievementModule.getStats();
     
     document.getElementById('stat-total').textContent = stats.total;
     document.getElementById('stat-unlocked').textContent = stats.unlocked;
@@ -31,7 +78,7 @@ function renderCategories() {
     const cloudContainer = document.getElementById('category-cloud');
     cloudContainer.innerHTML = '';
     
-    achievementCategories.forEach(category => {
+    AchievementModule.getCategories().forEach(category => {
         const tag = document.createElement('div');
         tag.className = 'category-tag';
         tag.dataset.category = category.id;
@@ -52,22 +99,103 @@ function renderCategories() {
 }
 
 // 渲染成就卡片
-function renderAchievements(categoryId) {
+function renderAchievements(categoryId = 'all') {
     const grid = document.getElementById('achievements-grid');
-    grid.innerHTML = '';
+    const achievements = AchievementModule.filterByCategory(categoryId);
     
-    const achievements = filterAchievementsByCategory(categoryId);
+    // 使用文档片段减少DOM操作
+    const fragment = document.createDocumentFragment();
+    const existingCards = new Map();
+    
+    // 收集现有卡片
+    grid.querySelectorAll('.achievement-card').forEach(card => {
+        const id = card.dataset.achievementId;
+        existingCards.set(id, card);
+    });
     
     achievements.forEach(achievement => {
-        const card = createAchievementCard(achievement);
-        grid.appendChild(card);
+        const existingCard = existingCards.get(achievement.id);
+        
+        if (existingCard) {
+            // 复用现有卡片，只更新状态
+            updateCardStatus(existingCard, achievement);
+            fragment.appendChild(existingCard);
+            existingCards.delete(achievement.id);
+        } else {
+            // 创建新卡片
+            const card = createAchievementCard(achievement);
+            fragment.appendChild(card);
+        }
     });
+    
+    // 移除不再需要的卡片
+    existingCards.forEach(card => card.remove());
+    
+    // 一次性替换内容
+    grid.innerHTML = '';
+    grid.appendChild(fragment);
+}
+
+// 更新卡片状态（不重建DOM）
+function updateCardStatus(card, achievement) {
+    const status = AchievementModule.getStatus(achievement);
+    const isEquipped = AchievementModule.isEquipped(achievement.id);
+    
+    // 更新状态类
+    card.className = `achievement-card ${status} ${isEquipped ? 'equipped' : ''} rarity-${achievement.rarity}`;
+    
+    // 更新徽章
+    const badge = card.querySelector('.equip-badge');
+    if (isEquipped && !badge) {
+        const newBadge = document.createElement('div');
+        newBadge.className = 'equip-badge';
+        newBadge.textContent = '⚡';
+        card.appendChild(newBadge);
+    } else if (!isEquipped && badge) {
+        badge.remove();
+    }
+    
+    // 更新按钮
+    const btn = card.querySelector('.equip-btn');
+    if (btn) {
+        if (isEquipped) {
+            btn.textContent = '取下';
+            btn.classList.add('unequip');
+            btn.classList.remove('equip');
+        } else {
+            btn.textContent = '佩戴';
+            btn.classList.add('equip');
+            btn.classList.remove('unequip');
+        }
+    }
+    
+    // 更新进度条
+    const progressFill = card.querySelector('.progress-fill');
+    if (progressFill) {
+        progressFill.className = `progress-fill ${status}`;
+        progressFill.style.width = achievement.progress + '%';
+    }
+    
+    // 更新进度文本
+    const progressText = card.querySelector('.progress-text');
+    if (progressText) {
+        progressText.textContent = status === 'locked' ? '未解锁' : 
+                                  status === 'unlocked' ? '已完成' : 
+                                  `${achievement.requirements.current}/${achievement.requirements.target}`;
+    }
+    
+    // 更新状态指示器
+    const statusEl = card.querySelector('.card-status');
+    if (statusEl) {
+        statusEl.className = `card-status ${status}`;
+        statusEl.textContent = status === 'locked' ? '🔒' : status === 'unlocked' ? '✓' : '...';
+    }
 }
 
 // 创建成就卡片
 function createAchievementCard(achievement) {
-    const status = getAchievementStatus(achievement);
-    const isEquipped = isAchievementEquipped(achievement.id);
+    const status = AchievementModule.getStatus(achievement);
+    const isEquipped = AchievementModule.isEquipped(achievement.id);
     
     const card = document.createElement('div');
     card.className = `achievement-card ${status} ${isEquipped ? 'equipped' : ''} rarity-${achievement.rarity}`;
@@ -124,40 +252,94 @@ function createAchievementCard(achievement) {
     return card;
 }
 
+// 渲染锁 - 避免重复渲染
+let isRendering = false;
+let pendingRender = false;
+
+// 优化渲染函数
+function scheduleRender() {
+    if (isRendering) {
+        pendingRender = true;
+        return;
+    }
+    
+    isRendering = true;
+    
+    requestAnimationFrame(() => {
+        const activeCategory = document.querySelector('.category-tab.active').dataset.category;
+        renderAchievements(activeCategory);
+        
+        isRendering = false;
+        if (pendingRender) {
+            pendingRender = false;
+            scheduleRender();
+        }
+    });
+}
+
 // 处理佩戴/取下点击
 function handleEquipClick(achievementId, event) {
     event.stopPropagation();
     
-    const isEquipped = isAchievementEquipped(achievementId);
+    const isEquipped = AchievementModule.isEquipped(achievementId);
+    const achievement = AchievementModule.getAchievementData(achievementId);
     
     if (isEquipped) {
         // 卸下成就
-        const equipped = getEquippedAchievements();
+        const equipped = AchievementModule.getEquipped();
         const index = equipped.findIndex(e => e && e.id === achievementId);
         if (index !== -1) {
-            unequipAchievement(index);
-            alert('成就已取下！');
+            AchievementModule.unequip(index);
+            showNotification(`「${achievement.name}」已取下！`, 'success');
+            
+            // 更新当前卡片状态（直接更新，不调用完整渲染）
+            const card = document.querySelector(`[data-achievement-id="${achievementId}"]`);
+            if (card) {
+                updateCardStatus(card, achievement);
+            }
+            
+            // 更新其他受影响的卡片（如果有的话）
+            updateEquippedBadges();
         }
     } else {
         // 显示佩戴槽选择弹窗
         showSlotSelectModal(achievementId);
+        return;
     }
+}
+
+// 更新佩戴徽章状态
+function updateEquippedBadges() {
+    const equippedIds = AchievementModule.getEquipped()
+        .filter(e => e !== null)
+        .map(e => e.id);
     
-    // 重新渲染成就列表
-    const activeCategory = document.querySelector('.category-tab.active').dataset.category;
-    renderAchievements(activeCategory);
+    document.querySelectorAll('.achievement-card').forEach(card => {
+        const cardId = card.dataset.achievementId;
+        const shouldHaveBadge = equippedIds.includes(cardId);
+        const badge = card.querySelector('.equip-badge');
+        
+        if (shouldHaveBadge && !badge) {
+            const newBadge = document.createElement('div');
+            newBadge.className = 'equip-badge';
+            newBadge.textContent = '⚡';
+            card.appendChild(newBadge);
+        } else if (!shouldHaveBadge && badge) {
+            badge.remove();
+        }
+    });
 }
 
 // 显示佩戴槽选择弹窗
 function showSlotSelectModal(achievementId) {
-    const equipped = getEquippedAchievements();
-    const achievement = achievementData[achievementId];
+    const equipped = AchievementModule.getEquipped();
+    const achievement = AchievementModule.getAchievementData(achievementId);
     
     let slotsHtml = '';
-    for (let i = 0; i < MAX_EQUIP_SLOTS; i++) {
+    for (let i = 0; i < AchievementModule.getMaxSlots(); i++) {
         const slotData = equipped[i];
         const isEmpty = !slotData;
-        const slotAchievement = slotData ? achievementData[slotData.id] : null;
+        const slotAchievement = slotData ? AchievementModule.getAchievementData(slotData.id) : null;
         
         slotsHtml += `
             <div class="slot-option ${isEmpty ? 'empty' : 'filled'}" data-slot="${i}">
@@ -201,13 +383,18 @@ function showSlotSelectModal(achievementId) {
     modal.querySelectorAll('.slot-option').forEach(slot => {
         slot.addEventListener('click', function() {
             const slotIndex = parseInt(this.dataset.slot);
-            equipAchievement(achievementId, slotIndex);
+            AchievementModule.equip(achievementId, slotIndex);
             closeSlotModal();
-            alert(`成就「${achievement.name}」已佩戴到槽位${slotIndex + 1}！`);
+            showNotification(`成就「${achievement.name}」已佩戴到槽位${slotIndex + 1}！`, 'success');
             
-            // 重新渲染成就列表
-            const activeCategory = document.querySelector('.category-tab.active').dataset.category;
-            renderAchievements(activeCategory);
+            // 更新当前卡片状态（直接更新，不调用完整渲染）
+            const card = document.querySelector(`[data-achievement-id="${achievementId}"]`);
+            if (card) {
+                updateCardStatus(card, achievement);
+            }
+            
+            // 更新佩戴徽章状态
+            updateEquippedBadges();
         });
     });
 }
@@ -222,9 +409,9 @@ function closeSlotModal() {
 
 // 设置目标成就
 function setTargetAchievementClick(achievementId) {
-    const achievement = achievementData[achievementId];
-    setTargetAchievement(achievementId);
-    alert(`已将「${achievement.name}」设为目标成就！`);
+    const achievement = AchievementModule.getAchievementData(achievementId);
+    AchievementModule.setTarget(achievementId);
+    showNotification(`已将「${achievement.name}」设为目标成就！`, 'success');
     
     // 更新详情弹窗中的按钮状态
     document.getElementById('set-target-btn').textContent = '已设为目标';
@@ -247,7 +434,7 @@ function showAchievementDetail(achievement) {
     document.getElementById('modal-story').textContent = achievement.story;
     
     const progressFill = document.getElementById('progress-fill');
-    progressFill.className = `progress-fill ${getAchievementStatus(achievement)}`;
+    progressFill.className = `progress-fill ${AchievementModule.getStatus(achievement)}`;
     progressFill.style.width = achievement.progress + '%';
     
     document.getElementById('progress-text').textContent = 
@@ -278,8 +465,20 @@ function closeModal() {
 
 // 分享当前成就
 function shareCurrentAchievement() {
+    console.log('shareCurrentAchievement called');
+    console.log('currentAchievement:', currentAchievement);
+    
     closeModal();
-    document.getElementById('share-modal').classList.add('show');
+    
+    const shareModal = document.getElementById('share-modal');
+    console.log('share-modal element:', shareModal);
+    
+    if (shareModal) {
+        shareModal.classList.add('show');
+        console.log('share-modal show class added');
+    } else {
+        console.error('share-modal element not found!');
+    }
 }
 
 // 关闭分享弹窗
@@ -296,11 +495,11 @@ function shareToWeChatFriend() {
     
     if (isWeChatBrowser()) {
         // 微信内置浏览器
-        alert(`即将分享到微信好友：\n\n${shareTitle}\n${shareUrl}`);
+        showNotification('即将分享到微信好友...', 'success');
     } else {
         // 其他浏览器
         copyToClipboard(shareUrl);
-        alert(`链接已复制！\n\n${shareTitle}\n\n请打开微信粘贴分享给好友`);
+        showNotification('链接已复制！请打开微信粘贴分享给好友', 'success');
         
         // 尝试唤起微信
         window.location.href = 'weixin://';
@@ -317,10 +516,10 @@ function shareToWeChatTimeline() {
     const shareTitle = `「${currentAchievement.name}」成就解锁！`;
     
     if (isWeChatBrowser()) {
-        alert(`即将分享到朋友圈：\n\n${shareTitle}\n${shareUrl}`);
+        showNotification('即将分享到朋友圈...', 'success');
     } else {
         copyToClipboard(shareUrl);
-        alert(`链接已复制！\n\n${shareTitle}\n\n请打开微信分享到朋友圈`);
+        showNotification('链接已复制！请打开微信分享到朋友圈', 'success');
         window.location.href = 'weixin://';
     }
     
@@ -333,7 +532,7 @@ function copyAchievementLink() {
     
     const shareUrl = `${window.location.href}?achievement=${currentAchievement.id}`;
     copyToClipboard(shareUrl);
-    alert(`链接已复制！\n\n${shareUrl}`);
+    showNotification('链接已复制到剪贴板！', 'success');
     
     closeShareModal();
 }

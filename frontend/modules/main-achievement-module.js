@@ -45,8 +45,12 @@ const MainAchievementModule = (function() {
      */
     function refreshEquippedDisplay() {
         const equipped = AchievementModule.getEquipped();
-        const slotsContainer = document.getElementById('equip-slots');
-        const countElement = document.getElementById('equipped-count');
+        const slotsContainer = document.getElementById('equipment-slots-container');
+        
+        if (!slotsContainer) {
+            console.warn('equipment-slots-container not found');
+            return;
+        }
         
         slotsContainer.innerHTML = '';
         let filledCount = 0;
@@ -76,7 +80,6 @@ const MainAchievementModule = (function() {
             slotsContainer.appendChild(slotDiv);
         }
         
-        countElement.textContent = `${filledCount}/${AchievementModule.getMaxSlots()}`;
         updateAchievementCards();
     }
 
@@ -85,12 +88,23 @@ const MainAchievementModule = (function() {
      */
     function renderMainAchievements() {
         const grid = document.getElementById('achievements-grid-main');
-        if (!grid) return;
+        if (!grid) {
+            console.warn('MainAchievementModule: achievements-grid-main not found');
+            return;
+        }
         
         grid.innerHTML = '';
         
+        // 检查 AchievementModule 是否可用
+        if (typeof AchievementModule === 'undefined' || !AchievementModule.getAllAchievements) {
+            console.error('MainAchievementModule: AchievementModule not available');
+            return;
+        }
+        
         const targetAchievement = AchievementModule.getTarget();
         const allAchievements = Object.values(AchievementModule.getAllAchievements());
+        
+        console.log('MainAchievementModule: allAchievements count:', allAchievements.length);
         
         // 更新统计数字
         const unlockedCount = allAchievements.filter(a => a.unlockedAt !== null).length;
@@ -98,6 +112,9 @@ const MainAchievementModule = (function() {
         const countElement = document.getElementById('achievement-count');
         if (countElement) {
             countElement.textContent = `${unlockedCount}/${totalCount}`;
+            console.log('MainAchievementModule: Updated count to', `${unlockedCount}/${totalCount}`);
+        } else {
+            console.warn('MainAchievementModule: achievement-count element not found');
         }
         
         // 获取当前佩戴的成就
@@ -319,10 +336,15 @@ const MainAchievementModule = (function() {
     function init() {
         console.log('MainAchievementModule 初始化');
         
-        // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', function() {
+        // 确保DOM完全加载后再执行
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function readyCallback() {
+                document.removeEventListener('DOMContentLoaded', readyCallback);
+                loadEquippedAchievement();
+            });
+        } else {
             loadEquippedAchievement();
-        });
+        }
         
         // 监听localStorage变化（跨页面联动）
         window.addEventListener('storage', function(e) {

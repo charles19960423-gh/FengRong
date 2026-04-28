@@ -1837,6 +1837,121 @@
     <script src="achievements/scripts/achievement.js"></script>
     <script src="modules/main-achievement-module.js"></script>
     <script src="auth/scripts/auth.js"></script>
+    <script>
+        // 测试模块加载
+        console.log('Testing module loading...');
+        console.log('AchievementModule loaded:', typeof AchievementModule);
+        console.log('MainAchievementModule loaded:', typeof MainAchievementModule);
+        
+        // 备用成就统计渲染函数
+        function renderAchievementStatsFallback() {
+            console.log('renderAchievementStatsFallback called');
+            
+            // 等待模块加载
+            if (typeof AchievementModule === 'undefined') {
+                console.log('AchievementModule not ready, retrying...');
+                setTimeout(renderAchievementStatsFallback, 100);
+                return;
+            }
+            
+            try {
+                const allAchievements = Object.values(AchievementModule.getAllAchievements());
+                const unlockedCount = allAchievements.filter(a => a.unlockedAt !== null).length;
+                const totalCount = allAchievements.length;
+                
+                console.log(`Achievements: ${unlockedCount}/${totalCount}`);
+                
+                const countElement = document.getElementById('achievement-count');
+                if (countElement) {
+                    countElement.textContent = `${unlockedCount}/${totalCount}`;
+                    console.log('Updated achievement count successfully');
+                }
+                
+                // 渲染成就卡片
+                renderAchievementCardsFallback();
+            } catch (e) {
+                console.error('Error rendering achievement stats:', e);
+            }
+        }
+        
+        // 备用成就卡片渲染函数
+        function renderAchievementCardsFallback() {
+            const grid = document.getElementById('achievements-grid-main');
+            if (!grid) {
+                console.log('achievements-grid-main not found');
+                return;
+            }
+            
+            // 确保 AchievementModule 已加载
+            if (typeof AchievementModule === 'undefined' || !AchievementModule.getAllAchievements) {
+                console.log('AchievementModule not ready');
+                setTimeout(renderAchievementCardsFallback, 100);
+                return;
+            }
+            
+            const allAchievements = Object.values(AchievementModule.getAllAchievements());
+            const unlockedAchievements = allAchievements.filter(a => a.unlockedAt !== null);
+            const lockedAchievements = allAchievements.filter(a => a.unlockedAt === null)
+                .sort((a, b) => (b.progress || 0) - (a.progress || 0));
+            
+            console.log(`Unlocked: ${unlockedAchievements.length}, Locked: ${lockedAchievements.length}`);
+            
+            // 获取当前佩戴的成就
+            let equipped = [];
+            try {
+                if (AchievementModule.getEquipped) {
+                    equipped = AchievementModule.getEquipped().filter(e => e !== null);
+                }
+            } catch (e) {
+                console.log('Error getting equipped:', e);
+            }
+            
+            console.log(`Equipped count: ${equipped.length}`);
+            
+            let displayAchievements;
+            
+            if (equipped.length > 0) {
+                // 有佩戴：显示已解锁成就
+                displayAchievements = [...unlockedAchievements];
+                console.log('Showing unlocked achievements');
+            } else {
+                // 没有佩戴：显示未完成的成就（按进度排序）
+                displayAchievements = [...lockedAchievements];
+                console.log('Showing locked achievements');
+            }
+            
+            // 限制最多显示4个
+            displayAchievements = displayAchievements.slice(0, 4);
+            
+            console.log(`Displaying ${displayAchievements.length} achievements`);
+            
+            grid.innerHTML = displayAchievements.map(achievement => {
+                const isUnlocked = achievement.unlockedAt !== null;
+                const rarityColors = {
+                    common: '#9ca3af',
+                    uncommon: '#22c55e',
+                    rare: '#3b82f6',
+                    epic: '#a855f7',
+                    legendary: '#f59e0b'
+                };
+                const borderColor = rarityColors[achievement.rarity] || '#9ca3af';
+                
+                return `
+                    <div class="achievement-card" style="border-color: ${borderColor};" data-achievement-id="${achievement.id}">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-name">${achievement.name}</div>
+                        <div class="achievement-rarity" style="color: ${borderColor};">${achievement.rarityText || achievement.rarity}</div>
+                        ${!isUnlocked && achievement.progress ? `<div class="achievement-progress">${achievement.progress}%</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // 页面加载后执行备用渲染
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(renderAchievementStatsFallback, 200);
+        });
+    </script>
     <link rel="stylesheet" href="auth/styles/auth.css">
     <link rel="stylesheet" href="achievements/styles/achievements.css">
     <link rel="stylesheet" href="components/achievement-card/achievement-card.css">
@@ -2147,7 +2262,7 @@
         }
 
         // 分享功能模块
-        const shareModule = {
+        const shareModule = window.shareModule = {
             // 当前分享的URL（使用GitHub Pages地址）
             shareUrl: 'https://charles19960423-gh.github.io/FengRong',
             
@@ -2473,21 +2588,56 @@
 
         // 打开分享弹窗
         function openShareModal() {
+            console.log('openShareModal called');
+            
+            // 使用全局的 shareModule
+            const shareModule = window.shareModule;
+            
+            console.log('shareModule:', typeof shareModule);
+            
             const modal = document.createElement('div');
             modal.className = 'modal-overlay';
             modal.style.display = 'flex';
-            modal.innerHTML = `
-                <div class="modal-content" style="background: linear-gradient(145deg, #2D1E17 0%, #1A120B 100%); max-width: 500px;">
-                    <span class="modal-close" onclick="closeShareModal()">✕</span>
-                    ${shareModule.generateShareCard()}
-                </div>
-            `;
+            
+            if (typeof shareModule === 'undefined' || !shareModule.generateShareCard) {
+                console.error('shareModule is undefined or missing generateShareCard!');
+                // 创建一个简单的分享弹窗
+                modal.innerHTML = `
+                    <div class="modal-content" style="background: linear-gradient(145deg, #2D1E17 0%, #1A120B 100%); max-width: 400px; padding: 20px;">
+                        <span class="modal-close" onclick="closeShareModal()" style="float: right; cursor: pointer; font-size: 24px;">✕</span>
+                        <h3 style="color: #d4af37; margin-bottom: 20px;">📤 分享成就</h3>
+                        <p style="color: #ccc; margin-bottom: 20px;">复制链接分享给好友：</p>
+                        <input type="text" value="https://charles19960423-gh.github.io/FengRong" style="width: 100%; padding: 10px; background: #333; border: 1px solid #555; color: #fff; border-radius: 5px;" readonly id="share-url-input">
+                        <button onclick="copyShareUrl(); closeShareModal()" style="margin-top: 15px; padding: 10px 20px; background: linear-gradient(135deg, #07c160, #06ad56); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            📋 复制链接
+                        </button>
+                    </div>
+                `;
+            } else {
+                modal.innerHTML = `
+                    <div class="modal-content" style="background: linear-gradient(145deg, #2D1E17 0%, #1A120B 100%); max-width: 500px;">
+                        <span class="modal-close" onclick="closeShareModal()">✕</span>
+                        ${shareModule.generateShareCard()}
+                    </div>
+                `;
+            }
+            
             document.body.appendChild(modal);
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     closeShareModal();
                 }
             });
+        }
+        
+        // 复制分享链接
+        function copyShareUrl() {
+            const input = document.getElementById('share-url-input');
+            if (input) {
+                input.select();
+                document.execCommand('copy');
+                alert('链接已复制到剪贴板！');
+            }
         }
 
         // 关闭分享弹窗
@@ -4122,8 +4272,23 @@
         updateEnvironment();
         ViewManager.init();
         
+        console.log('DOMContentLoaded: Initializing achievement modules...');
+        console.log('AchievementModule:', typeof AchievementModule);
+        console.log('MainAchievementModule:', typeof MainAchievementModule);
+        
+        // 初始化成就核心模块（必须先调用）
+        if (typeof AchievementModule !== 'undefined') {
+            AchievementModule.init();
+        } else {
+            console.error('AchievementModule is undefined!');
+        }
+        
         // 初始化主页面成就模块
-        MainAchievementModule.init();
+        if (typeof MainAchievementModule !== 'undefined') {
+            MainAchievementModule.init();
+        } else {
+            console.error('MainAchievementModule is undefined!');
+        }
 
         // 绑定导航链接事件
         document.querySelectorAll('nav a').forEach(link => {

@@ -12,7 +12,7 @@ const AchievementModule = (function() {
             icon: "🪵",
             rarity: "common",
             rarityText: "普通",
-            category: "基础",
+            category: "赏金任务",
             description: "完成第一个赏金任务",
             story: "江湖新人初入酒馆，在悬赏公告板前驻足良久，终于接下人生第一份委托。从此，传奇的序章正式展开...",
             unlockedAt: "2024-01-15",
@@ -26,7 +26,7 @@ const AchievementModule = (function() {
             icon: "🔑",
             rarity: "common",
             rarityText: "普通",
-            category: "活跃度",
+            category: "酒馆打卡",
             description: "连续7天登录",
             story: "每日必到酒馆报到，与掌柜相谈甚欢。这份坚持，让你成为了酒馆里最熟悉的面孔。",
             unlockedAt: "2024-01-22",
@@ -40,7 +40,7 @@ const AchievementModule = (function() {
             icon: "🥃",
             rarity: "uncommon",
             rarityText: "精良",
-            category: "收集",
+            category: "藏品收集",
             description: "收集10种法器",
             story: "在江湖中闯荡，收集了各式各样的法器。每一件都是冒险的见证，每一件都藏着独特的故事。",
             unlockedAt: "2024-02-01",
@@ -54,7 +54,7 @@ const AchievementModule = (function() {
             icon: "⚔️",
             rarity: "legendary",
             rarityText: "传说",
-            category: "声望",
+            category: "传奇殿堂",
             description: "声望达到1000",
             story: "你的名字在江湖中广为流传，无论是酒馆里的闲谈，还是茶楼中的议论，都离不开你的传奇故事。",
             unlockedAt: null,
@@ -68,7 +68,7 @@ const AchievementModule = (function() {
             icon: "🎯",
             rarity: "uncommon",
             rarityText: "精良",
-            category: "任务",
+            category: "赏金任务",
             description: "完成10个赏金任务",
             story: "十次揭榜，十次凯旋。你的战绩在酒馆公告板上熠熠生辉，成为众多冒险者的榜样。",
             unlockedAt: null,
@@ -82,7 +82,7 @@ const AchievementModule = (function() {
             icon: "⭐",
             rarity: "rare",
             rarityText: "稀有",
-            category: "任务",
+            category: "赏金任务",
             description: "以完美评价完成5个任务",
             story: "不仅完成任务，更追求极致。每一次交付都无可挑剔，你的专业精神令人叹服。",
             unlockedAt: null,
@@ -96,7 +96,7 @@ const AchievementModule = (function() {
             icon: "🌟",
             rarity: "uncommon",
             rarityText: "精良",
-            category: "社交",
+            category: "社交达人",
             description: "邀请3位好友加入",
             story: "一人独行快，众人同行远。你将酒馆的故事分享给更多人，让江湖更加热闹。",
             unlockedAt: "2024-02-10",
@@ -110,7 +110,7 @@ const AchievementModule = (function() {
             icon: "🦉",
             rarity: "common",
             rarityText: "普通",
-            category: "活跃度",
+            category: "酒馆打卡",
             description: "在深夜(23:00-02:00)登录5次",
             story: "夜深人静时，酒馆的灯火依然为你点亮。那些在深夜完成的任务，都成了难忘的回忆。",
             unlockedAt: null,
@@ -124,7 +124,7 @@ const AchievementModule = (function() {
             icon: "🔮",
             rarity: "epic",
             rarityText: "史诗",
-            category: "收集",
+            category: "藏品收集",
             description: "收集30种法器",
             story: "从普通的铜剑到传说中的神器，你的藏品足以开设一座小型法器博物馆。",
             unlockedAt: null,
@@ -138,7 +138,7 @@ const AchievementModule = (function() {
             icon: "🏅",
             rarity: "rare",
             rarityText: "稀有",
-            category: "赛季",
+            category: "赛季之星",
             description: "参与第一赛季活动",
             story: "在酒馆开业之初便投身其中，见证了第一个赛季的风起云涌。这份经历，是你江湖资历的最好证明。",
             unlockedAt: "2024-01-31",
@@ -152,7 +152,7 @@ const AchievementModule = (function() {
             icon: "💰",
             rarity: "rare",
             rarityText: "稀有",
-            category: "声望",
+            category: "传奇殿堂",
             description: "累计获得10000声望",
             story: "声望如流水般汇聚而来，你的名字已成为财富与实力的象征。",
             unlockedAt: null,
@@ -166,26 +166,224 @@ const AchievementModule = (function() {
             icon: "🛡️",
             rarity: "epic",
             rarityText: "史诗",
-            category: "活跃度",
+            category: "酒馆打卡",
             description: "连续登录30天",
             story: "一个月的坚守，见证了你的忠诚与执着。酒馆因你这样的守护者而更加温暖。",
             unlockedAt: null,
             progress: 45,
             requirements: { type: "login", target: 30, current: 13 },
             rewards: { prestige: 600, title: "忠诚卫士" }
+        },
+        // === 现代传媒风成就 ===
+        "headline-author": {
+            id: "headline-author",
+            name: "头条作者",
+            icon: "📰",
+            rarity: "common",
+            rarityText: "普通",
+            category: "头条速递",
+            description: "发布首篇任务报道",
+            story: "笔尖为剑，记录江湖风云的第一篇报道！你的文字将传遍整个酒馆。",
+            unlockedAt: "2024-03-01",
+            progress: 100,
+            requirements: { type: "task", target: 1, current: 1 },
+            rewards: { prestige: 50, title: "新锐记者" }
+        },
+        "traffic-star": {
+            id: "traffic-star",
+            name: "流量明星",
+            icon: "📈",
+            rarity: "uncommon",
+            rarityText: "精良",
+            category: "社交达人",
+            description: "获得100次点赞",
+            story: "你的报道引起了广泛关注，点赞数突破百次。江湖中，你的名字越来越响亮。",
+            unlockedAt: null,
+            progress: 75,
+            requirements: { type: "likes", target: 100, current: 75 },
+            rewards: { prestige: 150, title: "流量达人" }
+        },
+        "deep-investigation": {
+            id: "deep-investigation",
+            name: "深度调查",
+            icon: "🔍",
+            rarity: "uncommon",
+            rarityText: "精良",
+            category: "赏金任务",
+            description: "完成10个深度任务",
+            story: "深入事件背后，挖掘真相。每一次深度调查，都让你更接近江湖的本质。",
+            unlockedAt: null,
+            progress: 40,
+            requirements: { type: "deep-task", target: 10, current: 4 },
+            rewards: { prestige: 250, title: "调查记者" }
+        },
+        "material-expert": {
+            id: "material-expert",
+            name: "素材达人",
+            icon: "📸",
+            rarity: "rare",
+            rarityText: "稀有",
+            category: "藏品收集",
+            description: "上传50张任务素材",
+            story: "用镜头记录江湖的每一个精彩瞬间，你的素材库已经相当丰富。",
+            unlockedAt: null,
+            progress: 30,
+            requirements: { type: "upload", target: 50, current: 15 },
+            rewards: { prestige: 350, title: "素材大师" }
+        },
+        "opinion-leader": {
+            id: "opinion-leader",
+            name: "意见领袖",
+            icon: "🎤",
+            rarity: "rare",
+            rarityText: "稀有",
+            category: "社交达人",
+            description: "粉丝数达到1000",
+            story: "你的观点影响着众多江湖人士，成为大家信赖的意见领袖。",
+            unlockedAt: null,
+            progress: 25,
+            requirements: { type: "followers", target: 1000, current: 250 },
+            rewards: { prestige: 450, title: "江湖名嘴" }
+        },
+        "yearly-journalist": {
+            id: "yearly-journalist",
+            name: "年度记者",
+            icon: "🏅",
+            rarity: "epic",
+            rarityText: "史诗",
+            category: "赛季之星",
+            description: "获得年度最佳记者称号",
+            story: "一年的辛勤耕耘，终于收获荣誉。你成为了江湖公认的年度最佳记者！",
+            unlockedAt: null,
+            progress: 0,
+            requirements: { type: "season-points", target: 5000, current: 0 },
+            rewards: { prestige: 800, title: "年度风云记者" }
+        },
+        "media-tycoon": {
+            id: "media-tycoon",
+            name: "传媒大亨",
+            icon: "👑",
+            rarity: "legendary",
+            rarityText: "传说",
+            category: "传奇殿堂",
+            description: "建立自己的传媒帝国",
+            story: "从一名普通记者到传媒帝国的缔造者，你的传奇故事将被永远铭记。",
+            unlockedAt: null,
+            progress: 0,
+            requirements: { type: "complete-all", target: 1, current: 0 },
+            rewards: { prestige: 1500, title: "传媒帝王" }
+        },
+        "daily-update": {
+            id: "daily-update",
+            name: "每日一更",
+            icon: "⏰",
+            rarity: "common",
+            rarityText: "普通",
+            category: "酒馆打卡",
+            description: "连续发布30天内容",
+            story: "坚持每日更新，从未间断。你的勤奋与坚持，让读者养成了每天期待的习惯。",
+            unlockedAt: null,
+            progress: 10,
+            requirements: { type: "daily-post", target: 30, current: 3 },
+            rewards: { prestige: 100, title: "勤勉作者" }
+        },
+        // === 现代传媒风扩展成就 ===
+        "hotspot-tracker": {
+            id: "hotspot-tracker",
+            name: "热点追踪者",
+            icon: "🌡️",
+            rarity: "common",
+            rarityText: "普通",
+            category: "头条速递",
+            description: "连续7天发布热点内容",
+            story: "紧跟时事热点，第一时间传递江湖动态。你的报道总是走在最前沿！",
+            unlockedAt: null,
+            progress: 50,
+            requirements: { type: "hotspot", target: 7, current: 3 },
+            rewards: { prestige: 80, title: "热点先锋" }
+        },
+        "exclusive-scoop": {
+            id: "exclusive-scoop",
+            name: "独家爆料",
+            icon: "🎯",
+            rarity: "uncommon",
+            rarityText: "精良",
+            category: "头条速递",
+            description: "发布5篇独家报道",
+            story: "挖掘不为人知的内幕，每一篇独家报道都能引起江湖震动！",
+            unlockedAt: null,
+            progress: 60,
+            requirements: { type: "exclusive", target: 5, current: 3 },
+            rewards: { prestige: 200, title: "独家记者" }
+        },
+        "video-creator": {
+            id: "video-creator",
+            name: "视频达人",
+            icon: "🎬",
+            rarity: "uncommon",
+            rarityText: "精良",
+            category: "藏品收集",
+            description: "发布10个视频内容",
+            story: "用镜头讲述江湖故事，你的视频作品广受好评！",
+            unlockedAt: null,
+            progress: 40,
+            requirements: { type: "video", target: 10, current: 4 },
+            rewards: { prestige: 220, title: "视频创作者" }
+        },
+        "columnist": {
+            id: "columnist",
+            name: "专栏作家",
+            icon: "✍️",
+            rarity: "rare",
+            rarityText: "稀有",
+            category: "头条速递",
+            description: "开设并更新专栏10期",
+            story: "深耕某一领域，你的专栏成为众多读者的必读内容！",
+            unlockedAt: null,
+            progress: 30,
+            requirements: { type: "column", target: 10, current: 3 },
+            rewards: { prestige: 400, title: "专栏作家" }
+        },
+        "live-star": {
+            id: "live-star",
+            name: "直播新星",
+            icon: "🎤",
+            rarity: "rare",
+            rarityText: "稀有",
+            category: "社交达人",
+            description: "完成5次直播",
+            story: "镜头前的你魅力四射，每次直播都吸引众多观众！",
+            unlockedAt: null,
+            progress: 20,
+            requirements: { type: "live", target: 5, current: 1 },
+            rewards: { prestige: 380, title: "直播达人" }
+        },
+        "data-analyst": {
+            id: "data-analyst",
+            name: "数据分析师",
+            icon: "📊",
+            rarity: "epic",
+            rarityText: "史诗",
+            category: "赛季之星",
+            description: "发布20篇数据报告",
+            story: "用数据解读江湖趋势，你的分析报告成为决策参考！",
+            unlockedAt: null,
+            progress: 15,
+            requirements: { type: "data-report", target: 20, current: 3 },
+            rewards: { prestige: 750, title: "数据专家" }
         }
     };
 
-    // 成就分类
+    // 成就分类（方案三：酒馆传媒融合风）
     const achievementCategories = [
         { id: "all", name: "全部", icon: "📋" },
-        { id: "基础", name: "基础", icon: "📌" },
-        { id: "活跃度", name: "活跃度", icon: "🔥" },
-        { id: "任务", name: "任务", icon: "📜" },
-        { id: "收集", name: "收集", icon: "🎒" },
-        { id: "声望", name: "声望", icon: "⭐" },
-        { id: "社交", name: "社交", icon: "👥" },
-        { id: "赛季", name: "赛季", icon: "🏆" }
+        { id: "酒馆打卡", name: "酒馆打卡", icon: "🍶" },
+        { id: "头条速递", name: "头条速递", icon: "📰" },
+        { id: "赏金任务", name: "赏金任务", icon: "🎯" },
+        { id: "社交达人", name: "社交达人", icon: "👥" },
+        { id: "藏品收集", name: "藏品收集", icon: "🎒" },
+        { id: "赛季之星", name: "赛季之星", icon: "⭐" },
+        { id: "传奇殿堂", name: "传奇殿堂", icon: "👑" }
     ];
 
     // 稀有度颜色映射
@@ -564,7 +762,9 @@ const AchievementModule = (function() {
                     if (index !== -1) {
                         unequip(index);
                         card.classList.remove('equipped');
-                        alert(`「${achievement.name}」已取下！`);
+                        if (typeof showNotification === 'function') {
+                            showNotification(`「${achievement.name}」已取下！`, 'success');
+                        }
                         renderAchievements(document.querySelector('.category-tag.active')?.dataset.category || 'all');
                     }
                 } else {
@@ -574,7 +774,9 @@ const AchievementModule = (function() {
                     if (emptySlot !== -1) {
                         equip(achievement.id, emptySlot);
                         card.classList.add('equipped');
-                        alert(`「${achievement.name}」已佩戴到槽位${emptySlot + 1}！`);
+                        if (typeof showNotification === 'function') {
+                            showNotification(`「${achievement.name}」已佩戴到槽位${emptySlot + 1}！`, 'success');
+                        }
                         renderAchievements(document.querySelector('.category-tag.active')?.dataset.category || 'all');
                     } else {
                         // 没有空槽位，显示槽位选择弹窗
@@ -600,7 +802,12 @@ const AchievementModule = (function() {
             const index = equippedList.findIndex(e => e && e.id === achievementId);
             if (index !== -1) {
                 unequip(index);
-                alert('成就已取下！');
+                // 使用 Toast 通知
+                if (typeof showNotification === 'function') {
+                    showNotification('成就已取下！', 'success');
+                } else {
+                    console.log('成就已取下！');
+                }
             }
         } else {
             showSlotModal(achievementId);
@@ -672,7 +879,9 @@ const AchievementModule = (function() {
                 const slotIndex = parseInt(this.dataset.slot);
                 equip(achievementId, slotIndex);
                 AchievementModule.closeSlotModal();
-                alert(`成就「${achievement.name}」已佩戴到槽位${slotIndex + 1}！`);
+                if (typeof showNotification === 'function') {
+                    showNotification(`成就「${achievement.name}」已佩戴到槽位${slotIndex + 1}！`, 'success');
+                }
                 renderAchievements(document.querySelector('.category-tag.active')?.dataset.category || 'all');
             });
         });
@@ -922,20 +1131,23 @@ const AchievementModule = (function() {
         // 初始化默认佩戴数据（如果localStorage中没有数据）
         initDefaultEquipped();
 
-        renderStats();
-        renderCategories();
-        renderAchievements('all');
+        // 只有在成就子页面时才渲染页面内容
+        if (document.getElementById('achievements-grid')) {
+            renderStats();
+            renderCategories();
+            renderAchievements('all');
 
-        // 绑定模态框外部点击关闭
-        document.addEventListener('click', function(e) {
-            const modals = ['achievement-modal', 'share-modal', 'poster-modal'];
-            modals.forEach(modalId => {
-                const modal = document.getElementById(modalId);
-                if (modal && modal.classList.contains('show') && e.target === modal) {
-                    modal.classList.remove('show');
-                }
+            // 绑定模态框外部点击关闭
+            document.addEventListener('click', function(e) {
+                const modals = ['achievement-modal', 'share-modal', 'poster-modal'];
+                modals.forEach(modalId => {
+                    const modal = document.getElementById(modalId);
+                    if (modal && modal.classList.contains('show') && e.target === modal) {
+                        modal.classList.remove('show');
+                    }
+                });
             });
-        });
+        }
     }
 
     // 暴露公共API
@@ -1136,7 +1348,9 @@ function setTargetAchievementClick() {
     if (achievement) {
         AchievementModule.setTarget(achievement.id);
         StateManager.setTargetAchievement(achievement.id);
-        alert(`已将「${achievement.name}」设为目标！`);
+        if (typeof showNotification === 'function') {
+            showNotification(`已将「${achievement.name}」设为目标！`, 'success');
+        }
         closeModal();
     }
 }
