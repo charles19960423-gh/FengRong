@@ -1,0 +1,24 @@
+{
+  "name": "fr-tavern-frontend",
+  "version": "0.2.0",
+  "description": "枫榕赏金酒馆 - 前端应用",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "npx serve . -l 8080"
+  },
+  "keywords": [
+    "tavern",
+    "bounty",
+    "task-management",
+    "game"
+  ],
+  "author": "枫榕管理平台",
+  "license": "Private",
+  "devDependencies": {
+    "vite": "^5.2.0"
+  },
+  "dependencies": {}
+}

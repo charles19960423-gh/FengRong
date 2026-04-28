@@ -1,4 +1,3 @@
-
 package com.example.taskmanagement.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -14,13 +13,16 @@ import java.util.Optional;
 public interface TaskParticipantMapper extends BaseMapper<TaskParticipant> {
     @Select("SELECT * FROM task_participant WHERE task_id = #{taskId} AND user_id = #{userId}")
     Optional<TaskParticipant> findByTaskIdAndUserId(@Param("taskId") Long taskId, @Param("userId") Long userId);
-    
+
+    @Select("SELECT * FROM task_participant WHERE id = #{id}")
+    Optional<TaskParticipant> selectByIdOptional(Long id);
+
     @Select("SELECT * FROM task_participant WHERE task_id = #{taskId}")
     List<TaskParticipant> findByTaskId(@Param("taskId") Long taskId);
-    
+
     @Select("SELECT * FROM task_participant WHERE user_id = #{userId}")
     List<TaskParticipant> findByUserId(@Param("userId") Long userId);
-    
+
     @Select("SELECT COUNT(*) FROM task_participant WHERE task_id = #{taskId} AND status = 'confirmed'")
     int countConfirmedParticipants(@Param("taskId") Long taskId);
 }

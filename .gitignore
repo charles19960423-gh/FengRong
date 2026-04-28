@@ -1,61 +1,91 @@
-# Java
-*.class
+# ==============================================
+# 枫榕赏金酒馆 - Git忽略配置
+# ==============================================
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# IDE配置
+.idea/
+.vscode/
+.project
+.classpath
+.settings/
+*.iml
+*.ipr
+*.iws
+
+# 构建输出
+target/
+build/
+dist/
 *.jar
 *.war
 *.ear
-*.logs
-target/
-.idea/
-*.iml
-.vscode/
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
 
-# Build tools
-bin/
-build/
-out/
-
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Logs
-*.log
+# 日志文件
 logs/
+*.log
+*.log.*
 
-# Temporary files
-*.tmp
-*.bak
-*.swp
-*~
+# 环境变量配置
+.env
+.env.local
+.env.*.local
 
-# Backup files
-*.zip
-*.rar
-*.7z
-backup/
-
-# Database
+# 数据库文件
 *.db
 *.sqlite
 
-# Environment
-.env
-.env.local
-*.local
-
-# Dependencies
+# 缓存文件
+.cache/
 node_modules/
-package-lock.json
-yarn.lock
+npm-debug.log
+yarn-error.log
 
-# IDE specific
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# 临时文件
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
+
+# Gradle
+gradle/
+gradlew
+gradlew.bat
+build/
+
+# Docker
+docker-compose.override.yml
+
+# 敏感文件
+secrets/
+credentials/
+*.pem
+*.key
+
+# 备份文件
+*.bak
+*.backup
+*.old
+
+# 编辑器临时文件
+*.bak
+*.swp
+*.swo
+*~
+
+# 前端开发
+.parcel-cache/
+.cache/
+.vite/

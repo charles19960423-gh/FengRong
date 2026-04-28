@@ -1,4 +1,3 @@
-
 package com.example.taskmanagement.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -21,9 +20,9 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
-    
+
     private final TaskMapper taskMapper;
-    
+
     @Override
     public TaskResponse createTask(TaskCreateRequest request, Long userId) {
         Task task = new Task();
@@ -43,47 +42,47 @@ public class TaskServiceImpl implements TaskService {
         task.setDeliveryRequirements(request.getDeliveryRequirements());
         task.setCreatedAt(LocalDateTime.now());
         task.setUpdatedAt(LocalDateTime.now());
-        
+
         taskMapper.insert(task);
-        
+
         return convertToResponse(task);
     }
-    
+
     @Override
     public TaskResponse getTaskById(Long id) {
-        Task task = taskMapper.selectById(id)
+        Task task = taskMapper.selectByIdOptional(id)
                 .orElseThrow(() -> new ResourceNotFoundException("任务不存在"));
         return convertToResponse(task);
     }
-    
+
     @Override
     public IPage<TaskResponse> getAllTasks(int page, int size) {
         Page<Task> taskPage = new Page<>(page, size);
         IPage<Task> result = taskMapper.selectPage(taskPage, null);
         return result.convert(this::convertToResponse);
     }
-    
+
     @Override
     public IPage<TaskResponse> getTasksByStatus(String status, int page, int size) {
         Page<Task> taskPage = new Page<>(page, size);
         IPage<Task> result = taskMapper.findByStatus(taskPage, status);
         return result.convert(this::convertToResponse);
     }
-    
+
     @Override
     public IPage<TaskResponse> getTasksByPublisher(Long publisherId, int page, int size) {
         Page<Task> taskPage = new Page<>(page, size);
         IPage<Task> result = taskMapper.findByPublisherId(taskPage, publisherId);
         return result.convert(this::convertToResponse);
     }
-    
+
     @Override
     public IPage<TaskResponse> getTasksByCategory(String category, int page, int size) {
         Page<Task> taskPage = new Page<>(page, size);
         IPage<Task> result = taskMapper.findByCategory(taskPage, category);
         return result.convert(this::convertToResponse);
     }
-    
+
     @Override
     public IPage<TaskResponse> searchTasks(String keyword, int page, int size) {
         if (!StringUtils.hasText(keyword)) {
@@ -93,16 +92,16 @@ public class TaskServiceImpl implements TaskService {
         IPage<Task> result = taskMapper.searchTasks(taskPage, keyword);
         return result.convert(this::convertToResponse);
     }
-    
+
     @Override
     public TaskResponse updateTask(Long id, TaskUpdateRequest request, Long userId) {
-        Task task = taskMapper.selectById(id)
+        Task task = taskMapper.selectByIdOptional(id)
                 .orElseThrow(() -> new ResourceNotFoundException("任务不存在"));
-        
+
         if (!task.getPublisherId().equals(userId)) {
             throw new UnauthorizedException("无权修改此任务");
         }
-        
+
         if (request.getTitle() != null) task.setTitle(request.getTitle());
         if (request.getDescription() != null) task.setDescription(request.getDescription());
         if (request.getCategory() != null) task.setCategory(request.getCategory());
@@ -117,24 +116,24 @@ public class TaskServiceImpl implements TaskService {
         if (request.getRequirements() != null) task.setRequirements(request.getRequirements());
         if (request.getDeliveryRequirements() != null) task.setDeliveryRequirements(request.getDeliveryRequirements());
         task.setUpdatedAt(LocalDateTime.now());
-        
+
         taskMapper.updateById(task);
-        
+
         return convertToResponse(task);
     }
-    
+
     @Override
     public void deleteTask(Long id, Long userId) {
-        Task task = taskMapper.selectById(id)
+        Task task = taskMapper.selectByIdOptional(id)
                 .orElseThrow(() -> new ResourceNotFoundException("任务不存在"));
-        
+
         if (!task.getPublisherId().equals(userId)) {
             throw new UnauthorizedException("无权删除此任务");
         }
-        
+
         taskMapper.deleteById(id);
     }
-    
+
     private TaskResponse convertToResponse(Task task) {
         TaskResponse response = new TaskResponse();
         response.setId(task.getId());

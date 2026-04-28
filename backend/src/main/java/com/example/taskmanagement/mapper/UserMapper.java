@@ -1,4 +1,3 @@
-
 package com.example.taskmanagement.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -15,7 +14,10 @@ public interface UserMapper extends BaseMapper<User> {
     Optional<User> findByUsername(String username);
 
     @Select("SELECT * FROM user WHERE email = #{email}")
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmail(String username);
+
+    @Select("SELECT * FROM user WHERE id = #{id}")
+    Optional<User> selectByIdOptional(Long id);
 
     @Update("UPDATE user SET prestige = #{prestige}, level = #{level}, tier = #{tier}, " +
             "continuous_days = #{continuousDays}, last_login_date = #{lastLoginDate}, " +

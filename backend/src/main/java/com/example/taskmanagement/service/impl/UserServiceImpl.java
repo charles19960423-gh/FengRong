@@ -1,4 +1,3 @@
-
 package com.example.taskmanagement.service.impl;
 
 import com.example.taskmanagement.dto.request.UserLoginRequest;
@@ -77,8 +76,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String token = jwtUtil.generateToken(user.getUsername());
-        
-        // 处理登录奖励
+
         PrestigeResponse prestigeResponse = loginBonus(user.getId());
 
         LoginResponse response = new LoginResponse();
@@ -91,7 +89,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getUserById(Long id) {
-        User user = userMapper.selectById(id)
+        User user = userMapper.selectByIdOptional(id)
                 .orElseThrow(() -> new ResourceNotFoundException("用户不存在"));
         return convertToResponse(user);
     }
@@ -105,14 +103,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PrestigeResponse getPrestigeInfo(Long userId) {
-        User user = userMapper.selectById(userId)
+        User user = userMapper.selectByIdOptional(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("用户不存在"));
         return buildPrestigeResponse(user, false);
     }
 
     @Override
     public PrestigeResponse addPrestige(Long userId, int amount, String reason) {
-        User user = userMapper.selectById(userId)
+        User user = userMapper.selectByIdOptional(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("用户不存在"));
 
         int oldPrestige = user.getPrestige() != null ? user.getPrestige() : INITIAL_PRESTIGE;
@@ -137,7 +135,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PrestigeResponse deductPrestige(Long userId, int amount, String reason) {
-        User user = userMapper.selectById(userId)
+        User user = userMapper.selectByIdOptional(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("用户不存在"));
 
         int oldPrestige = user.getPrestige() != null ? user.getPrestige() : INITIAL_PRESTIGE;
@@ -154,7 +152,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PrestigeResponse loginBonus(Long userId) {
-        User user = userMapper.selectById(userId)
+        User user = userMapper.selectByIdOptional(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("用户不存在"));
 
         LocalDate today = LocalDate.now();

@@ -6,7 +6,7 @@ import com.example.taskmanagement.dto.response.ApiResponse;
 import com.example.taskmanagement.dto.response.LoginResponse;
 import com.example.taskmanagement.dto.response.UserResponse;
 import com.example.taskmanagement.service.UserService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

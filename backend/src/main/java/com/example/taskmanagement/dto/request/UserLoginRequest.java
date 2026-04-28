@@ -1,7 +1,7 @@
 
 package com.example.taskmanagement.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data

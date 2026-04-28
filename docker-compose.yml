@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # MySQL数据库服务
+  mysql:
+    image: mysql:8.0
+    container_name: fr-tavern-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_NAME:-fr_tavern}
+      MYSQL_USER: ${DB_USERNAME:-admin}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/mysql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    networks:
+      - fr-tavern-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis缓存服务（可选）
+  redis:
+    image: redis:7-alpine
+    container_name: fr-tavern-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - fr-tavern-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 后端服务
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fr-tavern-backend
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-fr_tavern}
+      DB_USERNAME: ${DB_USERNAME:-admin}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key}
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - fr-tavern-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 前端服务
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fr-tavern-frontend
+    ports:
+      - "80:80"
+    networks:
+      - fr-tavern-network
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  fr-tavern-network:
+    driver: bridge

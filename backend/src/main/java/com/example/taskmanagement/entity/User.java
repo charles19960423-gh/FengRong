@@ -1,4 +1,3 @@
-
 package com.example.taskmanagement.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -70,6 +69,19 @@ public class User {
     }
 
     public int getProgressPercent() {
-        return PrestigeResponse.calculateProgressPercent(this.prestige != null ? this.prestige : 2850);
+        int prestige = this.prestige != null ? this.prestige : 2850;
+        int currentLevelIndex = getLevelIndex(prestige);
+        int nextThreshold = PRESTIGE_THRESHOLDS[currentLevelIndex];
+        int prevThreshold = currentLevelIndex > 0 ? PRESTIGE_THRESHOLDS[currentLevelIndex - 1] : 0;
+        int levelRange = nextThreshold - prevThreshold;
+        int progress = prestige - prevThreshold;
+        return (int) ((progress * 100.0) / levelRange);
+    }
+
+    private int getLevelIndex(int prestige) {
+        for (int i = PRESTIGE_THRESHOLDS.length - 1; i >= 0; i--) {
+            if (prestige >= PRESTIGE_THRESHOLDS[i]) return i;
+        }
+        return 0;
     }
 }
