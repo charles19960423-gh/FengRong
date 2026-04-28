@@ -1,89 +1,112 @@
-# 枫榕赏金酒馆 - 传媒江湖补给站
+# 枫榕管理平台 v3.1
 
-## 项目简介
+## 📋 版本说明
 
-枫榕赏金酒馆是一个传媒江湖补给站管理系统，融合武侠风格的现代任务管理平台。项目代号 FR（FengRong），旨在为传媒从业者提供一个有趣的任务委托与接单平台。
+这是枫榕管理平台的基础架构优化版本，主要完成了以下工作：
 
-## 项目结构
+## ✨ 核心改进
+
+### 🔧 技术栈升级
+- **数据库**: PostgreSQL → MySQL 8.0
+- **容器化**: Docker + Docker Compose
+- **Spring Boot**: 3.x → 2.7.18（兼容Java 11）
+- **JWT认证**: 完整的认证体系
+- **CORS配置**: 跨域访问支持
+
+### 📦 新增功能
+
+#### 后端
+- ✅ 统一响应封装（ApiResponse）
+- ✅ 全局异常处理
+- ✅ 多环境配置（dev/prod）
+- ✅ 环境变量支持（.env）
+- ✅ Docker容器化
+- ✅ JWT认证优化
+- ✅ MyBatis-Plus优化
+
+#### 前端
+- ✅ 组件化重构
+- ✅ API服务封装
+- ✅ 工具函数提取
+- ✅ Docker容器化
+- ✅ Nginx配置
+
+#### 数据库
+- ✅ MySQL完整表结构
+- ✅ 初始数据脚本
+- ✅ 索引优化
+
+## 🚀 快速开始
+
+### 前置要求
+- Docker & Docker Compose
+- Java 11+
+- Maven
+- Node.js 16+
+
+### 启动方式
+
+#### 方式1：Docker Compose（推荐）
+```bash
+docker-compose up -d
+```
+
+#### 方式2：本地开发
+```bash
+# 后端
+cd backend
+mvn spring-boot:run
+
+# 前端
+cd frontend
+npm install
+npm run dev
+```
+
+## 📊 服务地址
+
+| 服务 | 地址 |
+|------|------|
+| 前端 | http://localhost:5173 |
+| 后端API | http://localhost:8080 |
+| MySQL | localhost:3306 |
+
+## 🔐 默认账号
+
+| 用户名 | 密码 | 角色 |
+|--------|------|------|
+| admin | test123 | 馆主 |
+
+## 📁 项目结构
 
 ```
 FR-GIT/
-├── frontend/          # 前端文件
-│   └── FR-index.html  # 单页应用主文件
-├── backend/           # 后端服务 (Spring Boot)
-│   ├── src/          # Java 源代码
-│   └── pom.xml       # Maven 配置
-├── database/         # 数据库脚本
-│   └── FR SQL/       # SQL 脚本文件夹
-├── .gitignore        # Git 忽略配置
-└── README.md         # 项目说明文档
+├── backend/              # 后端项目
+├── frontend/             # 前端项目
+├── database/             # 数据库脚本
+│   └── mysql/
+├── docker-compose.yml    # Docker编排
+├── manage-mysql.ps1      # MySQL管理脚本
+└── README.md
 ```
 
-## 技术栈
+## 📈 版本历史
 
-### 前端
-- HTML5 + CSS3 + JavaScript
-- Supabase (后端即服务)
-- 响应式设计
+### v3.1 (2026-04-29)
+- ✅ 基础架构优化完成
+- ✅ MySQL数据库迁移
+- ✅ Docker容器化部署
+- ✅ 多环境配置支持
+- ✅ 前端模块化重构
 
-### 后端
-- Spring Boot 2.7+
-- MyBatis Plus
-- MySQL
-- JWT 认证
+## 🔧 技术支持
 
-### 数据库
-- MySQL 8.0+
+- MySQL Workbench: 图形化数据库管理
+- manage-mysql.ps1: PowerShell管理脚本
 
-## 功能模块
+## 📝 Git提交
 
-### 用户系统
-- 用户注册与登录
-- JWT Token 认证
-- 权限管理
-
-### 任务系统
-- 发布赏金任务
-- 接单与完成任务
-- 任务评论与参与
-
-### 装备系统
-- 法器背包
-- 装备槽位（武器、护甲、饰品）
-- 装备/卸下功能
-
-### 成就系统
-- 任务成就解锁
-- 声望等级
-
-## 快速开始
-
-### 前端运行
-1. 直接在浏览器中打开 `frontend/FR-index.html`
-2. 或使用本地服务器：`npx serve frontend`
-
-### 后端运行
-1. 确保已安装 Maven 和 JDK 11+
-2. 进入 `backend` 目录
-3. 执行 `mvn spring-boot:run`
-
-### 数据库配置
-1. 创建 MySQL 数据库
-2. 执行 `database/FR SQL/tavern_database.sql` 初始化表结构
-3. 修改 `backend/src/main/resources/application.yml` 中的数据库配置
-
-## 开发团队
-
-- 林峰系统论 V3.1
-- 枫榕管理平台
-
-## 版本历史
-
-- V0.2 - 当前版本
-  - 背包装备系统
-  - JWT 认证
-  - 任务管理功能
-
-## 许可证
-
-私有项目 - 仅供内部使用
+```bash
+# 本地已提交，如需推送到远程
+git push
+```
