@@ -1345,6 +1345,108 @@
         .equip-action-btn.unequip:hover {
             background: #c0392b;
         }
+
+        /* ===== 分享功能样式 ===== */
+        .share-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .share-card h3 {
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .share-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 100px;
+        }
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .share-icon {
+            font-size: 1.8rem;
+        }
+        .share-text {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: white;
+        }
+        .share-btn.wechat-friend {
+            background: linear-gradient(135deg, #07c160 0%, #06ad56 100%);
+        }
+        .share-btn.wechat-friend:hover {
+            background: linear-gradient(135deg, #10d670 0%, #07c160 100%);
+        }
+        .share-btn.wechat-timeline {
+            background: linear-gradient(135deg, #52c41a 0%, #3db916 100%);
+        }
+        .share-btn.wechat-timeline:hover {
+            background: linear-gradient(135deg, #67d925 0%, #52c41a 100%);
+        }
+        .share-btn.copy-link {
+            background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+        }
+        .share-btn.copy-link:hover {
+            background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+        }
+        .share-preview {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            border: 1px solid #4a3520;
+        }
+        .share-url {
+            font-size: 0.8rem;
+            color: #8b7355;
+            word-break: break-all;
+        }
+        .share-btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .share-btn-sm {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .share-btn-sm.wechat {
+            background: #07c160;
+            color: white;
+        }
+        .share-btn-sm.wechat:hover {
+            background: #10d670;
+        }
+        .share-btn-sm.link {
+            background: #1890ff;
+            color: white;
+        }
+        .share-btn-sm.link:hover {
+            background: #40a9ff;
+        }
     </style>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
@@ -1773,6 +1875,123 @@
             } else {
                 showNotification(text, 'info');
             }
+        }
+
+        // 分享功能模块
+        const shareModule = {
+            // 当前分享的URL（使用GitHub Pages地址）
+            shareUrl: 'https://charles19960423-gh.github.io/FengRong',
+            
+            // 分享标题
+            shareTitle: '枫榕赏金酒馆 - 传媒江湖补给站',
+            
+            // 分享描述
+            shareDesc: '在传媒江湖中接单任务，提升声望，收集法器装备！',
+
+            // 微信好友分享
+            shareToWeChatFriend: function(title = this.shareTitle, desc = this.shareDesc, url = this.shareUrl) {
+                // 微信内置浏览器分享
+                if (this.isWeChatBrowser()) {
+                    // 微信JS-SDK分享需要配置，这里用通用方式
+                    this.copyShareLink(title, desc, url);
+                    showNotification('已复制分享链接到剪贴板，粘贴到微信即可分享！', 'success');
+                } else {
+                    // 非微信环境，生成分享链接
+                    this.copyShareLink(title, desc, url);
+                    showNotification('已复制分享链接，请打开微信粘贴给好友！', 'success');
+                }
+            },
+
+            // 微信朋友圈分享
+            shareToWeChatTimeline: function(title = this.shareTitle, desc = this.shareDesc, url = this.shareUrl) {
+                if (this.isWeChatBrowser()) {
+                    this.copyShareLink(title, desc, url);
+                    showNotification('已复制分享链接，到朋友圈粘贴分享！', 'success');
+                } else {
+                    this.copyShareLink(title, desc, url);
+                    showNotification('已复制分享链接，请打开微信分享到朋友圈！', 'success');
+                }
+            },
+
+            // 复制分享链接
+            copyShareLink: function(title, desc, url) {
+                const shareText = `${title}\n${desc}\n${url}`;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(shareText);
+                }
+                return shareText;
+            },
+
+            // 判断是否微信浏览器
+            isWeChatBrowser: function() {
+                const ua = navigator.userAgent.toLowerCase();
+                return ua.includes('micromessenger');
+            },
+
+            // 生成分享卡片HTML
+            generateShareCard: function() {
+                return `
+                    <div class="share-card">
+                        <h3>📤 分享到</h3>
+                        <div class="share-buttons">
+                            <button class="share-btn wechat-friend" onclick="shareModule.shareToWeChatFriend(); closeShareModal()">
+                                <span class="share-icon">💬</span>
+                                <span class="share-text">微信好友</span>
+                            </button>
+                            <button class="share-btn wechat-timeline" onclick="shareModule.shareToWeChatTimeline(); closeShareModal()">
+                                <span class="share-icon">📱</span>
+                                <span class="share-text">朋友圈</span>
+                            </button>
+                            <button class="share-btn copy-link" onclick="shareModule.copyLinkOnly(); closeShareModal()">
+                                <span class="share-icon">🔗</span>
+                                <span class="share-text">复制链接</span>
+                            </button>
+                        </div>
+                        <div class="share-preview">
+                            <div class="share-url">${this.shareUrl}</div>
+                        </div>
+                    </div>
+                `;
+            },
+
+            // 仅复制链接
+            copyLinkOnly: function() {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(this.shareUrl);
+                    showNotification('链接已复制到剪贴板！', 'success');
+                }
+            },
+
+            // 分享任务
+            shareTask: function(task) {
+                const title = `【赏金任务】${task.title}`;
+                const desc = `报酬：${task.reward} | 难度：${task.difficulty} | 截止：${task.deadline}`;
+                const url = this.shareUrl + '?task=' + task.id;
+                
+                this.copyShareLink(title, desc, url);
+                showNotification('任务链接已复制！', 'success');
+            },
+
+            // 分享用户主页
+            shareProfile: function(username) {
+                const title = `${username} 的枫榕酒馆主页`;
+                const desc = '在枫榕赏金酒馆中探索传媒江湖！';
+                const url = this.shareUrl + '?user=' + username;
+                
+                this.copyShareLink(title, desc, url);
+                showNotification('主页链接已复制！', 'success');
+            }
+        };
+
+        // 打开分享弹窗
+        function openShareModal() {
+            const modalContent = shareModule.generateShareCard();
+            showModal('分享', modalContent);
+        }
+
+        // 关闭分享弹窗
+        function closeShareModal() {
+            hideModal();
         }
 
         // 玩家状态数据
@@ -2691,6 +2910,11 @@
             <li><a href="#publish">发布委托</a></li>
             <li><a href="#honor">荣誉殿堂</a></li>
             <li><a href="#about">关于手册</a></li>
+            <li>
+                <a href="javascript:void(0)" onclick="openShareModal()" style="background: #07c160; color: white; padding: 8px 15px;">
+                    📤 分享
+                </a>
+            </li>
             <li id="authNav">
                 <a href="javascript:void(0)" onclick="document.getElementById('loginModal').style.display='flex'; document.getElementById('loginForm').style.display='block'; document.getElementById('registerForm').style.display='none';" style="background: var(--gold); color: #1A120B;">
                     👤 登录/注册
