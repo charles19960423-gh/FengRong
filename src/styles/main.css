@@ -1,0 +1,97 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #8C2B1B;
+  --secondary-color: #D4AF37;
+  --background-dark: #1A120B;
+  --background-card: #2D1E17;
+  --text-primary: #D4C39E;
+  --text-secondary: #888;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Noto Serif SC', 'SimSun', serif;
+  background: linear-gradient(180deg, #1A120B 0%, #2D1E17 100%);
+  color: #D4C39E;
+  min-height: 100vh;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.main-content {
+  padding: 30px 0;
+  min-height: calc(100vh - 300px);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1A120B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #8C2B1B;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A03320;
+}
+
+a {
+  color: #D4AF37;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+}
+
+input, select {
+  font-family: inherit;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
