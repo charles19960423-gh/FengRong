@@ -7,8 +7,38 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json'
   },
-  withCredentials: true
+  withCredentials: true,
+  // 请求超时
+  timeout: 15000
 })
+
+// 错误消息映射
+const errorMessages = {
+  400: '请求参数错误，请检查输入内容',
+  401: '登录已过期，请重新登录',
+  403: '没有权限执行此操作',
+  404: '请求的资源不存在',
+  408: '请求超时，请稍后重试',
+  500: '服务器内部错误，请稍后重试',
+  502: '网关错误，请稍后重试',
+  503: '服务暂不可用，请稍后重试',
+  504: '网关超时，请稍后重试'
+}
+
+// 显示错误提示的函数
+const showError = (message) => {
+  // 使用自定义事件通知 UI 显示错误
+  window.dispatchEvent(new CustomEvent('showToast', { 
+    detail: { message, type: 'error' } 
+  }))
+}
+
+// 显示成功提示的函数
+const showSuccess = (message) => {
+  window.dispatchEvent(new CustomEvent('showToast', { 
+    detail: { message, type: 'success' } 
+  }))
+}
 
 api.interceptors.request.use(
   (config) => {
@@ -16,6 +46,8 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    // 添加请求 ID 用于追踪
+    config.headers['X-Request-ID'] = Date.now().toString(36) + Math.random().toString(36).substr(2)
     return config
   },
   (error) => {
@@ -24,12 +56,37 @@ api.interceptors.request.use(
 )
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // 如果响应中有消息，显示成功提示
+    if (response.data?.message) {
+      showSuccess(response.data.message)
+    }
+    return response
+  },
   (error) => {
-    if (error.response?.status === 401) {
+    // 获取错误信息
+    const status = error.response?.status
+    const serverMessage = error.response?.data?.message
+    const customMessage = errorMessages[status] || '网络错误，请稍后重试'
+    
+    // 组合错误消息
+    const finalMessage = serverMessage || customMessage
+    
+    // 显示错误提示
+    showError(finalMessage)
+    
+    // 根据状态码处理特定错误
+    if (status === 401) {
       localStorage.removeItem('tavern_token')
       window.dispatchEvent(new CustomEvent('authChange', { detail: { type: 'logout' } }))
+    } else if (status === 403) {
+      // 可以在这里添加跳转逻辑
+      console.warn('权限不足:', finalMessage)
+    } else if (status >= 500) {
+      // 服务器错误，可以记录到监控系统
+      console.error('服务器错误:', status, finalMessage)
     }
+    
     return Promise.reject(error)
   }
 )

@@ -1,34 +1,34 @@
-<template>
+﻿<template>
   <div class="bounty-page">
     <div class="page-header">
       <h1>赏金榜单</h1>
-      <p>领取高额赏金任务，赢取丰厚奖励</p>
+      <p>领取高额赏金任务赢取丰厚奖励</p>
     </div>
 
     <div class="bounty-stats">
       <div class="stat-card">
-        <span class="stat-icon">💰</span>
+        <span class="stat-icon"></span>
         <div class="stat-info">
           <span class="stat-value">{{ bounties.length }}</span>
           <span class="stat-label">任务总数</span>
         </div>
       </div>
       <div class="stat-card">
-        <span class="stat-icon">🎯</span>
+        <span class="stat-icon"></span>
         <div class="stat-info">
           <span class="stat-value">{{ claimedCount }}</span>
           <span class="stat-label">已领取</span>
         </div>
       </div>
       <div class="stat-card">
-        <span class="stat-icon">🔥</span>
+        <span class="stat-icon"></span>
         <div class="stat-info">
           <span class="stat-value">{{ inProgressCount }}</span>
           <span class="stat-label">进行中</span>
         </div>
       </div>
       <div class="stat-card">
-        <span class="stat-icon">🏆</span>
+        <span class="stat-icon"></span>
         <div class="stat-info">
           <span class="stat-value">2,850</span>
           <span class="stat-label">累计声望</span>
@@ -39,7 +39,7 @@
     <div class="bounty-main-layout">
       <aside class="sidebar">
         <div class="sidebar-section">
-          <h3>🔍 搜索任务</h3>
+          <h3> 搜索任务</h3>
           <input 
             type="text" 
             v-model="searchQuery" 
@@ -49,7 +49,7 @@
         </div>
 
         <div class="sidebar-section">
-          <h3>⚔️ 品质筛选</h3>
+          <h3>品质筛选</h3>
           <div class="filter-options">
             <label 
               v-for="difficulty in difficultyFilters" 
@@ -68,7 +68,7 @@
         </div>
 
         <div class="sidebar-section">
-          <h3>📍 地点筛选</h3>
+          <h3>地点筛选</h3>
           <select v-model="selectedLocation" class="sidebar-select">
             <option value="all">全部地点</option>
             <option v-for="loc in uniqueLocations" :key="loc" :value="loc">{{ loc }}</option>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="sidebar-section">
-          <h3>🏷️ 快捷筛选</h3>
+          <h3>快捷筛选</h3>
           <div class="quick-filters">
             <button 
               v-for="quick in quickFilters" 
@@ -90,35 +90,35 @@
         </div>
 
         <div class="sidebar-section">
-          <h3>📊 排序方式</h3>
+          <h3> 排序方式</h3>
           <select v-model="sortBy" class="sidebar-select">
             <option value="default">默认排序</option>
-            <option value="prestige-desc">声望 ⬆️</option>
-            <option value="prestige-asc">声望 ⬇️</option>
-            <option value="difficulty-desc">难度 ⬆️</option>
-            <option value="difficulty-asc">难度 ⬇️</option>
-            <option value="players-desc">人数 ⬆️</option>
-            <option value="players-asc">人数 ⬇️</option>
+            <option value="prestige-desc">声望 </option>
+            <option value="prestige-asc">声望 </option>
+            <option value="difficulty-desc">难度 </option>
+            <option value="difficulty-asc">难度 </option>
+            <option value="players-desc">人数 </option>
+            <option value="players-asc">人数 </option>
           </select>
         </div>
 
-        <button class="reset-btn" @click="resetFilters">🔄 重置筛选</button>
+        <button class="reset-btn" @click="resetFilters">重置筛选</button>
       </aside>
 
       <div class="content-area">
         <div v-if="featuredBounty" class="featured-section">
-          <div class="featured-label">🌟 热门推荐</div>
+          <div class="featured-label"> 热门推荐</div>
           <div class="featured-card" :class="featuredBounty.difficulty">
-            <div class="featured-badge">{{ featuredBounty.rank || '🏅' }}</div>
+            <div class="featured-badge">{{ featuredBounty.rank || '' }}</div>
             <div class="featured-content">
               <div class="featured-icon">{{ featuredBounty.icon }}</div>
               <div class="featured-info">
                 <h4>{{ featuredBounty.title }}</h4>
                 <p>{{ featuredBounty.description }}</p>
                 <div class="featured-meta">
-                  <span>📍 {{ featuredBounty.location }}</span>
-                  <span>💰 {{ featuredBounty.reward.prestige }} 声望</span>
-                  <span>👥 {{ featuredBounty.players }}人</span>
+                  <span> {{ featuredBounty.location }}</span>
+                  <span> {{ featuredBounty.reward.prestige }} 声望</span>
+                  <span> {{ featuredBounty.players }}></span>
                 </div>
               </div>
             </div>
@@ -151,25 +151,25 @@
             <p class="bounty-description">{{ bounty.description }}</p>
             <div class="bounty-details">
               <div class="detail-item">
-                <span>📍</span>
+                <span></span>
                 <span>{{ bounty.location }}</span>
               </div>
               <div class="detail-item">
-                <span>⏰</span>
+                <span>></span>
                 <span>{{ bounty.duration }}</span>
               </div>
               <div class="detail-item">
-                <span>👥</span>
-                <span>{{ bounty.players }}人</span>
+                <span></span>
+                <span>{{ bounty.players }}></span>
               </div>
             </div>
             <div class="bounty-rewards">
               <div class="reward-item">
-                <span class="reward-icon">💰</span>
+                <span class="reward-icon"></span>
                 <span class="reward-value">{{ bounty.reward.prestige }} 声望</span>
               </div>
               <div class="reward-item">
-                <span class="reward-icon">🎁</span>
+                <span class="reward-icon"></span>
                 <span class="reward-value">{{ bounty.reward.item }}</span>
               </div>
             </div>
@@ -185,7 +185,7 @@
         </div>
 
         <div v-if="filteredBounties.length === 0" class="empty-state">
-          <div class="empty-icon">📋</div>
+          <div class="empty-icon"></div>
           <p>暂无符合条件的赏金任务</p>
         </div>
       </div>
@@ -204,10 +204,10 @@ const activeQuickFilter = ref(null)
 const claimedTasks = ref([])
 
 const difficultyFilters = [
-  { value: 'easy', label: '⭐ 简单' },
-  { value: 'medium', label: '⭐⭐ 中等' },
-  { value: 'hard', label: '⭐⭐⭐ 困难' },
-  { value: 'legendary', label: '⭐⭐⭐⭐ 传说' }
+  { value: 'easy', label: '简单' },
+  { value: 'medium', label: '中等' },
+  { value: 'hard', label: '困难' },
+  { value: 'legendary', label: '传说' }
 ]
 
 const quickFilters = [
@@ -221,112 +221,108 @@ const bounties = ref([
   {
     id: 'bounty-001',
     title: '清除山贼据点',
-    icon: '⚔️',
+    icon: '',
     type: 'combat',
     difficulty: 'hard',
-    rank: '🏅',
-    description: '黑石山道被一伙山贼占据，商队无法通行。请前往清除山贼据点，恢复道路畅通。',
+    rank: '',
+    description: '黑石山道被一伙山贼占据，商队无法通行，请前往清除山贼据点，恢复道路畅通。',
     location: '黑石山道',
-    duration: '3天',
+    duration: '3小时',
     players: '1-3',
-    reward: { prestige: 500, item: '精良武器箱' }
+    reward: { prestige: 500, item: '精良武器' }
   },
   {
     id: 'bounty-002',
     title: '寻找失落的遗迹',
-    icon: '🗺️',
+    icon: '',
     type: 'exploration',
     difficulty: 'legendary',
-    rank: '👑',
+    rank: '',
     description: '传说在迷雾森林深处有一座失落的古代遗迹，据说藏有珍贵的宝藏和古老的知识。',
     location: '迷雾森林深处',
-    duration: '5天',
+    duration: '5小时',
     players: '3-5',
     reward: { prestige: 1500, item: '传奇法器' }
   },
   {
     id: 'bounty-003',
     title: '护送商队',
-    icon: '📦',
+    icon: '',
     type: 'delivery',
     difficulty: 'medium',
     description: '商人需要将一批珍贵货物从晨曦镇护送到边境要塞，路途艰险，请务必小心。',
-    location: '晨曦镇 → 边境要塞',
-    duration: '2天',
+    location: '晨曦镇-边境要塞',
+    duration: '2小时',
     players: '2',
-    reward: { prestige: 300, item: '宝石袋' }
+    reward: { prestige: 300, item: '宝石' }
   },
   {
     id: 'bounty-004',
     title: '采集千年灵芝',
-    icon: '🌿',
+    icon: '',
     type: 'gathering',
     difficulty: 'hard',
     description: '药王谷需要一株千年灵芝用于炼制珍贵丹药，请前往雪峰之巅采集。',
     location: '雪峰之巅',
-    duration: '3天',
+    duration: '3小时',
     players: '1-2',
-    reward: { prestige: 400, item: '高级药材包' }
+    reward: { prestige: 400, item: '高级药材' }
   },
   {
     id: 'bounty-005',
     title: '调查神秘事件',
-    icon: '🔍',
+    icon: '',
     type: 'investigation',
     difficulty: 'medium',
     description: '最近村庄发生了多起神秘失踪事件，请前往调查真相，保护村民安全。',
     location: '月影村',
-    duration: '2天',
+    duration: '2小时',
     players: '1-3',
     reward: { prestige: 350, item: '情报卷轴' }
   },
   {
     id: 'bounty-006',
     title: '狩猎狼王',
-    icon: '🐺',
+    icon: '',
     type: 'combat',
     difficulty: 'easy',
     description: '青狼岭出现了一只凶猛的狼王，已经伤害了多位村民，请前去狩猎。',
     location: '青狼岭',
-    duration: '1天',
+    duration: '1小时',
     players: '1',
     reward: { prestige: 150, item: '狼皮披风' }
   },
   {
     id: 'bounty-007',
     title: '护送重要人物',
-    icon: '🛡️',
+    icon: '',
     type: 'delivery',
     difficulty: 'legendary',
-    rank: '👑',
+    rank: '',
     description: '保护一位重要人物穿越危险区域，这是一项极其重要的任务，不容有失。',
     location: '死亡沙漠',
-    duration: '7天',
+    duration: '7小时',
     players: '5-8',
     reward: { prestige: 2000, item: '传说装备' }
   },
   {
     id: 'bounty-008',
     title: '探索废弃矿洞',
-    icon: '⛏️',
+    icon: '',
     type: 'exploration',
     difficulty: 'medium',
     description: '老矿区有一个废弃的矿洞，据说里面藏有丰富的矿藏，但也可能有未知的危险。',
     location: '老矿区',
-    duration: '2天',
+    duration: '2小时',
     players: '2-3',
-    reward: { prestige: 280, item: '矿石袋' }
+    reward: { prestige: 280, item: '矿石' }
   }
 ])
 
 const uniqueLocations = computed(() => {
   const locations = new Set()
   bounties.value.forEach(b => {
-    if (b.location.includes('→')) {
-      b.location.split('→').forEach(loc => locations.add(loc.trim()))
-    } else {
-      locations.add(b.location)
-    }
+    locations.add(b.location)
   })
   return Array.from(locations)
 })
@@ -411,21 +407,21 @@ const filteredBounties = computed(() => {
 
 function getTypeLabel(type) {
   const labels = {
-    combat: '⚔️ 战斗',
-    exploration: '🗺️ 探索',
-    delivery: '📦 护送',
-    gathering: '🌿 采集',
-    investigation: '🔍 调查'
+    combat: '战斗',
+    exploration: '探索',
+    delivery: '护送',
+    gathering: '采集',
+    investigation: '调查'
   }
   return labels[type] || type
 }
 
 function getDifficultyLabel(difficulty) {
   const labels = {
-    easy: '⭐ 简单',
-    medium: '⭐⭐ 中等',
-    hard: '⭐⭐⭐ 困难',
-    legendary: '⭐⭐⭐⭐ 传说'
+    easy: '简单',
+    medium: '中等',
+    hard: '困难',
+    legendary: '传说'
   }
   return labels[difficulty] || difficulty
 }
@@ -434,13 +430,13 @@ function toggleClaim(bounty) {
   if (claimedTasks.value.includes(bounty.id)) {
     claimedTasks.value = claimedTasks.value.filter(id => id !== bounty.id)
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `已取消任务「${bounty.title}」`, type: 'info' }
+      detail: { message: `已取消任务{bounty.title}`, type: 'info' }
     }))
   } else {
     claimedTasks.value.push(bounty.id)
     saveClaimedTasks()
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `已领取任务「${bounty.title}」！`, type: 'success' }
+      detail: { message: `已领取任务{bounty.title}`, type: 'success' }
     }))
   }
 }
@@ -919,3 +915,4 @@ onMounted(() => {
   }
 }
 </style>
+

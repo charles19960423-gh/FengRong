@@ -1,8 +1,8 @@
 <template>
   <div class="resource-page">
     <div class="page-header">
-      <h1>📚 江湖秘典</h1>
-      <p>传媒行业资料库，分享PDF、链接、联系方式等资源</p>
+      <h1> 江湖秘典</h1>
+      <p>传媒行业资料库分享PDF链接联系方式等资源</p>
     </div>
 
     <div class="stats-bar">
@@ -25,7 +25,7 @@
         <input
           v-model="searchKeyword"
           type="text"
-          placeholder="🔍 搜索资料名称、描述或标签..."
+          placeholder=" 搜索资料名称描述或标签..."
           @input="handleSearch"
         />
       </div>
@@ -44,8 +44,8 @@
     </div>
 
     <div class="view-tabs">
-      <button :class="{ active: viewMode === 'grid' }" @click="viewMode = 'grid'">📱 网格</button>
-      <button :class="{ active: viewMode === 'list' }" @click="viewMode = 'list'">📋 列表</button>
+      <button :class="{ active: viewMode === 'grid' }" @click="viewMode = 'grid'"> 网格</button>
+      <button :class="{ active: viewMode === 'list' }" @click="viewMode = 'list'"> 列表</button>
     </div>
 
     <div v-if="viewMode === 'grid'" class="resource-grid">
@@ -69,12 +69,12 @@
           <span v-for="tag in resource.tags" :key="tag" class="tag">#{{ tag }}</span>
         </div>
         <div class="card-footer">
-          <span class="uploader">👤 {{ resource.uploaderName }}</span>
-          <span class="upload-time">📅 {{ resource.uploadTime }}</span>
+          <span class="uploader"> {{ resource.uploaderName }}</span>
+          <span class="upload-time"> {{ resource.uploadTime }}</span>
         </div>
         <div class="card-stats">
-          <span>⬇️ {{ resource.downloads }}</span>
-          <span>❤️ {{ resource.likes }}</span>
+          <span> {{ resource.downloads }}</span>
+          <span> {{ resource.likes }}</span>
         </div>
       </div>
     </div>
@@ -95,18 +95,18 @@
             <span class="tags">
               <span v-for="tag in resource.tags" :key="tag">#{{ tag }}</span>
             </span>
-            <span class="uploader">👤 {{ resource.uploaderName }}</span>
+            <span class="uploader"> {{ resource.uploaderName }}</span>
           </div>
         </div>
         <div class="item-stats">
-          <span>⬇️ {{ resource.downloads }}</span>
-          <span>❤️ {{ resource.likes }}</span>
+          <span> {{ resource.downloads }}</span>
+          <span> {{ resource.likes }}</span>
         </div>
       </div>
     </div>
 
     <div v-if="filteredResources.length === 0" class="empty-state">
-      <div class="empty-icon">📭</div>
+      <div class="empty-icon"></div>
       <p>暂无相关资料</p>
       <button class="empty-action" @click="showUploadModal = true">成为第一个上传者</button>
     </div>
@@ -117,15 +117,15 @@
         <form @submit.prevent="uploadResource">
           <div class="form-group">
             <label>资料标题</label>
-            <input v-model="newResource.title" type="text" placeholder="如：2024年短视频营销趋势报告" required />
+            <input v-model="newResource.title" type="text" placeholder="如2024年短视频营销趋势报告" required />
           </div>
           <div class="form-group">
             <label>资料类型</label>
             <select v-model="newResource.type" required>
-              <option value="pdf">📄 PDF文档</option>
-              <option value="link">🔗 外部链接</option>
-              <option value="contact">📞 联系方式</option>
-              <option value="portfolio">🖼️ 作品集</option>
+              <option value="pdf"> PDF文档</option>
+              <option value="link"> 外部链接</option>
+              <option value="contact"> 联系方式</option>
+              <option value="portfolio">作品集</option>
             </select>
           </div>
           <div class="form-group">
@@ -160,7 +160,7 @@
           </div>
           <div class="form-group">
             <label>标签 (用逗号分隔)</label>
-            <input v-model="tagsInput" type="text" placeholder="如：短视频,营销,趋势" />
+            <input v-model="tagsInput" type="text" placeholder="如短视频,营销,趋势" />
           </div>
           <div class="modal-actions">
             <button type="button" class="btn-cancel" @click="showUploadModal = false">取消</button>
@@ -182,7 +182,7 @@
         <p class="detail-description">{{ selectedResource?.description }}</p>
         <div class="detail-info">
           <div class="info-row">
-            <span>上传者:</span>
+            <span>上传</span>
             <span>{{ selectedResource?.uploaderName }}</span>
           </div>
           <div class="info-row">
@@ -203,12 +203,12 @@
         </div>
         <div v-if="selectedResource?.type === 'contact'" class="contact-info">
           <h4>联系方式</h4>
-          <p>📞 {{ selectedResource?.contactPhone || '暂无' }}</p>
-          <p>📱 {{ selectedResource?.contactWechat || '暂无' }}</p>
+          <p> {{ selectedResource?.contactPhone || '暂无' }}</p>
+          <p> {{ selectedResource?.contactWechat || '暂无' }}</p>
         </div>
         <div class="detail-actions">
           <button class="action-btn secondary" @click="showDetailModal = false">关闭</button>
-          <button class="action-btn primary" @click="handleDownload">⬇️ {{ selectedResource?.type === 'pdf' ? '下载' : '访问' }}</button>
+          <button class="action-btn primary" @click="handleDownload"> {{ selectedResource?.type === 'pdf' ? '下载' : '访问' }}</button>
         </div>
       </div>
     </div>
@@ -217,8 +217,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useResourceStore } from '../stores/resource'
-import { useAuthStore } from '../stores/auth'
+import { useResourceStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 
 const resourceStore = useResourceStore()
 const authStore = useAuthStore()
@@ -263,22 +263,23 @@ const filteredResources = computed(() => {
 
 function getTypeLabel(type) {
   const types = {
-    pdf: '📄 PDF',
-    link: '🔗 链接',
-    contact: '📞 联系',
-    portfolio: '🖼️ 作品'
+    pdf: ' PDF',
+    link: ' 链接',
+    contact: ' 联系',
+    portfolio: '作品集',
+    document: ' 文档'
   }
   return types[type] || type
 }
 
 function getTypeIcon(type) {
   const icons = {
-    pdf: '📄',
-    link: '🔗',
-    contact: '📞',
-    portfolio: '🖼️'
+    pdf: '',
+    link: '',
+    contact: '',
+    portfolio: ''
   }
-  return icons[type] || '📦'
+  return icons[type] || ''
 }
 
 function handleSearch() {
@@ -778,3 +779,4 @@ onMounted(() => {
   }
 }
 </style>
+

@@ -2,7 +2,7 @@
   <div class="tasks-page">
     <div class="page-header">
       <h1>任务中心</h1>
-      <p>管理你的任务列表，追踪进度</p>
+      <p>管理你的任务列表追踪进度</p>
     </div>
 
     <div class="stats-card">
@@ -23,7 +23,7 @@
         <span class="stat-label">已取消</span>
       </div>
       <div class="stat-item streak" v-if="streakDays > 0">
-        <span class="stat-value streak-value">🔥 {{ streakDays }}</span>
+        <span class="stat-value streak-value"> {{ streakDays }}</span>
         <span class="stat-label">连续完成</span>
       </div>
     </div>
@@ -64,23 +64,23 @@
             </div>
             <h3>{{ task.title }}</h3>
             <div class="task-actions-header">
-              <button class="icon-btn" @click="showLogModal(task)" title="日志">📋</button>
-              <button class="icon-btn" @click="showShareModal(task)" title="分享">📤</button>
-              <button class="icon-btn" @click="showReminderModal(task)" title="提醒">⏰</button>
+              <button class="icon-btn" @click="showLogModal(task)" title="日志"></button>
+              <button class="icon-btn" @click="showShareModal(task)" title="分享"></button>
+              <button class="icon-btn" @click="showReminderModal(task)" title="提醒"></button>
             </div>
           </div>
           <p class="task-description">{{ task.description }}</p>
           <div class="task-meta">
             <div class="meta-item">
-              <span>📍</span>
+              <span></span>
               <span>{{ task.location }}</span>
             </div>
             <div class="meta-item">
-              <span>🎯</span>
+              <span></span>
               <span>{{ task.reward }}</span>
             </div>
             <div class="meta-item" v-if="task.deadline">
-              <span>⏰</span>
+              <span>📅</span>
               <span>{{ task.deadline }} ({{ getDaysRemaining(task.deadline) }})</span>
             </div>
             <div class="meta-item" v-if="task.requiredIdentity">
@@ -100,45 +100,45 @@
               class="action-btn primary"
               @click="acceptTask(task.id)"
             >
-              🤝 接取任务
+               接取任务
             </button>
             <button 
               v-if="task.status === 'in-progress' && task.assignee === authStore.currentUser?.phone" 
               class="action-btn primary"
               @click="completeTask(task.id)"
             >
-              ✅ 完成任务
+              完成任务
             </button>
             <button 
               v-if="task.status === 'in-progress' && task.assignee === authStore.currentUser?.phone" 
               class="action-btn secondary"
               @click="cancelAcceptTask(task.id)"
             >
-              🚫 取消接取
+               取消接取
             </button>
             <button 
               v-if="task.status === 'in-progress' && task.publisherId === authStore.currentUser?.phone" 
               class="action-btn secondary"
               @click="cancelTask(task.id)"
             >
-              ❌ 取消任务
+              取消任务
             </button>
             <span v-if="task.completedAt" class="completed-date">
-              ✅ {{ task.completedAt }} 完成
+              {{ task.completedAt }} 完成
             </span>
             <span v-if="task.cancelledAt" class="cancelled-date">
-              ❌ {{ task.cancelledAt }} {{ task.reason }}
+              {{ task.cancelledAt }} {{ task.reason }}
             </span>
           </div>
           <div v-if="task.publisherName" class="task-publisher">
-            <span class="publisher-label">发布者:</span>
+            <span class="publisher-label">发布</span>
             <span class="publisher-name">{{ task.publisherName }}</span>
           </div>
         </div>
       </div>
 
       <div v-if="filteredTasks.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无任务</p>
         <router-link to="/bounty" class="empty-action">去领取赏金任务</router-link>
       </div>
@@ -146,9 +146,9 @@
 
     <div v-if="currentView === 'calendar'" class="calendar-view">
       <div class="calendar-header">
-        <button class="nav-btn" @click="prevMonth">◀</button>
+        <button class="nav-btn" @click="prevMonth"></button>
         <h3>{{ currentMonthLabel }}</h3>
-        <button class="nav-btn" @click="nextMonth">▶</button>
+        <button class="nav-btn" @click="nextMonth">›</button>
       </div>
       <div class="calendar-weekdays">
         <div v-for="day in weekdays" :key="day">{{ day }}</div>
@@ -171,7 +171,7 @@
         </div>
       </div>
       <div class="calendar-task-list" v-if="selectedDateTasks.length > 0">
-        <h4>{{ selectedDate }} 的任务 ({{ selectedDateTasks.length }}个)</h4>
+        <h4>{{ selectedDate }} 的任务 ({{ selectedDateTasks.length }})</h4>
         <div class="task-items">
           <div 
             v-for="task in selectedDateTasks" 
@@ -179,7 +179,7 @@
             class="calendar-task-item"
             @click="selectTask(task)"
           >
-            <span class="task-icon">{{ task.status === 'completed' ? '✅' : '📋' }}</span>
+            <span class="task-icon">{{ task.status === 'completed' ? '✓' : '' }}</span>
             <span class="task-title">{{ task.title }}</span>
             <span class="task-reward">{{ task.reward }}</span>
           </div>
@@ -222,13 +222,13 @@
             >
               <span class="task-badge" :class="task.status">{{ getStatusIcon(task.status) }}</span>
               <span class="task-name">{{ task.title }}</span>
-              <span class="task-location">📍 {{ task.location }}</span>
+              <span class="task-location"> {{ task.location }}</span>
               <span class="task-reward">{{ task.reward }}</span>
             </div>
           </div>
         </div>
         <div v-if="timelineGroups.length === 0" class="empty-state">
-          <div class="empty-icon">📊</div>
+          <div class="empty-icon"></div>
           <p>暂无完成的任务记录</p>
         </div>
       </div>
@@ -237,28 +237,28 @@
     <div v-if="currentView === 'dashboard'" class="dashboard-view">
       <div class="dashboard-stats">
         <div class="dashboard-stat-card">
-          <div class="stat-icon">🔥</div>
+          <div class="stat-icon"></div>
           <div class="stat-content">
             <span class="stat-number">{{ streakDays }}</span>
             <span class="stat-name">连续完成天数</span>
           </div>
         </div>
         <div class="dashboard-stat-card">
-          <div class="stat-icon">📅</div>
+          <div class="stat-icon"></div>
           <div class="stat-content">
             <span class="stat-number">{{ todayCompleted }}</span>
             <span class="stat-name">今日完成</span>
           </div>
         </div>
         <div class="dashboard-stat-card">
-          <div class="stat-icon">📆</div>
+          <div class="stat-icon"></div>
           <div class="stat-content">
             <span class="stat-number">{{ weekCompleted }}</span>
             <span class="stat-name">本周完成</span>
           </div>
         </div>
         <div class="dashboard-stat-card">
-          <div class="stat-icon">🗓️</div>
+          <div class="stat-icon"></div>
           <div class="stat-content">
             <span class="stat-number">{{ monthCompleted }}</span>
             <span class="stat-name">本月完成</span>
@@ -266,7 +266,7 @@
         </div>
       </div>
       <div class="dashboard-chart">
-        <h3>📈 近7天完成任务趋势</h3>
+        <h3>7天完成任务趋势</h3>
         <div class="trend-chart">
           <div 
             v-for="(day, index) in weeklyTrend" 
@@ -280,7 +280,7 @@
         </div>
       </div>
       <div class="category-stats">
-        <h3>📊 任务类型分布</h3>
+        <h3> 任务类型分布</h3>
         <div class="category-list">
           <div 
             v-for="(cat, index) in categoryStats" 
@@ -297,9 +297,9 @@
 
     <div v-if="selectedTask && showTaskDetail" class="task-detail-overlay" @click="closeTaskDetail">
       <div class="task-detail-modal" @click.stop>
-        <button class="close-btn" @click="closeTaskDetail">×</button>
+        <button class="close-btn" @click="closeTaskDetail"></button>
         <div class="detail-header">
-          <span class="detail-icon">{{ selectedTask.icon || '📋' }}</span>
+          <span class="detail-icon">{{ selectedTask.icon || '' }}</span>
           <div class="detail-title">
             <h2>{{ selectedTask.title }}</h2>
             <span class="detail-status" :class="selectedTask.status">{{ selectedTask.statusText }}</span>
@@ -309,24 +309,24 @@
           <p class="detail-description">{{ selectedTask.description }}</p>
           <div class="detail-meta">
             <div class="meta-row">
-              <span>📍 地点:</span>
+              <span> 地点:</span>
               <span>{{ selectedTask.location }}</span>
             </div>
             <div class="meta-row">
-              <span>🎯 奖励:</span>
+              <span> 奖励:</span>
               <span>{{ selectedTask.reward }}</span>
             </div>
             <div class="meta-row" v-if="selectedTask.deadline">
-              <span>⏰ 截止:</span>
+              <span>截止:</span>
               <span>{{ selectedTask.deadline }}</span>
             </div>
           </div>
           <div class="detail-actions">
-            <button v-if="selectedTask.status === 'in-progress'" class="action-btn primary" @click="completeTask(selectedTask.id); closeTaskDetail()">✅ 完成任务</button>
-            <button v-if="selectedTask.status === 'in-progress'" class="action-btn secondary" @click="cancelTask(selectedTask.id); closeTaskDetail()">❌ 取消任务</button>
-            <button class="action-btn info" @click="showLogModal(selectedTask)">📋 查看日志</button>
-            <button class="action-btn info" @click="showShareModal(selectedTask)">📤 分享任务</button>
-            <button class="action-btn info" @click="showReminderModal(selectedTask)">⏰ 设置提醒</button>
+            <button v-if="selectedTask.status === 'in-progress'" class="action-btn primary" @click="completeTask(selectedTask.id); closeTaskDetail()">完成任务</button>
+            <button v-if="selectedTask.status === 'in-progress'" class="action-btn secondary" @click="cancelTask(selectedTask.id); closeTaskDetail()">取消任务</button>
+            <button class="action-btn info" @click="showLogModal(selectedTask)"> 查看日志</button>
+            <button class="action-btn info" @click="showShareModal(selectedTask)"> 分享任务</button>
+            <button class="action-btn info" @click="showReminderModal(selectedTask)">设置提醒</button>
           </div>
         </div>
       </div>
@@ -334,9 +334,9 @@
 
     <div v-if="showLog" class="modal-overlay" @click="showLog = false">
       <div class="modal-content" @click.stop>
-        <button class="close-btn" @click="showLog = false">×</button>
+        <button class="close-btn" @click="showLog = false"></button>
         <div class="modal-header">
-          <span>📋 任务日志</span>
+          <span> 任务日志</span>
         </div>
         <div class="log-timeline">
           <div v-if="currentTaskLogs.length === 0" class="empty-log">
@@ -346,7 +346,7 @@
             <div v-for="(log, index) in currentTaskLogs" :key="index" class="log-item">
               <div class="log-dot"></div>
               <div class="log-content">
-                <div class="log-time">📅 {{ log.time }}</div>
+                <div class="log-time"> {{ log.time }}</div>
                 <div class="log-action">{{ log.action }}</div>
                 <div class="log-detail">{{ log.detail }}</div>
               </div>
@@ -358,40 +358,40 @@
 
     <div v-if="showShare" class="modal-overlay" @click="showShare = false">
       <div class="modal-content" @click.stop>
-        <button class="close-btn" @click="showShare = false">×</button>
+        <button class="close-btn" @click="showShare = false"></button>
         <div class="modal-header">
-          <span>📤 分享任务</span>
+          <span> 分享任务</span>
         </div>
         <div class="share-task-title">{{ currentShareTask?.title }}</div>
         <textarea class="share-text" v-model="shareText" readonly></textarea>
         <div class="share-options">
-          <button class="share-btn" @click="shareToWeChat">💬 微信</button>
-          <button class="share-btn" @click="shareToQQ">🐧 QQ</button>
-          <button class="share-btn" @click="shareToWeibo">🌐 微博</button>
-          <button class="share-btn" @click="copyShareLink">🔗 复制链接</button>
+          <button class="share-btn" @click="shareToWeChat"> 微信</button>
+          <button class="share-btn" @click="shareToQQ"> QQ</button>
+          <button class="share-btn" @click="shareToWeibo"> 微博</button>
+          <button class="share-btn" @click="copyShareLink"> 复制链接</button>
         </div>
       </div>
     </div>
 
     <div v-if="showReminder" class="modal-overlay" @click="showReminder = false">
       <div class="modal-content" @click.stop>
-        <button class="close-btn" @click="showReminder = false">×</button>
+        <button class="close-btn" @click="showReminder = false"></button>
         <div class="modal-header">
-          <span>⏰ 提醒设置</span>
+          <span>🔔 提醒设置</span>
         </div>
         <div class="reminder-task-title">{{ currentShareTask?.title }}</div>
         <div class="reminder-options">
           <label class="reminder-checkbox">
             <input type="checkbox" value="1day" v-model="reminderSelections" />
-            <span>截止前1天提醒</span>
+            <span>截止1天提醒</span>
           </label>
           <label class="reminder-checkbox">
             <input type="checkbox" value="3day" v-model="reminderSelections" />
-            <span>截止前3天提醒</span>
+            <span>截止3天提醒</span>
           </label>
           <label class="reminder-checkbox">
             <input type="checkbox" value="1week" v-model="reminderSelections" />
-            <span>截止前1周提醒</span>
+            <span>截止1周提醒</span>
           </label>
         </div>
         <button class="save-btn" @click="saveReminder">保存设置</button>
@@ -402,9 +402,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useTaskStore } from '../stores/task'
-import { useAuthStore } from '../stores/auth'
-import { useAchievementStore } from '../stores/achievement'
+import { useTaskStore } from '../../stores/modules/task'
+import { useAuthStore } from '../../stores/modules/auth'
+import { useAchievementStore } from '../../stores/modules/achievement'
 
 const taskStore = useTaskStore()
 const authStore = useAuthStore()
@@ -426,10 +426,10 @@ const timelineGroupBy = ref('month')
 const weekdays = ['日', '一', '二', '三', '四', '五', '六']
 
 const viewModes = [
-  { label: '列表', value: 'list', icon: '📋' },
-  { label: '日历', value: 'calendar', icon: '📅' },
-  { label: '时间线', value: 'timeline', icon: '📊' },
-  { label: '统计', value: 'dashboard', icon: '📈' }
+  { label: '列表', value: 'list', icon: '' },
+  { label: '日历', value: 'calendar', icon: '' },
+  { label: '时间线', value: 'timeline', icon: '' },
+  { label: '统计', value: 'dashboard', icon: '' }
 ]
 
 const filters = [
@@ -482,7 +482,7 @@ const filteredTasks = computed(() => {
 
 const currentMonthLabel = computed(() => {
   const date = new Date()
-  return `${date.getFullYear()}年${date.getMonth() + 1}月`
+  return `${date.getFullYear()}${date.getMonth() + 1}月`
 })
 
 const calendarDays = computed(() => {
@@ -559,15 +559,15 @@ const timelineGroups = computed(() => {
       const weekEnd = new Date(weekStart)
       weekEnd.setDate(weekStart.getDate() + 6)
       key = taskStore.formatDate(weekStart)
-      label = `${weekStart.getMonth() + 1}月${weekStart.getDate()}日 - ${weekEnd.getMonth() + 1}月${weekEnd.getDate()}日`
+      label = `${weekStart.getMonth() + 1}${weekStart.getDate()} - ${weekEnd.getMonth() + 1}${weekEnd.getDate()}日`
     } else if (timelineGroupBy.value === 'month') {
       key = date.substring(0, 7)
-      label = `${date.substring(0, 4)}年${date.substring(5, 7)}月`
+      label = `${date.substring(0, 4)}${date.substring(5, 7)}月`
     } else if (timelineGroupBy.value === 'quarter') {
       const month = parseInt(date.substring(5, 7))
       const quarter = Math.ceil(month / 3)
       key = `${date.substring(0, 4)}-Q${quarter}`
-      label = `${date.substring(0, 4)}年 第${quarter}季度`
+      label = `${date.substring(0, 4)}${quarter}季度`
     } else if (timelineGroupBy.value === 'year') {
       key = date.substring(0, 4)
       label = `${date.substring(0, 4)}年`
@@ -613,7 +613,7 @@ const categoryStats = computed(() => {
   allTasks.forEach(task => {
     const type = task.type || 'other'
     if (!cats[type]) {
-      cats[type] = { icon: '📋', name: type, count: 0 }
+      cats[type] = { icon: '', name: type, count: 0 }
     }
     cats[type].count++
   })
@@ -632,12 +632,12 @@ function getIdentityName(identityId) {
 
 function getStatusIcon(status) {
   const icons = {
-    'pending': '🔔',
-    'in-progress': '📋',
-    'completed': '✅',
-    'cancelled': '❌'
+    'pending': '',
+    'in-progress': '',
+    'completed': '',
+    'cancelled': ''
   }
-  return icons[status] || '📋'
+  return icons[status] || ''
 }
 
 function acceptTask(taskId) {
@@ -673,7 +673,7 @@ function acceptTask(taskId) {
   const cooldownRemaining = authStore.getAcceptCooldownRemaining()
   if (cooldownRemaining > 0) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `冷却中，请${cooldownRemaining}秒后再试`, type: 'warning' }
+      detail: { message: `冷却中，${cooldownRemaining}秒后再试`, type: 'warning' }
     }))
     return
   }
@@ -694,7 +694,7 @@ function acceptTask(taskId) {
   if (!success) {
     authStore.incrementFailCount()
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `😔 接取失败！成功率 ${Math.round(successRate * 100)}%，再接再厉！`, type: 'error' }
+      detail: { message: ` 接取失败成功率 ${Math.round(successRate * 100)}%再接再厉`, type: 'error' }
     }))
     return
   }
@@ -705,7 +705,7 @@ function acceptTask(taskId) {
   if (result.success) {
     addLog(taskId, '接取任务', `${authStore.currentUser.nickname} 接取了任务`)
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '🤝 任务接取成功！', type: 'success' }
+      detail: { message: '任务接取成功', type: 'success' }
     }))
   } else {
     window.dispatchEvent(new CustomEvent('notification', {
@@ -735,12 +735,12 @@ function completeTask(taskId) {
       achievementStore.checkProgress('prestige_added', { total: authStore.currentUser?.totalPrestige || 0 })
     })
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `🏆 解锁成就: ${unlockedAchievements.map(a => a.name).join('、')}`, type: 'success' }
+      detail: { message: `解锁成就: ${unlockedAchievements.map(a => a.name).join('、')}`, type: 'success' }
     }))
   }
   
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: '🎉 任务完成！奖励已发放', type: 'success' }
+    detail: { message: '任务完成奖励已发放', type: 'success' }
   }))
 }
 
@@ -810,7 +810,7 @@ function showLogModal(task) {
 function showShareModal(task) {
   selectedTask.value = task
   currentShareTask.value = task
-  shareText.value = `我正在枫榕赏金酒馆完成任务：【${task.title}】\n📍 ${task.location}\n🎁 奖励: ${task.reward}\n快来一起冒险吧！`
+  shareText.value = `我正在枫榕赏金酒馆完成任务{task.title}\n ${task.location}\n 奖励: ${task.reward}\n快来一起冒险吧`
   showShare.value = true
   showTaskDetail.value = false
 }
@@ -867,7 +867,7 @@ function saveReminder() {
     currentShareTask.value.reminders = [...reminderSelections.value]
     localStorage.setItem('tasks', JSON.stringify(taskStore.getAllTasks()))
     const reminderText = reminderSelections.value.length > 0 
-      ? `提醒已设置：${reminderSelections.value.map(r => r === '1day' ? '截止前1天' : r === '3day' ? '截止前3天' : '截止前1周').join('、')}`
+      ? `提醒已设置${reminderSelections.value.map(r => r === '1day' ? '截止1天' : r === '3day' ? '截止3天' : '截止1周').join('、')}`
       : '已取消所有提醒'
     window.dispatchEvent(new CustomEvent('notification', {
       detail: { message: reminderText, type: 'success' }
@@ -882,13 +882,13 @@ function selectCalendarDate(day) {
 
 function prevMonth() {
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: '已是最新月份', type: 'info' }
+    detail: { message: '已是最早月份', type: 'info' }
   }))
 }
 
 function nextMonth() {
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: '已是最新月份', type: 'info' }
+    detail: { message: '已是最晚月份', type: 'info' }
   }))
 }
 
@@ -1557,260 +1557,6 @@ onMounted(() => {
   display: inline-block;
   padding: 12px 30px;
   background: #8C2B1B;
-  color: white;
-  text-decoration: none;
-  border-radius: 5px;
-}
-
-.empty-action:hover {
-  background: #A03320;
-}
-
-.task-detail-overlay,
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 3000;
-  padding: 20px;
-}
-
-.task-detail-modal,
-.modal-content {
-  background: linear-gradient(135deg, #2D1E17 0%, #1A120B 100%);
-  border: 2px solid #8C2B1B;
-  border-radius: 15px;
-  width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  padding: 25px;
-}
-
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: none;
-  border: none;
-  color: #888;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.detail-header {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.detail-icon {
-  font-size: 3rem;
-}
-
-.detail-title h2 {
-  color: #D4AF37;
-  margin: 0 0 10px 0;
-}
-
-.detail-status {
-  padding: 5px 12px;
-  border-radius: 5px;
-  font-size: 0.85rem;
-}
-
-.detail-status.in-progress { background: rgba(52,152,219,0.2); color: #3498db; }
-.detail-status.completed { background: rgba(46,204,113,0.2); color: #2ecc71; }
-.detail-status.cancelled { background: rgba(231,76,60,0.2); color: #e74c3c; }
-
-.detail-body {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.detail-description {
-  color: #D4C39E;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.detail-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.meta-row {
-  display: flex;
-  gap: 10px;
-  color: #888;
-}
-
-.meta-row span:first-child {
-  color: #D4C39E;
-}
-
-.detail-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.modal-header {
-  margin-bottom: 20px;
-  color: #D4AF37;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.log-timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.empty-log {
-  text-align: center;
-  color: #888;
-  padding: 20px;
-}
-
-.log-item {
-  display: flex;
-  gap: 15px;
-  position: relative;
-}
-
-.log-dot {
-  width: 10px;
-  height: 10px;
-  background: #D4AF37;
-  border-radius: 50%;
-  margin-top: 5px;
-  flex-shrink: 0;
-}
-
-.log-item:not(:last-child)::before {
-  content: '';
-  position: absolute;
-  left: 4px;
-  top: 15px;
-  bottom: -10px;
-  width: 2px;
-  background: #444;
-}
-
-.log-content {
-  flex: 1;
-}
-
-.log-time {
-  color: #D4AF37;
-  font-size: 0.9rem;
-}
-
-.log-action {
-  color: #D4C39E;
-  margin: 5px 0;
-}
-
-.log-detail {
-  color: #888;
-  font-size: 0.9rem;
-}
-
-.share-task-title {
-  color: #D4AF37;
-  font-size: 1.1rem;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.share-text {
-  width: 100%;
-  height: 120px;
-  padding: 12px;
-  background: #1A120B;
-  border: 1px solid #444;
-  border-radius: 8px;
-  color: #D4C39E;
-  resize: none;
-  font-size: 0.95rem;
-  margin-bottom: 15px;
-}
-
-.share-options {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-.share-btn {
-  padding: 12px;
-  background: rgba(140,43,27,0.3);
-  border: none;
-  border-radius: 8px;
-  color: #D4C39E;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.share-btn:hover {
-  background: rgba(140,43,27,0.5);
-}
-
-.reminder-task-title {
-  color: #D4AF37;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.reminder-options {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.reminder-checkbox {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  background: rgba(0,0,0,0.2);
-  border-radius: 8px;
-  cursor: pointer;
-  color: #D4C39E;
-}
-
-.reminder-checkbox input {
-  width: 18px;
-  height: 18px;
-}
-
-.save-btn {
-  width: 100%;
-  padding: 12px;
-  background: #D4AF37;
-  color: #1A120B;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.save-btn:hover {
-  background: #B89500;
 }
 </style>
+

@@ -1,9 +1,9 @@
-<template>
+﻿<template>
   <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-container">
       <div class="modal-header">
         <h2>{{ isLoginMode ? '冒险者登录' : '冒险者注册' }}</h2>
-        <button class="close-btn" @click="$emit('close')">×</button>
+        <button class="close-btn" @click="$emit('close')"></button>
       </div>
       <div class="modal-body">
         <div class="auth-tabs">
@@ -23,7 +23,7 @@
             <input 
               v-model="form.phone" 
               type="tel" 
-              placeholder="请输入手机号码"
+              placeholder="请输入手机号"
               :disabled="authStore.isLoading"
             />
             <span v-if="errors.phone" class="error">{{ errors.phone }}</span>
@@ -65,17 +65,17 @@
             class="submit-btn"
             :disabled="authStore.isLoading"
           >
-            <span v-if="authStore.isLoading">处理中...</span>
+            <span v-if="authStore.isLoading">处理中..</span>
             <span v-else>{{ isLoginMode ? '登录' : '注册' }}</span>
           </button>
           
           <span v-if="errors.general" class="error general">{{ errors.general }}</span>
           
           <p v-if="isLoginMode" class="login-hint">
-            还没有账号？<button type="button" @click="isLoginMode = false">立即注册</button>
+            还没有账号<button type="button" @click="isLoginMode = false">立即注册</button>
           </p>
           <p v-else class="login-hint">
-            已有账号？<button type="button" @click="isLoginMode = true">立即登录</button>
+            已有账号<button type="button" @click="isLoginMode = true">立即登录</button>
           </p>
         </form>
       </div>
@@ -86,7 +86,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../../stores/auth'
+import { useAuthStore } from '@/stores'
 
 const emit = defineEmits(['close'])
 const router = useRouter()
@@ -118,7 +118,7 @@ function validateForm() {
   errors.general = ''
   
   if (!form.phone) {
-    errors.phone = '请输入手机号码'
+    errors.phone = '请输入手机号'
     return false
   }
   
@@ -164,7 +164,7 @@ async function handleSubmit() {
   if (result.success) {
     window.dispatchEvent(new CustomEvent('notification', {
       detail: {
-        message: isLoginMode.value ? '登录成功！' : '注册成功！',
+        message: isLoginMode.value ? '登录成功' : '注册成功',
         type: 'success'
       }
     }))
@@ -333,3 +333,4 @@ async function handleSubmit() {
   text-decoration: underline;
 }
 </style>
+

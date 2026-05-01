@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <footer class="site-footer">
     <div class="footer-content">
       <div class="footer-section">
@@ -11,12 +11,12 @@
           <li><router-link to="/">首页</router-link></li>
           <li><router-link to="/achievements">成就系统</router-link></li>
           <li><router-link to="/tasks">任务中心</router-link></li>
-          <li><router-link to="/bounty">赏金榜</router-link></li>
+          <li><router-link to="/bounty">赏金猎人</router-link></li>
         </ul>
       </div>
       <div class="footer-section">
         <h4>关于我们</h4>
-        <p>我们致力于为江湖侠客提供最优质的任务管理体验。<br>从揭榜到完成，每一步都有我们的陪伴。</p>
+        <p>我们致力于为江湖侠客提供最优质的任务管理体验<br>从揭榜到完成每一步都有我们的陪伴</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -79,3 +79,4 @@
   color: #888;
 }
 </style>
+

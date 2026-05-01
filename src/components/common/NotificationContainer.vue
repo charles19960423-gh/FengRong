@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="notification-container">
     <transition-group name="notification">
       <div 
@@ -9,7 +9,7 @@
       >
         <span class="notification-icon">{{ getIcon(notification.type) }}</span>
         <span class="notification-message">{{ notification.message }}</span>
-        <button class="notification-close" @click.stop="closeNotification(notification.id)">×</button>
+        <button class="notification-close" @click.stop="closeNotification(notification.id)"></button>
       </div>
     </transition-group>
   </div>
@@ -39,10 +39,10 @@ function closeNotification(id) {
 
 function getIcon(type) {
   const icons = {
-    success: '✅',
-    error: '❌',
-    warning: '⚠️',
-    info: 'ℹ️'
+    success: '',
+    error: '',
+    warning: '',
+    info: ''
   }
   return icons[type] || icons.info
 }
@@ -136,3 +136,4 @@ defineExpose({ addNotification })
   transform: translateX(100px);
 }
 </style>
+

@@ -1,8 +1,8 @@
 <template>
   <div class="team-page">
     <div class="page-header">
-      <h1>👥 组队项目</h1>
-      <p>传媒行业同行组队制作项目，找到志同道合的伙伴</p>
+      <h1> 组队项目</h1>
+      <p>传媒行业同行组队制作项目找到志同道合的伙伴</p>
     </div>
 
     <div class="stats-bar">
@@ -32,10 +32,10 @@
 
     <div class="tabs">
       <button :class="{ active: currentTab === 'discover' }" @click="currentTab = 'discover'">
-        🔍 发现项目
+         发现项目
       </button>
       <button :class="{ active: currentTab === 'my-projects' }" @click="currentTab = 'my-projects'" v-if="authStore.isLoggedIn">
-        📋 我的项目
+         我的项目
       </button>
     </div>
 
@@ -61,16 +61,25 @@
             <span class="status-badge" :style="{ backgroundColor: teamStore.projectStatuses[project.status]?.color }">
               {{ teamStore.projectStatuses[project.status]?.icon }} {{ teamStore.projectStatuses[project.status]?.label }}
             </span>
+            <div v-if="authStore.isLoggedIn" class="match-badge" :class="getMatchLevel(project)">
+              {{ getMatchScore(project) }}% 匹配
+            </div>
           </div>
           <h3>{{ project.title }}</h3>
           <p class="card-description">{{ project.description }}</p>
           <div class="card-meta">
-            <span>💰 {{ project.budget }}</span>
-            <span>📍 {{ project.location }}</span>
-            <span>📅 {{ project.deadline }}</span>
+            <span> {{ project.budget }}</span>
+            <span> {{ project.location }}</span>
+            <span> {{ project.deadline }}</span>
+          </div>
+          <div class="project-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" :style="{ width: getProjectProgress(project.id) + '%' }"></div>
+            </div>
+            <span class="progress-text">招募进度: {{ getProjectProgress(project.id) }}%</span>
           </div>
           <div class="roles-needed">
-            <span class="roles-label">需要角色:</span>
+            <span class="roles-label">需要角色</span>
             <div class="role-tags">
               <span
                 v-for="role in project.requiredRoles"
@@ -78,20 +87,20 @@
                 class="role-tag"
                 :class="{ filled: role.filled >= role.count }"
               >
-                {{ teamStore.roleCategories[role.role]?.icon || '📦' }} {{ teamStore.roleCategories[role.role]?.label }}
+                {{ teamStore.roleCategories[role.role]?.icon || '' }} {{ teamStore.roleCategories[role.role]?.label }}
                 ({{ role.filled }}/{{ role.count }})
               </span>
             </div>
           </div>
           <div class="card-footer">
-            <span class="creator">👤 {{ project.creatorName }}</span>
-            <span class="members">👥 {{ project.members.length }}人已加入</span>
+            <span class="creator"> {{ project.creatorName }}</span>
+            <span class="members"> {{ project.members.length }}人已加入</span>
           </div>
         </div>
       </div>
 
       <div v-if="filteredProjects.length === 0" class="empty-state">
-        <div class="empty-icon">🔍</div>
+        <div class="empty-icon"></div>
         <p>暂无相关项目</p>
       </div>
     </div>
@@ -121,7 +130,7 @@
       </div>
 
       <div v-if="myProjects.length === 0" class="empty-state">
-        <div class="empty-icon">📋</div>
+        <div class="empty-icon"></div>
         <p>你还没有参与或创建的项目</p>
       </div>
     </div>
@@ -132,7 +141,7 @@
         <form @submit.prevent="createProject">
           <div class="form-group">
             <label>项目名称</label>
-            <input v-model="newProject.title" type="text" placeholder="如：品牌微电影项目" required />
+            <input v-model="newProject.title" type="text" placeholder="如品牌微电影项目" required />
           </div>
           <div class="form-group">
             <label>项目描述</label>
@@ -141,11 +150,11 @@
           <div class="form-row">
             <div class="form-group">
               <label>预算范围</label>
-              <input v-model="newProject.budget" type="text" placeholder="如：¥50,000 - ¥80,000" />
+              <input v-model="newProject.budget" type="text" placeholder="如50,000 - 80,000" />
             </div>
             <div class="form-group">
               <label>项目地点</label>
-              <input v-model="newProject.location" type="text" placeholder="如：上海/线上" />
+              <input v-model="newProject.location" type="text" placeholder="如上海/线上" />
             </div>
           </div>
           <div class="form-group">
@@ -181,19 +190,19 @@
           <p class="detail-description">{{ selectedProject.description }}</p>
           <div class="detail-meta">
             <div class="meta-row">
-              <span>💰 预算:</span>
+              <span> 预算:</span>
               <span>{{ selectedProject.budget }}</span>
             </div>
             <div class="meta-row">
-              <span>📍 地点:</span>
+              <span> 地点:</span>
               <span>{{ selectedProject.location }}</span>
             </div>
             <div class="meta-row">
-              <span>📅 截止:</span>
+              <span> 截止:</span>
               <span>{{ selectedProject.deadline }}</span>
             </div>
             <div class="meta-row">
-              <span>👤 创建者:</span>
+              <span> 创建</span>
               <span>{{ selectedProject.creatorName }}</span>
             </div>
           </div>
@@ -216,7 +225,7 @@
             <h4>团队成员 ({{ selectedProject.members.length }})</h4>
             <div class="members-list">
               <div v-for="member in selectedProject.members" :key="member.userId" class="member-item">
-                <span class="member-avatar">👤</span>
+                <span class="member-avatar"></span>
                 <span class="member-name">{{ member.nickname }}</span>
                 <span class="member-role">{{ teamStore.roleCategories[member.role]?.icon }} {{ teamStore.roleCategories[member.role]?.label }}</span>
               </div>
@@ -270,13 +279,13 @@
             <select v-model="applyForm.role" required>
               <option v-for="role in availableRoles" :key="role.role" :value="role.role">
                 {{ teamStore.roleCategories[role.role]?.icon }} {{ teamStore.roleCategories[role.role]?.label }}
-                ({{ role.count - role.filled }}个空位)
+                ({{ role.count - role.filled }}个空
               </option>
             </select>
           </div>
           <div class="form-group">
             <label>申请留言</label>
-            <textarea v-model="applyForm.message" placeholder="介绍一下自己..." rows="3"></textarea>
+            <textarea v-model="applyForm.message" placeholder="介绍一下自.." rows="3"></textarea>
           </div>
           <div class="modal-actions">
             <button type="button" class="btn-cancel" @click="showApplyModal = false">取消</button>
@@ -290,8 +299,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useTeamStore } from '../stores/team'
-import { useAuthStore } from '../stores/auth'
+import { useTeamStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 
 const teamStore = useTeamStore()
 const authStore = useAuthStore()
@@ -410,7 +419,7 @@ function submitApplication() {
 
   if (result.success) {
     showApplyModal.value = false
-    alert('申请已提交！')
+    alert('申请已提交')
     applyForm.value = { role: '', message: '' }
   } else {
     alert(result.message)
@@ -419,10 +428,28 @@ function submitApplication() {
 
 function handleLeave() {
   if (!selectedProject.value || !authStore.currentUser) return
-  if (confirm('确定要离开这个项目吗？')) {
+  if (confirm('确定要离开这个项目吗')) {
     teamStore.leaveProject(selectedProject.value.id, authStore.currentUser.phone)
     showDetailModal.value = false
   }
+}
+
+function getProjectProgress(projectId) {
+  return teamStore.calculateProjectProgress(projectId)
+}
+
+function getMatchScore(project) {
+  if (!authStore.isLoggedIn || !authStore.currentUser) return 0
+  const userSkills = authStore.currentUser.skills || []
+  const match = teamStore.calculateRoleMatch(project, userSkills)
+  return match.score
+}
+
+function getMatchLevel(project) {
+  const score = getMatchScore(project)
+  if (score >= 80) return 'high'
+  if (score >= 50) return 'medium'
+  return 'low'
 }
 
 onMounted(() => {
@@ -907,3 +934,4 @@ onMounted(() => {
   }
 }
 </style>
+

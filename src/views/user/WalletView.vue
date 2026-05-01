@@ -1,13 +1,13 @@
-<template>
+﻿<template>
   <div class="wallet-page">
     <div class="page-header">
-      <h1>💰 资产管理</h1>
+      <h1>资产管理</h1>
       <p>查看和管理你的资产</p>
     </div>
 
     <div class="assets-overview">
       <div class="asset-card coins">
-        <div class="asset-icon">💰</div>
+        <div class="asset-icon"></div>
         <div class="asset-info">
           <span class="asset-label">金币</span>
           <span class="asset-value">{{ formatNumber(authStore.currentUser?.coins || 0) }}</span>
@@ -16,7 +16,7 @@
       </div>
 
       <div class="asset-card prestige">
-        <div class="asset-icon">⭐</div>
+        <div class="asset-icon"></div>
         <div class="asset-info">
           <span class="asset-label">声望</span>
           <span class="asset-value">{{ authStore.currentUser?.prestige || 0 }}</span>
@@ -28,7 +28,7 @@
       </div>
 
       <div class="asset-card pearls">
-        <div class="asset-icon">💎</div>
+        <div class="asset-icon"></div>
         <div class="asset-info">
           <span class="asset-label">淡水珍珠</span>
           <span class="asset-value">{{ authStore.currentUser?.pearls || 0 }}</span>
@@ -39,30 +39,30 @@
 
     <div class="quick-actions">
       <button class="quick-btn" @click="showRecharge = true">
-        <span class="btn-icon">💳</span>
+        <span class="btn-icon"></span>
         <span>充值金币</span>
       </button>
       <button class="quick-btn" @click="showExchange = true">
-        <span class="btn-icon">🔄</span>
+        <span class="btn-icon"></span>
         <span>珍珠兑换</span>
       </button>
       <button class="quick-btn" @click="showTransfer = true">
-        <span class="btn-icon">📤</span>
+        <span class="btn-icon"></span>
         <span>好友转账</span>
       </button>
       <button class="quick-btn" @click="showShop = true">
-        <span class="btn-icon">🛒</span>
+        <span class="btn-icon"></span>
         <span>兑换商城</span>
       </button>
       <button class="quick-btn" @click="showInventory = true">
-        <span class="btn-icon">🎒</span>
+        <span class="btn-icon"></span>
         <span>物品仓库</span>
       </button>
     </div>
 
     <div class="transactions-section">
       <div class="section-header">
-        <h2>📜 交易记录</h2>
+        <h2> 交易记录</h2>
         <div class="filter-tabs">
           <button 
             v-for="filter in filters" 
@@ -94,13 +94,13 @@
       </div>
 
       <div v-if="filteredTransactions.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无交易记录</p>
       </div>
     </div>
 
     <div class="leaderboard-section">
-      <h2>🏆 声望排行榜</h2>
+      <h2>声望排行榜</h2>
       <div class="leaderboard-list">
         <div 
           v-for="(user, index) in leaderboard" 
@@ -109,7 +109,7 @@
           :class="{ 'top-three': index < 3 }"
         >
           <div class="rank" :class="'rank-' + (index + 1)">
-            {{ index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1 }}
+            {{ index === 0 ? '' : index === 1 ? '' : index === 2 ? '' : index + 1 }}
           </div>
           <div class="leader-avatar">{{ user.avatar }}</div>
           <div class="leader-info">
@@ -126,8 +126,8 @@
 
     <div v-if="showRecharge" class="modal-overlay" @click.self="showRecharge = false">
       <div class="modal-content" @click.stop>
-        <button class="close-btn" @click="showRecharge = false">×</button>
-        <h3>💳 充值金币</h3>
+        <button class="close-btn" @click="showRecharge = false"></button>
+        <h3>充值金币</h3>
         <div class="recharge-options">
           <button 
             v-for="option in rechargeOptions" 
@@ -145,11 +145,11 @@
 
     <div v-if="showExchange" class="modal-overlay" @click.self="showExchange = false">
       <div class="modal-content" @click.stop>
-        <button class="close-btn" @click="showExchange = false">×</button>
-        <h3>🔄 珍珠兑换</h3>
+        <button class="close-btn" @click="showExchange = false"></button>
+        <h3> 珍珠兑换</h3>
         <div class="exchange-info">
           <div class="exchange-rate">
-            <span>💎 1珍珠 = 💰 100金币</span>
+            <span> 1珍珠 =  100金币</span>
           </div>
           <div class="exchange-input">
             <label>兑换数量</label>
@@ -162,7 +162,7 @@
             <span class="input-hint">当前珍珠: {{ authStore.currentUser?.pearls || 0 }}</span>
           </div>
           <div class="exchange-result">
-            将获得: <span class="result-value">💰 {{ exchangeAmount * 100 }}</span>
+            将获 <span class="result-value"> {{ exchangeAmount * 100 }}</span>
           </div>
         </div>
         <button class="confirm-btn" @click="confirmExchange">确认兑换</button>
@@ -171,11 +171,11 @@
 
     <div v-if="showTransfer" class="modal-overlay" @click.self="showTransfer = false">
       <div class="modal-content transfer-modal" @click.stop>
-        <button class="close-btn" @click="showTransfer = false">×</button>
-        <h3>📤 好友转账</h3>
+        <button class="close-btn" @click="showTransfer = false"></button>
+        <h3> 好友转账</h3>
         <div class="transfer-info">
           <div class="transfer-balance">
-            当前余额: <span class="balance-value">💰 {{ formatNumber(authStore.currentUser?.coins || 0) }}</span>
+            当前余额: <span class="balance-value"> {{ formatNumber(authStore.currentUser?.coins || 0) }}</span>
           </div>
           <div class="form-group">
             <label>选择好友</label>
@@ -195,7 +195,7 @@
               </div>
             </div>
             <div v-if="friends.length === 0" class="no-friends">
-              <span>暂无好友，快去添加好友吧！</span>
+              <span>暂无好友，快去添加好友吧</span>
             </div>
           </div>
           <div class="form-group">
@@ -206,10 +206,10 @@
               min="1"
               :max="authStore.currentUser?.coins || 0"
             />
-            <span class="input-hint">最大可转: {{ formatNumber(authStore.currentUser?.coins || 0) }}</span>
+            <span class="input-hint">最大可转 {{ formatNumber(authStore.currentUser?.coins || 0) }}</span>
           </div>
           <div class="form-group">
-            <label>留言（可选）</label>
+            <label>留言可选</label>
             <input 
               v-model="transferMessage" 
               type="text" 
@@ -230,8 +230,8 @@
 
     <div v-if="showShop" class="modal-overlay shop-overlay" @click.self="showShop = false">
       <div class="modal-content shop-modal" @click.stop>
-        <button class="close-btn" @click="showShop = false">×</button>
-        <h3>🛒 兑换商城</h3>
+        <button class="close-btn" @click="showShop = false"></button>
+        <h3> 兑换商城</h3>
         <div class="shop-tabs">
           <button 
             v-for="tab in shopTabs" 
@@ -256,7 +256,7 @@
             </div>
             <div class="item-price">
               <span class="price-value">{{ item.price }}</span>
-              <span class="price-currency">{{ item.currency === 'coins' ? '💰金币' : '💎珍珠' }}</span>
+              <span class="price-currency">{{ item.currency === 'coins' ? '金币' : '珍珠' }}</span>
             </div>
             <button 
               class="buy-btn"
@@ -272,9 +272,9 @@
 
     <div v-if="showInventory" class="modal-overlay inventory-overlay" @click.self="showInventory = false">
       <div class="modal-content inventory-modal" @click.stop>
-        <button class="close-btn" @click="showInventory = false">×</button>
+        <button class="close-btn" @click="showInventory = false"></button>
         <div class="inventory-header">
-          <h3>🎒 物品仓库</h3>
+          <h3> 物品仓库</h3>
           <div class="inventory-capacity">
             <span>容量: {{ inventoryStore.capacityUsed }} / {{ inventoryStore.maxCapacity }}</span>
             <div class="capacity-bar">
@@ -303,7 +303,7 @@
             <div class="inventory-item-info">
               <div class="inventory-item-name">{{ item.name }}</div>
               <div class="inventory-item-desc">{{ item.description }}</div>
-              <div class="inventory-item-count">数量: ×{{ item.count }}</div>
+              <div class="inventory-item-count">数量: {{ item.count }}</div>
             </div>
             <div class="inventory-item-actions">
               <button class="action-btn use-btn" @click="useInventoryItem(item)">使用</button>
@@ -311,7 +311,7 @@
             </div>
           </div>
           <div v-if="(inventoryStore.filteredItems[selectedInventoryTab]?.items || []).length === 0" class="empty-inventory">
-            <span>📭</span>
+            <span></span>
             <p>该分类暂无物品</p>
           </div>
         </div>
@@ -322,9 +322,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useAuthStore } from '../stores/auth'
-import { useTransactionStore } from '../stores/transaction'
-import { useInventoryStore } from '../stores/inventory'
+import { useAuthStore } from '@/stores'
+import { useTransactionStore } from '@/stores'
+import { useInventoryStore } from '@/stores'
 
 const authStore = useAuthStore()
 const transactionStore = useTransactionStore()
@@ -361,23 +361,23 @@ const shopTabs = [
 ]
 
 const rechargeOptions = [
-  { amount: 1000, price: '¥10' },
-  { amount: 5000, price: '¥50' },
-  { amount: 10000, price: '¥100' },
-  { amount: 50000, price: '¥500' }
+  { amount: 1000, price: '10' },
+  { amount: 5000, price: '50' },
+  { amount: 10000, price: '100' },
+  { amount: 50000, price: '500' }
 ]
 
 const friends = computed(() => [
-  { phone: '13800138003', nickname: '赏金猎人', avatar: '🏹', level: 32 },
-  { phone: '13800138001', nickname: '馆主大人', avatar: '👑', level: 50 },
-  { phone: '13800138004', nickname: '光明法师', avatar: '🧙', level: 28 }
+  { phone: '13800138003', nickname: '赏金猎人', avatar: '', level: 32 },
+  { phone: '13800138001', nickname: '馆主大人', avatar: '', level: 50 },
+  { phone: '13800138004', nickname: '光明法师', avatar: '', level: 28 }
 ])
 
 const shopItems = [
   { 
     id: 'item1', 
-    name: '初级体力丹', 
-    icon: '💊', 
+    name: '初级体力药水', 
+    icon: '', 
     description: '恢复50点体力',
     reward: '体力 +50',
     price: 100,
@@ -385,8 +385,8 @@ const shopItems = [
   },
   { 
     id: 'item2', 
-    name: '中级体力丹', 
-    icon: '🧪', 
+    name: '中级体力药水', 
+    icon: '', 
     description: '恢复100点体力',
     reward: '体力 +100',
     price: 250,
@@ -395,7 +395,7 @@ const shopItems = [
   { 
     id: 'item3', 
     name: '经验卷轴', 
-    icon: '📜', 
+    icon: '', 
     description: '获得500点经验',
     reward: '经验 +500',
     price: 500,
@@ -404,7 +404,7 @@ const shopItems = [
   { 
     id: 'item4', 
     name: '声望令牌', 
-    icon: '⭐', 
+    icon: '', 
     description: '获得50点声望',
     reward: '声望 +50',
     price: 800,
@@ -413,7 +413,7 @@ const shopItems = [
   { 
     id: 'item5', 
     name: '珍珠袋', 
-    icon: '💎', 
+    icon: '', 
     description: '获得5颗珍珠',
     reward: '珍珠 +5',
     price: 500,
@@ -422,7 +422,7 @@ const shopItems = [
   { 
     id: 'item6', 
     name: '神秘宝箱', 
-    icon: '📦', 
+    icon: '', 
     description: '随机获得珍贵物品',
     reward: '随机奖励',
     price: 1500,
@@ -430,8 +430,8 @@ const shopItems = [
   },
   { 
     id: 'pearl1', 
-    name: '高级体力丹', 
-    icon: '💎💊', 
+    name: '高级体力药水', 
+    icon: '', 
     description: '恢复500点体力',
     reward: '体力 +500',
     price: 5,
@@ -439,8 +439,8 @@ const shopItems = [
   },
   { 
     id: 'pearl2', 
-    name: '传说经验书', 
-    icon: '💎📚', 
+    name: '传说经验卷轴', 
+    icon: '', 
     description: '获得5000点经验',
     reward: '经验 +5000',
     price: 10,
@@ -448,8 +448,8 @@ const shopItems = [
   },
   { 
     id: 'pearl3', 
-    name: '至尊声望令', 
-    icon: '💎⭐', 
+    name: '至尊声望令牌', 
+    icon: '', 
     description: '获得500点声望',
     reward: '声望 +500',
     price: 15,
@@ -458,7 +458,7 @@ const shopItems = [
   { 
     id: 'pearl4', 
     name: '金色宝箱', 
-    icon: '💎📦', 
+    icon: '', 
     description: '随机获得稀有物品',
     reward: '稀有奖励',
     price: 20,
@@ -475,11 +475,11 @@ const filteredTransactions = computed(() => {
 })
 
 const leaderboard = computed(() => [
-  { nickname: '馆主大人', avatar: '👑', prestige: 1500, level: 50 },
-  { nickname: '赏金猎人', avatar: '🏹', prestige: 890, level: 32 },
-  { nickname: '江湖游侠', avatar: '🗡️', prestige: 650, level: 25 },
-  { nickname: '光明法师', avatar: '🧙', prestige: 520, level: 28 },
-  { nickname: '暗夜刺客', avatar: '🗡️', prestige: 480, level: 24 }
+  { nickname: '馆主大人', avatar: '', prestige: 1500, level: 50 },
+  { nickname: '赏金猎人', avatar: '', prestige: 890, level: 32 },
+  { nickname: '江湖游侠', avatar: '', prestige: 650, level: 25 },
+  { nickname: '光明法师', avatar: '', prestige: 520, level: 28 },
+  { nickname: '暗夜刺客', avatar: '', prestige: 480, level: 24 }
 ])
 
 function getPrestigeProgress() {
@@ -505,7 +505,7 @@ function confirmRecharge() {
   transactionStore.addTransaction('recharge', '充值到账', selectedRecharge.value)
   
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: `💳 充值 ${selectedRecharge.value} 金币成功！`, type: 'success' }
+    detail: { message: `充值 ${selectedRecharge.value} 金币成功`, type: 'success' }
   }))
   showRecharge.value = false
 }
@@ -523,7 +523,7 @@ function confirmExchange() {
   transactionStore.addTransaction('exchange', '珍珠兑换', exchangeAmount.value * 100)
   
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: `🔄 兑换成功！获得 ${exchangeAmount.value * 100} 金币`, type: 'success' }
+    detail: { message: ` 兑换成功获${exchangeAmount.value * 100} 金币`, type: 'success' }
   }))
   showExchange.value = false
   exchangeAmount.value = 1
@@ -546,10 +546,10 @@ function confirmTransfer() {
   }
   
   authStore.deductCoins(amount)
-  transactionStore.addTransaction('transfer', `转账给${selectedFriend.value.nickname}`, -amount)
+  transactionStore.addTransaction('transfer', `转账{selectedFriend.value.nickname}`, -amount)
   
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: `📤 成功转账 ${amount} 金币给 ${selectedFriend.value.nickname}！`, type: 'success' }
+    detail: { message: ` 成功转账 ${amount} 金币${selectedFriend.value.nickname}`, type: 'success' }
   }))
   showTransfer.value = false
   selectedFriend.value = null
@@ -568,7 +568,7 @@ function canBuy(item) {
 function buyItem(item) {
   if (!canBuy(item)) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '余额不足，无法兑换', type: 'warning' }
+      detail: { message: '余额不足无法兑换', type: 'warning' }
     }))
     return
   }
@@ -609,27 +609,27 @@ function buyItem(item) {
   
   if (item.reward.includes('体力')) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `🎉 成功兑换 ${item.name}！${item.reward}`, type: 'success' }
+      detail: { message: ` 成功兑换 ${item.name}?{item.reward}`, type: 'success' }
     }))
   } else if (item.reward.includes('经验')) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `🎉 成功兑换 ${item.name}！${item.reward}`, type: 'success' }
+      detail: { message: ` 成功兑换 ${item.name}?{item.reward}`, type: 'success' }
     }))
   } else if (item.reward.includes('声望')) {
     const prestige = parseInt(item.reward.replace('声望 +', ''))
     authStore.addPrestige(prestige)
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `🎉 成功兑换 ${item.name}！${item.reward}`, type: 'success' }
+      detail: { message: ` 成功兑换 ${item.name}?{item.reward}`, type: 'success' }
     }))
   } else if (item.reward.includes('珍珠')) {
     const pearls = parseInt(item.reward.replace('珍珠 +', ''))
     authStore.addPearls(pearls)
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `🎉 成功兑换 ${item.name}！${item.reward}`, type: 'success' }
+      detail: { message: ` 成功兑换 ${item.name}?{item.reward}`, type: 'success' }
     }))
   } else {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `🎉 成功兑换 ${item.name}！${item.reward}`, type: 'success' }
+      detail: { message: ` 成功兑换 ${item.name}?{item.reward}`, type: 'success' }
     }))
   }
 }

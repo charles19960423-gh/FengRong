@@ -3,8 +3,8 @@
     <div class="page-header">
       <div class="header-content">
         <div>
-          <h1>🏢 {{ authStore.currentUser?.companyName || '客户控制台' }}</h1>
-          <p>欢迎回来，{{ authStore.currentUser?.contactPerson || '联系人' }}</p>
+          <h1>{{ authStore.currentUser?.companyName || '客户控制台' }}</h1>
+          <p>欢迎回来{{ authStore.currentUser?.contactPerson || '联系人' }}</p>
         </div>
         <button class="publish-btn" @click="showPublishModal = true">+ 发布新任务</button>
       </div>
@@ -12,44 +12,44 @@
 
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon">📋</div>
+        <div class="stat-icon"></div>
         <div class="stat-info">
           <span class="stat-value">{{ clientStore.clientStats.total }}</span>
           <span class="stat-label">总任务数</span>
         </div>
       </div>
       <div class="stat-card pending">
-        <div class="stat-icon">⏳</div>
+        <div class="stat-icon"></div>
         <div class="stat-info">
           <span class="stat-value">{{ clientStore.clientStats.pending }}</span>
-          <span class="stat-label">待接单</span>
+          <span class="stat-label">待接收</span>
         </div>
       </div>
       <div class="stat-card progress">
-        <div class="stat-icon">🔄</div>
+        <div class="stat-icon"></div>
         <div class="stat-info">
           <span class="stat-value">{{ clientStore.clientStats.inProgress }}</span>
           <span class="stat-label">进行中</span>
         </div>
       </div>
       <div class="stat-card completed">
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon"></div>
         <div class="stat-info">
           <span class="stat-value">{{ clientStore.clientStats.completed }}</span>
           <span class="stat-label">已完成</span>
         </div>
       </div>
       <div class="stat-card budget">
-        <div class="stat-icon">💰</div>
+        <div class="stat-icon"></div>
         <div class="stat-info">
-          <span class="stat-value">¥{{ formatNumber(clientStore.clientStats.totalBudget) }}</span>
+          <span class="stat-value">{{ formatNumber(clientStore.clientStats.totalBudget) }}</span>
           <span class="stat-label">总预算</span>
         </div>
       </div>
       <div class="stat-card spent">
-        <div class="stat-icon">📤</div>
+        <div class="stat-icon"></div>
         <div class="stat-info">
-          <span class="stat-value">¥{{ formatNumber(clientStore.clientStats.spentBudget) }}</span>
+          <span class="stat-value">{{ formatNumber(clientStore.clientStats.spentBudget) }}</span>
           <span class="stat-label">已支出</span>
         </div>
       </div>
@@ -70,7 +70,7 @@
       <div class="filter-bar">
         <select v-model="statusFilter" class="filter-select">
           <option value="all">全部状态</option>
-          <option value="pending">待接单</option>
+          <option value="pending">待接收</option>
           <option value="in-progress">进行中</option>
           <option value="completed">已完成</option>
           <option value="cancelled">已取消</option>
@@ -93,8 +93,8 @@
           <h3>{{ task.title }}</h3>
           <p class="task-description">{{ task.description }}</p>
           <div class="task-meta">
-            <span class="meta-item">💰 预算: ¥{{ formatNumber(task.budget) }}</span>
-            <span class="meta-item">📅 截止: {{ task.deadline }}</span>
+            <span class="meta-item"> 预算: {{ formatNumber(task.budget) }}</span>
+            <span class="meta-item"> 截止: {{ task.deadline }}</span>
           </div>
           <div v-if="task.progress > 0 && task.status === 'in-progress'" class="task-progress">
             <div class="progress-bar-container">
@@ -103,7 +103,7 @@
             <span>{{ task.progress }}%</span>
           </div>
           <div v-if="task.assignedName" class="task-executor">
-            <span>👤 执行方: {{ task.assignedName }}</span>
+            <span> 执行 {{ task.assignedName }}</span>
           </div>
           <div class="task-actions">
             <button class="action-btn" @click="viewTaskDetail(task)">查看详情</button>
@@ -126,7 +126,7 @@
       </div>
 
       <div v-if="filteredTasks.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无任务</p>
         <button class="empty-action" @click="showPublishModal = true">发布第一个任务</button>
       </div>
@@ -144,7 +144,7 @@
           class="notification-item"
           :class="notif.type"
         >
-          <span class="notif-icon">{{ notif.type === 'success' ? '✅' : notif.type === 'warning' ? '⚠️' : 'ℹ️' }}</span>
+          <span class="notif-icon">{{ notif.type === 'success' ? '✓' : notif.type === 'warning' ? '⚠' : 'ℹ' }}</span>
           <div class="notif-content">
             <p>{{ notif.message }}</p>
             <span class="notif-time">{{ formatTime(notif.timestamp) }}</span>
@@ -162,7 +162,7 @@
         <form @submit.prevent="publishTask">
           <div class="form-group">
             <label>任务标题</label>
-            <input v-model="newTask.title" type="text" placeholder="如：品牌形象宣传片制作" required />
+            <input v-model="newTask.title" type="text" placeholder="如品牌形象宣传片制作" required />
           </div>
           <div class="form-group">
             <label>任务分类</label>
@@ -174,12 +174,12 @@
           </div>
           <div class="form-group">
             <label>详细描述</label>
-            <textarea v-model="newTask.description" placeholder="请详细描述任务需求..." rows="4" required></textarea>
+            <textarea v-model="newTask.description" placeholder="请详细描述任务需.." rows="4" required></textarea>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>预算金额 (元)</label>
-              <input v-model.number="newTask.budget" type="number" placeholder="如：30000" min="100" required />
+              <label>预算金额</label>
+              <input v-model.number="newTask.budget" type="number" placeholder="如30000" min="100" required />
             </div>
             <div class="form-group">
               <label>截止日期</label>
@@ -208,7 +208,7 @@
           <div class="detail-meta">
             <div class="meta-row">
               <span class="meta-label">预算:</span>
-              <span class="meta-value">¥{{ formatNumber(selectedTask.budget) }}</span>
+              <span class="meta-value">{{ formatNumber(selectedTask.budget) }}</span>
             </div>
             <div class="meta-row">
               <span class="meta-label">截止日期:</span>
@@ -219,7 +219,7 @@
               <span class="meta-value">{{ selectedTask.createdAt }}</span>
             </div>
             <div class="meta-row" v-if="selectedTask.assignedName">
-              <span class="meta-label">执行方:</span>
+              <span class="meta-label">执行</span>
               <span class="meta-value">{{ selectedTask.assignedName }}</span>
             </div>
           </div>
@@ -245,8 +245,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useAuthStore } from '../stores/auth'
-import { useClientStore } from '../stores/client'
+import { useAuthStore } from '@/stores'
+import { useClientStore } from '@/stores'
 
 const authStore = useAuthStore()
 const clientStore = useClientStore()
@@ -258,8 +258,8 @@ const showDetailModal = ref(false)
 const selectedTask = ref(null)
 
 const tabs = [
-  { value: 'tasks', label: '我的任务', icon: '📋' },
-  { value: 'notifications', label: '消息通知', icon: '🔔' }
+  { value: 'tasks', label: '我的任务', icon: '' },
+  { value: 'notifications', label: '消息通知', icon: '' }
 ]
 
 const newTask = ref({
@@ -319,21 +319,21 @@ function viewTaskDetail(task) {
 }
 
 function confirmComplete(task) {
-  if (confirm('确认任务已完成？')) {
+  if (confirm('确认任务已完成')) {
     clientStore.completeClientTask(task.id)
     clientStore.addNotification({
       type: 'success',
-      message: `任务「${task.title}」已标记完成`
+      message: `任务${task.title}已标记完成`
     })
   }
 }
 
 function cancelTask(task) {
-  if (confirm('确认取消该任务？')) {
+  if (confirm('确认取消该任务')) {
     clientStore.cancelClientTask(task.id)
     clientStore.addNotification({
       type: 'warning',
-      message: `任务「${task.title}」已取消`
+      message: `任务${task.title}已取消`
     })
   }
 }
@@ -803,3 +803,4 @@ onMounted(() => {
   }
 }
 </style>
+

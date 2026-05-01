@@ -1,8 +1,8 @@
-<template>
+﻿<template>
   <div class="achievements-page">
     <div class="page-header">
       <h1>成就系统</h1>
-      <p>收集成就，展示你的江湖风采</p>
+      <p>收集成就展示你的江湖风采</p>
     </div>
 
     <div class="stats-bar">
@@ -30,11 +30,11 @@
       <input 
         type="text" 
         v-model="searchQuery" 
-        placeholder="🔍 搜索成就名称或描述..." 
+        placeholder="搜索成就名称或描述..." 
         class="search-input"
         @input="handleSearch"
       />
-      <button v-if="searchQuery" class="clear-search" @click="clearSearch">✕</button>
+      <button v-if="searchQuery" class="clear-search" @click="clearSearch"></button>
     </div>
 
     <div class="category-tabs">
@@ -75,19 +75,19 @@
         <div class="achievement-status">
           <span v-if="achievement.unlockedAt" class="unlock-date">{{ achievement.unlockedAt }}</span>
           <span v-else-if="achievement.progress > 0" class="in-progress">进行中</span>
-          <span v-else class="locked">🔒</span>
+          <span v-else class="locked"></span>
         </div>
       </div>
     </div>
 
     <div v-if="filteredAchievements.length === 0" class="empty-state">
-      <div class="empty-icon">🔍</div>
+      <div class="empty-icon"></div>
       <p>没有找到匹配的成就</p>
     </div>
 
     <div v-if="selectedAchievement" class="achievement-detail-overlay" @click="selectedAchievement = null; showShareModal = false; showPosterModal = false">
       <div class="detail-modal" @click.stop>
-        <button class="close-btn" @click="selectedAchievement = null; showShareModal = false; showPosterModal = false">×</button>
+        <button class="close-btn" @click="selectedAchievement = null; showShareModal = false; showPosterModal = false"></button>
         <div class="detail-header">
           <span class="detail-icon">{{ selectedAchievement.icon }}</span>
           <div class="detail-title">
@@ -100,7 +100,7 @@
           <p class="detail-story">{{ selectedAchievement.story }}</p>
           
           <div v-if="!selectedAchievement.unlockedAt && selectedAchievement.progress > 0" class="detail-section target-progress-panel">
-            <h3>🎯 目标进度追踪</h3>
+            <h3> 目标进度追踪</h3>
             <div class="progress-circle-container">
               <div class="progress-circle" :style="{ '--progress': selectedAchievement.progress + '%' }">
                 <span class="progress-value">{{ selectedAchievement.progress }}%</span>
@@ -111,7 +111,7 @@
               </div>
             </div>
             <div class="milestone-section" v-if="getMilestones(selectedAchievement).length > 0">
-              <div class="milestone-title">📌 里程碑</div>
+              <div class="milestone-title">里程碑</div>
               <div class="milestone-list">
                 <div 
                   v-for="(milestone, index) in getMilestones(selectedAchievement)" 
@@ -119,13 +119,13 @@
                   class="milestone-item"
                   :class="{ completed: isMilestoneCompleted(milestone, selectedAchievement) }"
                 >
-                  <span class="milestone-check">{{ isMilestoneCompleted(milestone, selectedAchievement) ? '✅' : '⬜' }}</span>
+                  <span class="milestone-check">{{ isMilestoneCompleted(milestone, selectedAchievement) ? '' : '' }}</span>
                   <span>{{ milestone }}</span>
                 </div>
               </div>
             </div>
             <div class="suggestion-section" v-if="getSuggestion(selectedAchievement)">
-              <div class="suggestion-title">💡 行动建议</div>
+              <div class="suggestion-title"> 行动建议</div>
               <div class="suggestion-content">{{ getSuggestion(selectedAchievement) }}</div>
             </div>
           </div>
@@ -140,8 +140,8 @@
           <div class="detail-section">
             <h3>解锁奖励</h3>
             <div class="rewards-list">
-              <span v-if="selectedAchievement.rewards?.prestige">🎁 声望 +{{ selectedAchievement.rewards.prestige }}</span>
-              <span v-if="selectedAchievement.rewards?.title">🏅 称号: {{ selectedAchievement.rewards.title }}</span>
+              <span v-if="selectedAchievement.rewards?.prestige"> 声望 +{{ selectedAchievement.rewards.prestige }}</span>
+              <span v-if="selectedAchievement.rewards?.title"> 称号: {{ selectedAchievement.rewards.title }}</span>
             </div>
           </div>
           <div class="detail-actions">
@@ -150,14 +150,14 @@
               class="action-btn target-btn"
               @click="setTargetAchievement(selectedAchievement)"
             >
-              🎯 {{ targetAchievement?.id === selectedAchievement.id ? '取消目标' : '设为目标' }}
+               {{ targetAchievement?.id === selectedAchievement.id ? '取消目标' : '设为目标' }}
             </button>
             <button 
               v-if="selectedAchievement.unlockedAt" 
               class="action-btn share-btn"
               @click="showShareModal = true"
             >
-              📤 分享
+               分享
             </button>
             <button 
               v-if="selectedAchievement.unlockedAt" 
@@ -173,28 +173,28 @@
 
     <div v-if="showShareModal" class="share-modal-overlay" @click="showShareModal = false">
       <div class="share-modal-content" @click.stop>
-        <button class="close-btn" @click="showShareModal = false">×</button>
+        <button class="close-btn" @click="showShareModal = false"></button>
         <div class="share-modal-header">
-          <span style="font-size: 1.5rem;">📤</span>
+          <span style="font-size: 1.5rem;"></span>
           <div>
             <div class="modal-name">分享成就</div>
           </div>
         </div>
         <div class="share-options">
           <div class="share-option" @click="shareToWeChatFriend">
-            <div class="share-icon">💬</div>
+            <div class="share-icon"></div>
             <div class="share-text">微信好友</div>
           </div>
           <div class="share-option" @click="shareToWeChatTimeline">
-            <div class="share-icon">📱</div>
+            <div class="share-icon"></div>
             <div class="share-text">朋友圈</div>
           </div>
           <div class="share-option" @click="generatePoster">
-            <div class="share-icon">🖼️</div>
+            <div class="share-icon"></div>
             <div class="share-text">生成海报</div>
           </div>
           <div class="share-option" @click="copyAchievementLink">
-            <div class="share-icon">🔗</div>
+            <div class="share-icon"></div>
             <div class="share-text">复制链接</div>
           </div>
         </div>
@@ -203,16 +203,16 @@
 
     <div v-if="showPosterModal" class="poster-modal-overlay" @click="showPosterModal = false">
       <div class="poster-modal-content" @click.stop>
-        <button class="close-btn" @click="showPosterModal = false">×</button>
+        <button class="close-btn" @click="showPosterModal = false"></button>
         <div class="poster-modal-header">
-          <span style="font-size: 1.5rem;">🖼️</span>
+          <span style="font-size: 1.5rem;"></span>
           <div>
             <div class="modal-name">成就海报</div>
           </div>
         </div>
         <div class="poster-preview">
           <canvas ref="posterCanvas" class="poster-canvas"></canvas>
-          <button class="download-btn" @click="downloadPoster">📥 保存海报</button>
+          <button class="download-btn" @click="downloadPoster"> 保存海报</button>
         </div>
       </div>
     </div>
@@ -221,7 +221,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useAchievementStore } from '../stores/achievement'
+import { useAchievementStore } from '@/stores'
 
 const achievementStore = useAchievementStore()
 const selectedCategory = ref('all')
@@ -333,15 +333,15 @@ function isMilestoneCompleted(milestone, achievement) {
 
 function getSuggestion(achievement) {
   const suggestions = {
-    'task': '多接取赏金任务，完成后可获得进度',
-    'login': '保持每日登录，连续登录可加速进度',
+    'task': '多接取赏金任务完成后可获得进度',
+    'login': '保持每日登录连续登录可加速进度',
     'prestige': '多完成任务和成就获取声望',
     'collect': '收集更多法器可解锁成就',
     'invite': '邀请好友加入可获得进度',
     'perfect': '高质量完成任务可获得完美评价',
     'night': '尝试在深夜时段登录',
-    'season': '关注赛季活动，参与可获得进度',
-    'total-prestige': '累计获取声望，达到目标即可解锁'
+    'season': '关注赛季活动参与可获得进度',
+    'total-prestige': '累计获取声望达到目标即可解锁'
   }
   const type = achievement.requirements?.type || ''
   return suggestions[type] || '继续努力完成更多任务'
@@ -353,7 +353,7 @@ function shareToWeChatFriend() {
   copyToClipboard(text)
   showShareModal.value = false
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: '成就信息已复制到剪贴板！', type: 'success' }
+    detail: { message: '成就信息已复制到剪贴板', type: 'success' }
   }))
 }
 
@@ -367,12 +367,12 @@ function copyAchievementLink() {
   copyToClipboard(url)
   showShareModal.value = false
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: '链接已复制到剪贴板！', type: 'success' }
+    detail: { message: '链接已复制到剪贴板', type: 'success' }
   }))
 }
 
 function formatShareText(achievement) {
-  return `我在枫榕赏金酒馆获得了成就：${achievement.icon} ${achievement.name}！${achievement.description}`
+  return `我在枫榕赏金酒馆获得了成就${achievement.icon} ${achievement.name}?{achievement.description}`
 }
 
 function copyToClipboard(text) {
@@ -456,7 +456,7 @@ function renderPoster(canvas, achievement) {
     ctx.font = '14px Microsoft YaHei'
     ctx.fillStyle = '#D4AF37'
     let rewardsY = storyY + storyLines.length * 18 + 20
-    ctx.fillText('🎁 奖励：', 200, rewardsY)
+    ctx.fillText('奖励:', 200, rewardsY)
     
     let rewardsText = ''
     if (achievement.rewards.prestige) {
@@ -477,7 +477,7 @@ function renderPoster(canvas, achievement) {
   ctx.font = '14px Microsoft YaHei'
   ctx.fillStyle = '#D4AF37'
   ctx.textAlign = 'center'
-  ctx.fillText('🏮 枫榕赏金酒馆', 200, 475)
+  ctx.fillText(' 枫榕赏金酒馆', 200, 475)
 }
 
 function wrapText(ctx, text, maxWidth) {
@@ -524,7 +524,7 @@ function downloadPoster() {
   link.click()
   showPosterModal.value = false
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: '海报保存成功！', type: 'success' }
+    detail: { message: '海报保存成功', type: 'success' }
   }))
 }
 
@@ -1123,3 +1123,4 @@ onMounted(() => {
   background: #B89500;
 }
 </style>
+

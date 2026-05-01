@@ -1,22 +1,22 @@
 <template>
   <div class="settings-page">
     <div class="page-header">
-      <h1>⚙️ 设置中心</h1>
+      <h1> 设置中心</h1>
       <p>管理您的账户和偏好设置</p>
     </div>
 
     <div class="tabs">
       <button :class="{ active: activeTab === 'profile' }" @click="activeTab = 'profile'">
-        👤 个人信息
+         个人信息
       </button>
       <button :class="{ active: activeTab === 'security' }" @click="activeTab = 'security'">
-        🔐 安全设置
+         安全设置
       </button>
       <button :class="{ active: activeTab === 'notifications' }" @click="activeTab = 'notifications'">
-        🔔 通知设置
+         通知设置
       </button>
       <button :class="{ active: activeTab === 'privacy' }" @click="activeTab = 'privacy'">
-        🔒 隐私设置
+         隐私设置
       </button>
     </div>
 
@@ -25,7 +25,7 @@
       <div class="form-group">
         <label>头像</label>
         <div class="avatar-upload">
-          <div class="avatar-preview">{{ authStore.currentUser?.avatar || '👤' }}</div>
+          <div class="avatar-preview">{{ authStore.currentUser?.avatar || '' }}</div>
           <button class="upload-btn">更换头像</button>
         </div>
       </div>
@@ -38,7 +38,7 @@
         <input v-model="profileForm.email" type="email" placeholder="请输入邮箱" />
       </div>
       <div class="form-group">
-        <label>手机号</label>
+        <label>手机</label>
         <input :value="authStore.currentUser?.phone" type="text" disabled />
         <span class="disabled-hint">手机号不可修改</span>
       </div>
@@ -46,10 +46,10 @@
         <label>职业</label>
         <select v-model="profileForm.job">
           <option value="">请选择职业</option>
-          <option value="photographer">摄影师</option>
-          <option value="editor">剪辑师</option>
+          <option value="photographer">摄影</option>
+          <option value="editor">剪辑</option>
           <option value="director">导演</option>
-          <option value="producer">制片人</option>
+          <option value="producer">制片</option>
           <option value="writer">编剧</option>
           <option value="other">其他</option>
         </select>
@@ -65,19 +65,19 @@
       <div class="section-title">安全设置</div>
       <div class="setting-item">
         <div class="setting-info">
-          <div class="setting-icon">🔑</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">修改密码</span>
-            <span class="setting-desc">定期更换密码，保护账户安全</span>
+            <span class="setting-desc">定期更换密码保护账户安全</span>
           </div>
         </div>
         <button class="setting-action" @click="showChangePassword = true">修改</button>
       </div>
       <div class="setting-item">
         <div class="setting-info">
-          <div class="setting-icon">📱</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
-            <span class="setting-name">绑定手机号</span>
+            <span class="setting-name">绑定手机</span>
             <span class="setting-desc">{{ authStore.currentUser?.phone || '未绑定' }}</span>
           </div>
         </div>
@@ -85,7 +85,7 @@
       </div>
       <div class="setting-item">
         <div class="setting-info">
-          <div class="setting-icon">🔄</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">账号安全等级</span>
             <span class="setting-desc">当前安全等级: {{ securityLevel }}</span>
@@ -101,7 +101,7 @@
       <div class="section-title">通知设置</div>
       <div class="setting-item toggle-item">
         <div class="setting-info">
-          <div class="setting-icon">🔔</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">系统通知</span>
             <span class="setting-desc">接收平台系统消息</span>
@@ -114,7 +114,7 @@
       </div>
       <div class="setting-item toggle-item">
         <div class="setting-info">
-          <div class="setting-icon">📋</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">任务通知</span>
             <span class="setting-desc">接收任务相关消息</span>
@@ -127,7 +127,7 @@
       </div>
       <div class="setting-item toggle-item">
         <div class="setting-info">
-          <div class="setting-icon">👥</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">组队邀请</span>
             <span class="setting-desc">接收组队邀请通知</span>
@@ -140,7 +140,7 @@
       </div>
       <div class="setting-item toggle-item">
         <div class="setting-info">
-          <div class="setting-icon">🎪</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">活动提醒</span>
             <span class="setting-desc">接收活动相关消息</span>
@@ -153,7 +153,7 @@
       </div>
       <div class="setting-item toggle-item">
         <div class="setting-info">
-          <div class="setting-icon">💬</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">私信通知</span>
             <span class="setting-desc">接收私信消息</span>
@@ -171,7 +171,7 @@
       <div class="section-title">隐私设置</div>
       <div class="setting-item toggle-item">
         <div class="setting-info">
-          <div class="setting-icon">👁️</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">公开资料</span>
             <span class="setting-desc">允许其他用户查看您的个人资料</span>
@@ -184,10 +184,10 @@
       </div>
       <div class="setting-item toggle-item">
         <div class="setting-info">
-          <div class="setting-icon">🔍</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">允许被搜索</span>
-            <span class="setting-desc">允许其他用户通过手机号或昵称找到您</span>
+            <span class="setting-desc">允许其他用户通过手机号或昵称找到我</span>
           </div>
         </div>
         <label class="toggle">
@@ -197,7 +197,7 @@
       </div>
       <div class="setting-item toggle-item">
         <div class="setting-info">
-          <div class="setting-icon">🔔</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">允许陌生人私信</span>
             <span class="setting-desc">允许非好友用户向您发送私信</span>
@@ -210,7 +210,7 @@
       </div>
       <div class="setting-item">
         <div class="setting-info">
-          <div class="setting-icon">🗑️</div>
+          <div class="setting-icon"></div>
           <div class="setting-text">
             <span class="setting-name">清除缓存</span>
             <span class="setting-desc">清除本地缓存数据</span>
@@ -223,7 +223,7 @@
 
     <div v-if="showChangePassword" class="modal-overlay" @click.self="showChangePassword = false">
       <div class="modal-content">
-        <button class="close-btn" @click="showChangePassword = false">×</button>
+        <button class="close-btn" @click="showChangePassword = false"></button>
         <h3>修改密码</h3>
         <div class="form-group">
           <label>原密码</label>
@@ -245,7 +245,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import { useAuthStore } from '../stores/auth'
+import { useAuthStore } from '@/stores'
 
 const authStore = useAuthStore()
 
@@ -649,3 +649,4 @@ function clearCache() {
   }
 }
 </style>
+

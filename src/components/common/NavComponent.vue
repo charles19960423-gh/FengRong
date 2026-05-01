@@ -15,13 +15,13 @@
       <div id="authNav" class="auth-nav">
         <template v-if="authStore.isLoggedIn">
           <template v-if="authStore.isClient">
-            <router-link to="/client-console" class="nav-btn primary">
-              🏢 {{ authStore.currentUser?.companyName }}
+            <router-link to="/client" class="nav-btn primary">
+               {{ authStore.currentUser?.companyName }}
             </router-link>
           </template>
           <template v-else>
             <router-link to="/profile" class="nav-btn primary">
-              👤 {{ authStore.currentUser?.nickname }}
+               {{ authStore.currentUser?.nickname }}
             </router-link>
           </template>
           <button class="nav-btn secondary" @click="handleLogout">
@@ -30,7 +30,7 @@
         </template>
         <template v-else>
           <button class="nav-btn primary" @click="openAuthModal">
-            👤 登录/注册
+             登录/注册
           </button>
         </template>
       </div>
@@ -42,7 +42,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '../../stores/auth'
+import { useAuthStore } from '@/stores'
 import AuthModal from '../Auth/AuthModal.vue'
 
 const router = useRouter()
@@ -51,28 +51,28 @@ const showAuthModal = ref(false)
 
 const navItems = computed(() => {
   const items = [
-    { path: '/', name: '首页', icon: '🏠' },
-    { path: '/achievements', name: '成就', icon: '🏆' },
-    { path: '/tasks', name: '任务', icon: '📋' },
-    { path: '/milestone', name: '里程碑', icon: '📊' },
-    { path: '/workbench', name: '工作台', icon: '⚙️' },
-    { path: '/resources', name: '江湖秘典', icon: '📚' },
-    { path: '/team', name: '组队', icon: '👥' },
-    { path: '/events', name: '聚会', icon: '🎪' },
-    { path: '/publish', name: '发布', icon: '📝' },
-    { path: '/social', name: '社交', icon: '🍻' },
-    { path: '/coupons', name: '优惠券', icon: '🎫' },
-    { path: '/notifications', name: '消息', icon: '🔔' },
-    { path: '/profile', name: '我的', icon: '👤' }
+    { path: '/', name: '首页', icon: '' },
+    { path: '/achievements', name: '成就', icon: '' },
+    { path: '/tasks', name: '任务', icon: '' },
+    { path: '/milestone', name: '里程碑', icon: '' },
+    { path: '/workbench', name: '工作台', icon: '' },
+    { path: '/resources', name: '江湖秘典', icon: '' },
+    { path: '/team', name: '组队', icon: '' },
+    { path: '/events', name: '聚会', icon: '' },
+    { path: '/publish', name: '发布', icon: '' },
+    { path: '/social', name: '社交', icon: '' },
+    { path: '/coupons', name: '优惠券', icon: '' },
+    { path: '/notifications', name: '消息', icon: '' },
+    { path: '/profile', name: '我的', icon: '' }
   ]
 
   if (authStore.isClient) {
     return [
-      { path: '/', name: '首页', icon: '🏠' },
-      { path: '/client-console', name: '控制台', icon: '🏢' },
-      { path: '/resources', name: '江湖秘典', icon: '📚' },
-      { path: '/team', name: '组队', icon: '👥' },
-      { path: '/events', name: '聚会', icon: '🎪' }
+      { path: '/', name: '首页', icon: '' },
+      { path: '/client', name: '控制台', icon: '' },
+      { path: '/resources', name: '江湖秘典', icon: '' },
+      { path: '/team', name: '组队', icon: '' },
+      { path: '/events', name: '聚会', icon: '' }
     ]
   }
 
@@ -175,3 +175,4 @@ onMounted(() => {
   background: #555;
 }
 </style>
+

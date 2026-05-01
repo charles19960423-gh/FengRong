@@ -1,7 +1,7 @@
-<template>
+﻿<template>
   <div class="equipment-view">
     <div class="page-header">
-      <h1>🎥 影视设备租赁</h1>
+      <h1> 影视设备租赁</h1>
       <p>杭州本地影视设备与场地租赁服务</p>
     </div>
 
@@ -20,11 +20,11 @@
       <div class="filter-bar">
         <select v-model="equipmentFilter" class="filter-select">
           <option value="all">全部类别</option>
-          <option value="camera">📷 相机</option>
-          <option value="stabilizer">⚖️ 稳定器</option>
-          <option value="lighting">💡 灯光</option>
-          <option value="audio">🎤 音频</option>
-          <option value="drone">🚁 无人机</option>
+          <option value="camera"> 相机</option>
+          <option value="stabilizer">稳定器</option>
+          <option value="lighting">灯光</option>
+          <option value="audio">音频</option>
+          <option value="drone">无人机</option>
         </select>
         <select v-model="levelFilter" class="filter-select">
           <option value="all">全部等级</option>
@@ -48,10 +48,10 @@
           <p class="specs">{{ equipment.specs }}</p>
           <div class="category">{{ equipment.category }}</div>
           <div class="price-info">
-            <span class="daily-price">¥{{ equipment.dailyPrice }}/天</span>
-            <span class="vip-price">VIP价 ¥{{ getVipPrice(equipment) }}/天</span>
+            <span class="daily-price">{{ equipment.dailyPrice }}/天</span>
+            <span class="vip-price">VIP价 {{ getVipPrice(equipment) }}/天</span>
           </div>
-          <div class="deposit">押金: ¥{{ equipment.deposit }}</div>
+          <div class="deposit">押金: {{ equipment.deposit }}</div>
           <button 
             v-if="canRent(equipment)" 
             class="rent-btn"
@@ -74,7 +74,7 @@
         >
           <div class="venue-image">{{ venue.image }}</div>
           <h3>{{ venue.name }}</h3>
-          <p class="location">📍 {{ venue.location }}</p>
+          <p class="location"> {{ venue.location }}</p>
           <p class="area">面积: {{ venue.area }}㎡</p>
           <div class="facilities">
             <span v-for="facility in venue.facilities" :key="facility" class="facility-tag">
@@ -82,8 +82,8 @@
             </span>
           </div>
           <div class="price-info">
-            <span class="half-price">半天 ¥{{ venue.halfDayPrice }}</span>
-            <span class="full-price">全天 ¥{{ venue.fullDayPrice }}</span>
+            <span class="half-price">半天 {{ venue.halfDayPrice }}</span>
+            <span class="full-price">全天 {{ venue.fullDayPrice }}</span>
           </div>
           <button 
             v-if="canBook(venue)" 
@@ -106,11 +106,11 @@
         >
           <div class="package-image">{{ pkg.image }}</div>
           <h3>{{ pkg.name }}</h3>
-          <p class="duration">⏱️ {{ pkg.duration }}</p>
+          <p class="duration"> {{ pkg.duration }}</p>
           <p class="description">{{ pkg.description }}</p>
           <div class="price-info">
-            <span class="original-price">原价 ¥{{ pkg.originalPrice }}</span>
-            <span class="vip-price">VIP价 ¥{{ getPackageVipPrice(pkg) }}</span>
+            <span class="original-price">原价 {{ pkg.originalPrice }}</span>
+            <span class="vip-price">VIP?{{ getPackageVipPrice(pkg) }}</span>
           </div>
           <button class="purchase-btn" @click="openPackageModal(pkg)">
             立即购买
@@ -121,7 +121,7 @@
 
     <div v-if="activeTab === 'myrentals'" class="rentals-section">
       <div v-if="userRentals.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无租赁记录</p>
       </div>
       <div v-else class="rentals-list">
@@ -135,7 +135,7 @@
             <p class="rental-type">{{ getRentalType(rental) }}</p>
             <p class="rental-date">{{ rental.rentedAt || rental.bookedAt || rental.purchasedAt }}</p>
           </div>
-          <div class="rental-price">¥{{ rental.totalPrice }}</div>
+          <div class="rental-price">{{ rental.totalPrice }}</div>
           <div :class="['rental-status', rental.status]">
             {{ getStatusText(rental.status) }}
           </div>
@@ -158,7 +158,7 @@
       <div class="modal-content" @click.stop>
         <div class="modal-header">
           <h3>租赁 {{ selectedEquipment?.name }}</h3>
-          <button class="close-btn" @click="closeModal">✕</button>
+          <button class="close-btn" @click="closeModal">×</button>
         </div>
         <div class="modal-body">
           <div class="form-group">
@@ -168,16 +168,16 @@
           <div class="form-group">
             <label>支付方式</label>
             <select v-model="paymentMethod">
-              <option value="coins">💰 金币</option>
-              <option value="pearls">💎 珍珠</option>
-              <option value="points">⭐ 积分</option>
+              <option value="coins"> 金币</option>
+              <option value="pearls"> 珍珠</option>
+              <option value="points">?积分</option>
             </select>
           </div>
           <div class="price-summary">
-            <p>日租金: ¥{{ selectedEquipment?.dailyPrice }}</p>
+            <p>日租 {{ selectedEquipment?.dailyPrice }}</p>
             <p>VIP折扣: {{ (authStore.currentDiscount * 100).toFixed(0) }}%</p>
-            <p>押金: ¥{{ selectedEquipment?.deposit }}</p>
-            <p class="total">总计: ¥{{ calculateTotal() }}</p>
+            <p>押金: {{ selectedEquipment?.deposit }}</p>
+            <p class="total">总计: {{ calculateTotal() }}</p>
           </div>
         </div>
         <div class="modal-footer">
@@ -190,7 +190,7 @@
       <div class="modal-content" @click.stop>
         <div class="modal-header">
           <h3>预订 {{ selectedVenue?.name }}</h3>
-          <button class="close-btn" @click="closeModal">✕</button>
+          <button class="close-btn" @click="closeModal">×</button>
         </div>
         <div class="modal-body">
           <div class="form-group">
@@ -203,15 +203,15 @@
           <div class="form-group">
             <label>支付方式</label>
             <select v-model="paymentMethod">
-              <option value="coins">💰 金币</option>
-              <option value="pearls">💎 珍珠</option>
-              <option value="points">⭐ 积分</option>
+              <option value="coins"> 金币</option>
+              <option value="pearls"> 珍珠</option>
+              <option value="points">?积分</option>
             </select>
           </div>
           <div class="price-summary">
-            <p>价格: ¥{{ getVenuePrice() }}</p>
+            <p>价格: {{ getVenuePrice() }}</p>
             <p>VIP折扣: {{ (authStore.currentDiscount * 100).toFixed(0) }}%</p>
-            <p class="total">总计: ¥{{ calculateVenueTotal() }}</p>
+            <p class="total">总计: {{ calculateVenueTotal() }}</p>
           </div>
         </div>
         <div class="modal-footer">
@@ -224,21 +224,21 @@
       <div class="modal-content" @click.stop>
         <div class="modal-header">
           <h3>购买 {{ selectedPackage?.name }}</h3>
-          <button class="close-btn" @click="closeModal">✕</button>
+          <button class="close-btn" @click="closeModal">×</button>
         </div>
         <div class="modal-body">
           <div class="form-group">
             <label>支付方式</label>
             <select v-model="paymentMethod">
-              <option value="coins">💰 金币</option>
-              <option value="pearls">💎 珍珠</option>
-              <option value="points">⭐ 积分</option>
+              <option value="coins"> 金币</option>
+              <option value="pearls"> 珍珠</option>
+              <option value="points">?积分</option>
             </select>
           </div>
           <div class="price-summary">
-            <p>原价: ¥{{ selectedPackage?.originalPrice }}</p>
+            <p>原价: {{ selectedPackage?.originalPrice }}</p>
             <p>VIP折扣: {{ (authStore.currentDiscount * 100).toFixed(0) }}%</p>
-            <p class="total">总计: ¥{{ calculatePackageTotal() }}</p>
+            <p class="total">总计: {{ calculatePackageTotal() }}</p>
           </div>
         </div>
         <div class="modal-footer">
@@ -251,17 +251,17 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useEquipmentStore } from '../stores/equipment'
-import { useAuthStore } from '../stores/auth'
+import { useEquipmentStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 
 const equipmentStore = useEquipmentStore()
 const authStore = useAuthStore()
 
 const tabs = [
-  { id: 'equipment', name: '设备租赁', icon: '📦' },
-  { id: 'venue', name: '场地预订', icon: '🏠' },
-  { id: 'package', name: '套餐服务', icon: '🎁' },
-  { id: 'myrentals', name: '我的租赁', icon: '📋' }
+  { id: 'equipment', name: '设备租赁', icon: '' },
+  { id: 'venue', name: '场地预订', icon: '' },
+  { id: 'package', name: '套餐服务', icon: '' },
+  { id: 'myrentals', name: '我的租赁', icon: '' }
 ]
 
 const activeTab = ref('equipment')

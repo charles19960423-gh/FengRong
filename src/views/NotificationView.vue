@@ -1,16 +1,16 @@
 <template>
   <div class="notification-page">
     <div class="page-header">
-      <h1>🔔 消息中心</h1>
+      <h1> 消息中心</h1>
       <p>查看您的消息和通知</p>
     </div>
 
     <div class="tabs">
       <button :class="{ active: activeTab === 'notifications' }" @click="activeTab = 'notifications'">
-        🔔 系统通知 <span v-if="unreadCount > 0" class="badge">{{ unreadCount }}</span>
+         系统通知 <span v-if="unreadCount > 0" class="badge">{{ unreadCount }}</span>
       </button>
       <button :class="{ active: activeTab === 'messages' }" @click="activeTab = 'messages'">
-        💬 私信 <span v-if="unreadMessageCount > 0" class="badge">{{ unreadMessageCount }}</span>
+         私信 <span v-if="unreadMessageCount > 0" class="badge">{{ unreadMessageCount }}</span>
       </button>
     </div>
 
@@ -23,7 +23,7 @@
       </div>
 
       <div v-if="userNotifications.length === 0" class="empty-state">
-        <div class="empty-icon">🔔</div>
+        <div class="empty-icon"></div>
         <p>暂无系统通知</p>
       </div>
 
@@ -57,7 +57,7 @@
       </div>
 
       <div v-if="conversations.length === 0" class="empty-state">
-        <div class="empty-icon">💬</div>
+        <div class="empty-icon"></div>
         <p>暂无私信消息</p>
       </div>
 
@@ -69,7 +69,7 @@
           :class="{ active: selectedConversation?.userId === conversation.userId }"
           @click="selectConversation(conversation)"
         >
-          <div class="conversation-avatar">👤</div>
+          <div class="conversation-avatar"></div>
           <div class="conversation-info">
             <div class="conversation-name">{{ conversation.userName }}</div>
             <div class="conversation-preview">
@@ -87,7 +87,7 @@
 
       <div v-if="selectedConversation" class="chat-section">
         <div class="chat-header">
-          <div class="chat-avatar">👤</div>
+          <div class="chat-avatar"></div>
           <div class="chat-info">
             <div class="chat-name">{{ selectedConversation.userName }}</div>
           </div>
@@ -121,8 +121,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useNotificationStore } from '../stores/notification'
-import { useAuthStore } from '../stores/auth'
+import { useNotificationStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 
 const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
@@ -133,6 +133,7 @@ const newMessage = ref('')
 
 onMounted(() => {
   notificationStore.loadNotifications()
+  notificationStore.loadPrivateMessages()
 })
 
 const userNotifications = computed(() => {
@@ -170,7 +171,7 @@ const selectedMessages = computed(() => {
 })
 
 function getTypeIcon(type) {
-  return notificationStore.notificationTypes[type]?.icon || '🔔'
+  return notificationStore.notificationTypes[type]?.icon || ''
 }
 
 function getTypeColor(type) {
@@ -514,3 +515,4 @@ function sendMessage() {
   }
 }
 </style>
+

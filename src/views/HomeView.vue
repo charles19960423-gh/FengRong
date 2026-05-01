@@ -1,10 +1,10 @@
-<template>
+﻿<template>
   <div class="home-page">
     <section class="hero-section">
       <div class="hero-content">
         <div class="hero-text">
           <h2>欢迎来到枫榕赏金酒馆</h2>
-          <p>江湖侠客的聚集地，任务与成就的殿堂</p>
+          <p>江湖侠客的聚集地任务与成就的殿堂</p>
           <div class="hero-stats">
             <div class="stat-item">
               <span class="stat-value">{{ achievementStore.stats.total }}</span>
@@ -39,22 +39,22 @@
     <section class="quick-actions">
       <div class="action-cards">
         <router-link to="/achievements" class="action-card">
-          <div class="card-icon">🏆</div>
+          <div class="card-icon"></div>
           <h3>成就系统</h3>
           <p>查看你的成就收集进度</p>
         </router-link>
         <router-link to="/tasks" class="action-card">
-          <div class="card-icon">📋</div>
+          <div class="card-icon"></div>
           <h3>任务中心</h3>
           <p>管理你的任务列表</p>
         </router-link>
         <router-link to="/bounty" class="action-card">
-          <div class="card-icon">💰</div>
+          <div class="card-icon"></div>
           <h3>赏金榜单</h3>
           <p>领取高额赏金任务</p>
         </router-link>
         <router-link to="/profile" class="action-card">
-          <div class="card-icon">👤</div>
+          <div class="card-icon"></div>
           <h3>我的江湖</h3>
           <p>查看个人信息</p>
         </router-link>
@@ -97,8 +97,8 @@
 
 <script setup>
 import { computed, onMounted } from 'vue'
-import { useAchievementStore } from '../stores/achievement'
-import { useTaskStore } from '../stores/task'
+import { useAchievementStore } from '@/stores'
+import { useTaskStore } from '@/stores'
 
 const achievementStore = useAchievementStore()
 const taskStore = useTaskStore()
@@ -117,12 +117,12 @@ const recentAchievements = computed(() => {
 })
 
 const tips = [
-  { icon: '💡', text: '每日登录可获得额外声望奖励' },
-  { icon: '🎯', text: '完成赏金任务可解锁稀世成就' },
-  { icon: '🔗', text: '邀请好友加入可获得丰厚奖励' },
-  { icon: '⭐', text: '装备成就徽章可展示你的实力' },
-  { icon: '🔥', text: '赛季活动期间奖励翻倍' },
-  { icon: '📸', text: '上传任务素材可获得额外奖励' }
+  { icon: '', text: '每日登录可获得额外声望奖励' },
+  { icon: '', text: '完成赏金任务可解锁稀世成就' },
+  { icon: '', text: '邀请好友加入可获得丰厚奖励' },
+  { icon: '', text: '装备成就徽章可展示你的实力' },
+  { icon: '', text: '赛季活动期间奖励翻倍' },
+  { icon: '', text: '上传任务素材可获得额外奖励' }
 ]
 
 onMounted(() => {
@@ -351,3 +351,4 @@ onMounted(() => {
   font-size: 1.2rem;
 }
 </style>
+

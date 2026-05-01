@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="profile-page">
     <div v-if="authStore.isLoggedIn" class="profile-content">
       <div class="profile-header">
@@ -7,46 +7,46 @@
             <span>{{ getAvatarIcon() }}</span>
           </div>
           <div class="edit-avatar-btn">
-            <span>📷</span>
+            <span></span>
           </div>
         </div>
         <div class="user-info">
           <h1>{{ authStore.currentUser?.nickname }}</h1>
-          <p class="username">Lv.{{ authStore.currentUser?.level }} · @{{ authStore.currentUser?.phone }}</p>
+          <p class="username">Lv.{{ authStore.currentUser?.level }}  @{{ authStore.currentUser?.phone }}</p>
           <div class="user-stats">
-            <span class="stat coins">💰 {{ formatNumber(authStore.currentUser?.coins || 0) }}</span>
-            <span class="stat prestige">⭐ {{ authStore.currentUser?.prestige || 0 }}</span>
-            <span class="stat pearls">💎 {{ authStore.currentUser?.pearls || 0 }}</span>
+            <span class="stat coins"> {{ formatNumber(authStore.currentUser?.coins || 0) }}</span>
+            <span class="stat prestige">?{{ authStore.currentUser?.prestige || 0 }}</span>
+            <span class="stat pearls"> {{ authStore.currentUser?.pearls || 0 }}</span>
           </div>
           <router-link to="/wallet" class="wallet-link">
-            查看资产详情 →
+            查看资产详情 ?
           </router-link>
         </div>
       </div>
 
       <div class="quick-links">
         <router-link to="/coupons" class="quick-link">
-          <span class="link-icon">🎫</span>
+          <span class="link-icon"></span>
           <span class="link-name">优惠券</span>
         </router-link>
         <router-link to="/notifications" class="quick-link">
-          <span class="link-icon">🔔</span>
+          <span class="link-icon"></span>
           <span class="link-name">消息</span>
         </router-link>
         <router-link to="/orders" class="quick-link">
-          <span class="link-icon">📋</span>
+          <span class="link-icon"></span>
           <span class="link-name">订单</span>
         </router-link>
         <router-link to="/favorites" class="quick-link">
-          <span class="link-icon">⭐</span>
+          <span class="link-icon"></span>
           <span class="link-name">收藏</span>
         </router-link>
         <router-link to="/settings" class="quick-link">
-          <span class="link-icon">⚙️</span>
+          <span class="link-icon"></span>
           <span class="link-name">设置</span>
         </router-link>
         <router-link to="/support" class="quick-link">
-          <span class="link-icon">💬</span>
+          <span class="link-icon"></span>
           <span class="link-name">客服</span>
         </router-link>
       </div>
@@ -81,7 +81,7 @@
           </div>
           <div v-if="showEquipModal" class="equip-modal-overlay" @click.self="showEquipModal = false">
             <div class="equip-modal">
-              <button class="close-btn" @click="showEquipModal = false">×</button>
+              <button class="close-btn" @click="showEquipModal = false"></button>
               <h3>选择要装备的成就</h3>
               <div class="modal-achievements">
                 <div 
@@ -144,10 +144,10 @@
           <div class="security-tips">
             <h3>安全小贴士</h3>
             <ul>
-              <li>使用复杂密码，包含字母、数字和特殊字符</li>
-              <li>定期更换密码，建议每3个月更换一次</li>
+              <li>使用复杂密码包含字母数字和特殊字符</li>
+              <li>定期更换密码建议每3个月更换一次</li>
               <li>不要在公共设备上保存登录信息</li>
-              <li>开启双重验证（如果支持）</li>
+              <li>开启双重验证如果支持</li>
             </ul>
           </div>
         </div>
@@ -155,7 +155,7 @@
     </div>
 
     <div v-else class="not-logged-in">
-      <div class="empty-icon">👤</div>
+      <div class="empty-icon"></div>
       <h2>请先登录</h2>
       <p>登录后可查看个人信息和管理成就</p>
       <button class="login-btn" @click="openAuthModal">立即登录</button>
@@ -166,10 +166,10 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
-import { useAuthStore } from '../stores/auth'
-import { useAchievementStore } from '../stores/achievement'
-import { useTaskStore } from '../stores/task'
-import AuthModal from '../components/Auth/AuthModal.vue'
+import { useAuthStore } from '@/stores'
+import { useAchievementStore } from '@/stores'
+import { useTaskStore } from '@/stores'
+import AuthModal from '../../components/Auth/AuthModal.vue'
 
 const authStore = useAuthStore()
 const achievementStore = useAchievementStore()
@@ -203,14 +203,14 @@ const unlockedAchievements = computed(() => {
 
 function getAvatarIcon() {
   const user = authStore.currentUser
-  if (!user) return '👤'
+  if (!user) return ''
   
   const icons = {
-    '13800138001': '👑',
-    '13800138002': '🗡️',
-    '13800138003': '🏹'
+    '13800138001': '',
+    '13800138002': '',
+    '13800138003': ''
   }
-  return icons[user.phone] || '👤'
+  return icons[user.phone] || ''
 }
 
 function formatNumber(num) {
@@ -231,7 +231,7 @@ function confirmEquip() {
     showEquipModal.value = false
     selectedAchievement.value = null
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '成就装备成功！', type: 'success' }
+      detail: { message: '成就装备成功', type: 'success' }
     }))
   }
 }
@@ -251,7 +251,7 @@ function saveInfo() {
   })
   
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: '信息保存成功！', type: 'success' }
+    detail: { message: '信息保存成功', type: 'success' }
   }))
 }
 
@@ -272,7 +272,7 @@ function changePassword() {
   }
   
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: '密码修改成功！', type: 'success' }
+    detail: { message: '密码修改成功', type: 'success' }
   }))
   
   passwordForm.current = ''
@@ -720,3 +720,4 @@ function openAuthModal() {
   background: #A03320;
 }
 </style>
+

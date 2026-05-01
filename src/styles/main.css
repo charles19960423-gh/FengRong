@@ -5,12 +5,27 @@
 }
 
 :root {
+  /* 亮色主题 */
   --primary-color: #8C2B1B;
   --secondary-color: #D4AF37;
   --background-dark: #1A120B;
   --background-card: #2D1E17;
   --text-primary: #D4C39E;
   --text-secondary: #888;
+  --border-color: #3D2E27;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* 暗色主题（系统偏好） */
+[data-theme="dark"] {
+  --primary-color: #A03320;
+  --secondary-color: #E5C349;
+  --background-dark: #0D0A07;
+  --background-card: #1A120B;
+  --text-primary: #E5D9C4;
+  --text-secondary: #666;
+  --border-color: #2A1E17;
+  --shadow-color: rgba(0, 0, 0, 0.5);
 }
 
 html {
@@ -19,9 +34,10 @@ html {
 
 body {
   font-family: 'Noto Serif SC', 'SimSun', serif;
-  background: linear-gradient(180deg, #1A120B 0%, #2D1E17 100%);
-  color: #D4C39E;
+  background: linear-gradient(180deg, var(--background-dark) 0%, var(--background-card) 100%);
+  color: var(--text-primary);
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #app {
@@ -38,11 +54,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1A120B;
+  background: var(--background-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8C2B1B;
+  background: var(--primary-color);
   border-radius: 4px;
 }
 

@@ -112,7 +112,7 @@ export const useEquipmentStore = defineStore('equipment', () => {
     const equipment = getEquipmentById(equipmentId)
     if (!equipment) return { success: false, message: '设备不存在' }
 
-    const dailyPrice = calculateDiscountedPrice(equipment.dailyPrice, getVipLevel(userId))
+    const dailyPrice = calculateDiscountedPrice(equipment.dailyPrice, 1)
     const totalPrice = dailyPrice * days
 
     const rental = {
@@ -141,7 +141,7 @@ export const useEquipmentStore = defineStore('equipment', () => {
     if (!venue) return { success: false, message: '场地不存在' }
 
     const price = duration === 'halfday' ? venue.halfDayPrice : venue.fullDayPrice
-    const discountedPrice = calculateDiscountedPrice(price, getVipLevel(userId))
+    const discountedPrice = calculateDiscountedPrice(price, 1)
 
     const booking = {
       id: `book-${Date.now()}`,
@@ -166,7 +166,7 @@ export const useEquipmentStore = defineStore('equipment', () => {
     const pkg = getPackageById(packageId)
     if (!pkg) return { success: false, message: '套餐不存在' }
 
-    const discountedPrice = calculateDiscountedPrice(pkg.originalPrice, getVipLevel(userId))
+    const discountedPrice = calculateDiscountedPrice(pkg.originalPrice, 1)
 
     const purchase = {
       id: `pkg-${Date.now()}`,
@@ -217,14 +217,6 @@ export const useEquipmentStore = defineStore('equipment', () => {
     rental.cancelledAt = new Date().toISOString().split('T')[0]
     saveRentals()
     return { success: true, message: '租赁已取消' }
-  }
-
-  function getVipLevel(userId) {
-    const authStore = useAuthStore()
-    if (authStore.currentUser?.phone === userId) {
-      return authStore.currentUser.vipLevel || 1
-    }
-    return 1
   }
 
   function loadRentals() {

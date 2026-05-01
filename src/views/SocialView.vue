@@ -1,8 +1,8 @@
 <template>
   <div class="social-page">
     <div class="page-header">
-      <h1>🍻 社交酒馆</h1>
-      <p>结识同行伙伴，通过任务建立深厚友谊</p>
+      <h1>社交酒馆</h1>
+      <p>结识同行伙伴通过任务建立深厚友谊</p>
     </div>
 
     <div class="view-tabs">
@@ -32,7 +32,7 @@
             </div>
             <div class="activity-time">{{ activity.time }}</div>
             <div v-if="activity.reward" class="activity-reward">{{ activity.reward }}</div>
-            <div v-if="activity.members" class="activity-members">👥 {{ activity.members }}人组队</div>
+            <div v-if="activity.members" class="activity-members"> {{ activity.members }}人组队</div>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@
             <div class="friend-title">{{ friend.title }}</div>
             <div class="friend-meta">
               <span v-if="friend.commonTasks > 0">共同任务 {{ friend.commonTasks }}个</span>
-              <span v-if="friend.mutualFriends > 0">· 共同好友 {{ friend.mutualFriends }}人</span>
+              <span v-if="friend.mutualFriends > 0"> 共同好友 {{ friend.mutualFriends }}人</span>
             </div>
           </div>
           <div class="friend-status">
@@ -86,8 +86,8 @@
             <span v-else class="offline-text">{{ friend.lastActive }}</span>
           </div>
           <div class="friend-actions">
-            <button class="action-btn" @click="openChat(friend)">💬 聊天</button>
-            <button class="action-btn" @click="inviteToTeam(friend)">👥 组队</button>
+            <button class="action-btn" @click="openChat(friend)"> 聊天</button>
+            <button class="action-btn" @click="inviteToTeam(friend)"> 组队</button>
           </div>
         </div>
       </div>
@@ -95,43 +95,43 @@
 
     <div v-if="currentView === 'requests'" class="requests-view">
       <div v-if="socialStore.friendRequests.length > 0" class="requests-section">
-        <h3>📩 好友请求 ({{ socialStore.friendRequests.length }})</h3>
+        <h3> 好友请求 ({{ socialStore.friendRequests.length }})</h3>
         <div class="requests-list">
           <div 
             v-for="request in socialStore.friendRequests" 
             :key="request.id"
             class="request-card"
           >
-            <div class="request-avatar">{{ request.from.avatar }}</div>
+            <div class="request-avatar">{{ request.fromAvatar }}</div>
             <div class="request-info">
               <div class="request-name">
-                <span>{{ request.from.nickname }}</span>
-                <span class="request-level">Lv.{{ request.from.level }}</span>
+                <span>{{ request.fromNickname || request.fromName }}</span>
+                <span class="request-level">Lv.{{ request.fromLevel || 1 }}</span>
               </div>
-              <div class="request-title">{{ request.from.title }}</div>
-              <div v-if="request.message" class="request-message">💬 {{ request.message }}</div>
+              <div class="request-title">{{ request.fromTitle || '冒险者' }}</div>
+              <div v-if="request.message" class="request-message"> {{ request.message }}</div>
               <div class="request-time">{{ request.time }}</div>
             </div>
             <div class="request-actions">
-              <button class="btn-accept" @click="acceptRequest(request.id)">✅ 接受</button>
-              <button class="btn-reject" @click="rejectRequest(request.id)">❌ 拒绝</button>
+              <button class="btn-accept" @click="acceptRequest(request.id)">接受</button>
+              <button class="btn-reject" @click="rejectRequest(request.id)">拒绝</button>
             </div>
           </div>
         </div>
       </div>
 
       <div v-if="socialStore.pendingRequests.length > 0" class="pending-section">
-        <h3>📤 待确认请求 ({{ socialStore.pendingRequests.length }})</h3>
+        <h3> 待确认请({{ socialStore.pendingRequests.length }})</h3>
         <div class="pending-list">
           <div 
             v-for="pending in socialStore.pendingRequests" 
             :key="pending.id"
             class="pending-card"
           >
-            <div class="pending-avatar">{{ pending.to.avatar || '👤' }}</div>
+            <div class="pending-avatar">{{ pending.toAvatar || pending.to?.avatar || '' }}</div>
             <div class="pending-info">
-              <div class="pending-name">{{ pending.to.nickname || '未知用户' }}</div>
-              <div class="pending-status">等待对方确认 · {{ pending.time }}</div>
+              <div class="pending-name">{{ pending.toNickname || pending.toName || '未知用户' }}</div>
+              <div class="pending-status">等待对方确认  {{ pending.time }}</div>
             </div>
             <button class="btn-cancel" @click="cancelRequest(pending.id)">取消</button>
           </div>
@@ -139,7 +139,7 @@
       </div>
 
       <div v-if="socialStore.friendRequests.length === 0 && socialStore.pendingRequests.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无好友请求</p>
         <button class="empty-action" @click="currentView = 'discover'">去发现新朋友</button>
       </div>
@@ -150,12 +150,12 @@
         <input 
           v-model="searchQuery" 
           type="text" 
-          placeholder="搜索冒险者..."
+          placeholder="搜索冒险.."
         />
-        <button class="search-btn">🔍</button>
+        <button class="search-btn"></button>
       </div>
 
-      <h3>✨ 推荐冒险者</h3>
+      <h3>推荐冒险者</h3>
       <div class="discover-list">
         <div 
           v-for="user in recommendations" 
@@ -169,21 +169,21 @@
               <span class="discover-level">Lv.{{ user.level }}</span>
             </div>
             <div class="discover-title">{{ user.title }}</div>
-            <div class="discover-reason">💡 {{ user.reason }}</div>
+            <div class="discover-reason"> {{ user.reason }}</div>
             <div class="discover-meta">
               <span v-if="user.commonTasks">共同任务 {{ user.commonTasks }}个</span>
-              <span v-if="user.mutualFriends">· 共同好友 {{ user.mutualFriends }}人</span>
-              <span v-if="user.commonAchievements">· 共同成就 {{ user.commonAchievements }}个</span>
+              <span v-if="user.mutualFriends">共同好友 {{ user.mutualFriends }}人</span>
+              <span v-if="user.commonAchievements">共同成就 {{ user.commonAchievements }}个</span>
             </div>
           </div>
-          <button class="add-friend-btn" @click="sendRequest(user.id)">➕ 加好友</button>
+          <button class="add-friend-btn" @click="sendRequest(user.id)">添加好友</button>
         </div>
       </div>
     </div>
 
     <div v-if="currentView === 'team'" class="team-view">
       <div class="team-header">
-        <h3>👥 我的队伍</h3>
+        <h3> 我的队伍</h3>
         <button class="create-team-btn" @click="showCreateTeam = true">创建队伍</button>
       </div>
 
@@ -203,33 +203,33 @@
               <span class="member-level">Lv.{{ member.level }}</span>
             </div>
             <span class="member-status" :class="member.status">
-              {{ member.status === 'online' ? '🟢 在线' : '⚫ 离线' }}
+              {{ member.status === 'online' ? '在线' : '离线' }}
             </span>
           </div>
           <div class="member-actions">
-            <button class="action-btn" @click="openChat(member)">💬</button>
-            <button v-if="member.role !== '队长'" class="action-btn" @click="removeFromTeam(member.id)">👋</button>
+            <button class="action-btn" @click="openChat(member)"></button>
+            <button v-if="member.role !== '队长'" class="action-btn" @click="removeFromTeam(member.id)"></button>
           </div>
         </div>
       </div>
 
       <div v-else class="empty-state">
-        <div class="empty-icon">👥</div>
+        <div class="empty-icon"></div>
         <p>还没有队伍</p>
         <button class="empty-action" @click="showCreateTeam = true">创建队伍</button>
       </div>
 
       <div class="team-activity">
-        <h3>📋 队伍任务</h3>
+        <h3> 队伍任务</h3>
         <div class="team-tasks">
           <div class="team-task-item">
-            <span class="task-icon">📋</span>
+            <span class="task-icon"></span>
             <span class="task-name">清除山贼据点</span>
             <span class="task-progress">40%</span>
           </div>
           <div class="team-task-item completed">
-            <span class="task-icon">✅</span>
-            <span class="task-name">护送商人</span>
+            <span class="task-icon">></span>
+            <span class="task-name">护送商队</span>
             <span class="task-progress">已完成</span>
           </div>
         </div>
@@ -240,7 +240,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useSocialStore } from '../stores/social'
+import { useSocialStore } from '@/stores'
 
 const socialStore = useSocialStore()
 
@@ -250,11 +250,11 @@ const searchQuery = ref('')
 const showCreateTeam = ref(false)
 
 const viewModes = [
-  { label: '动态', value: 'feed', icon: '📖' },
-  { label: '好友', value: 'friends', icon: '👥' },
-  { label: '请求', value: 'requests', icon: '📩' },
-  { label: '发现', value: 'discover', icon: '🔍' },
-  { label: '队伍', value: 'team', icon: '⚔️' }
+  { label: '动态', value: 'feed', icon: '' },
+  { label: '好友', value: 'friends', icon: '' },
+  { label: '请求', value: 'requests', icon: '' },
+  { label: '发现', value: 'discover', icon: '' },
+  { label: '队伍', value: 'team', icon: '' }
 ]
 
 const filteredFriends = computed(() => {
@@ -271,15 +271,17 @@ const recommendations = computed(() => {
 })
 
 function acceptRequest(requestId) {
-  if (socialStore.acceptFriendRequest(requestId)) {
+  const result = socialStore.acceptFriendRequest(requestId)
+  if (result.success) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '🎉 已添加好友', type: 'success' }
+      detail: { message: '已添加好友', type: 'success' }
     }))
   }
 }
 
 function rejectRequest(requestId) {
-  if (socialStore.rejectFriendRequest(requestId)) {
+  const result = socialStore.rejectFriendRequest(requestId)
+  if (result.success) {
     window.dispatchEvent(new CustomEvent('notification', {
       detail: { message: '已拒绝请求', type: 'info' }
     }))
@@ -287,10 +289,8 @@ function rejectRequest(requestId) {
 }
 
 function cancelRequest(requestId) {
-  const index = socialStore.pendingRequests.findIndex(r => r.id === requestId)
-  if (index !== -1) {
-    socialStore.pendingRequests.splice(index, 1)
-    socialStore.saveSocialData()
+  const result = socialStore.cancelRequest(requestId)
+  if (result.success) {
     window.dispatchEvent(new CustomEvent('notification', {
       detail: { message: '已取消请求', type: 'info' }
     }))
@@ -298,26 +298,27 @@ function cancelRequest(requestId) {
 }
 
 function sendRequest(userId) {
-  if (socialStore.sendFriendRequest(userId)) {
+  const result = socialStore.sendFriendRequest(userId)
+  if (result.success) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '📤 好友请求已发送', type: 'success' }
+      detail: { message: '好友请求已发送', type: 'success' }
     }))
   } else {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '已发送过请求', type: 'warning' }
+      detail: { message: result.message || '发送失败', type: 'warning' }
     }))
   }
 }
 
 function openChat(friend) {
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: `💬 打开与 ${friend.nickname} 的聊天`, type: 'info' }
+    detail: { message: `打开${friend.nickname}的聊天`, type: 'info' }
   }))
 }
 
 function inviteToTeam(friend) {
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: `📨 已邀请 ${friend.nickname} 加入队伍`, type: 'success' }
+    detail: { message: ` 已邀${friend.nickname} 加入队伍`, type: 'success' }
   }))
 }
 

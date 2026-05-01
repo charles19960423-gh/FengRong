@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <header class="site-header">
     <div class="ticker-bar" v-if="showTicker">
       <div class="ticker-content">
@@ -19,11 +19,11 @@ import { ref } from 'vue'
 
 const showTicker = ref(true)
 const tickerItems = [
-  '🔥 新赛季「江湖风云」正式开启！',
-  '⭐ 完成每日任务可获得双倍声望！',
-  '🎁 连续登录7天可获得限定成就！',
-  '🏆 排行榜前三名可获得传奇法器！',
-  '💬 邀请好友加入可获得丰厚奖励！'
+  ' 新赛季江湖风云正式开启',
+  ' 完成每日任务可获得双倍声望',
+  ' 连续登录7天可获得限定成就',
+  ' 排行榜前三名可获得传奇法器',
+  ' 邀请好友加入可获得丰厚奖励'
 ]
 </script>
 
@@ -86,3 +86,4 @@ const tickerItems = [
   letter-spacing: 5px;
 }
 </style>
+

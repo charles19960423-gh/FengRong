@@ -1,7 +1,7 @@
-<template>
+﻿<template>
   <div class="favorite-page">
     <div class="page-header">
-      <h1>⭐ 我的收藏</h1>
+      <h1>我的收藏</h1>
       <p>管理您收藏的内容</p>
     </div>
 
@@ -10,24 +10,24 @@
         全部 ({{ stats.total }})
       </button>
       <button :class="{ active: activeTab === 'resource' }" @click="activeTab = 'resource'">
-        📚 江湖秘典 ({{ stats.resource }})
+         江湖秘典 ({{ stats.resource }})
       </button>
       <button :class="{ active: activeTab === 'project' }" @click="activeTab = 'project'">
-        👥 组队项目 ({{ stats.project }})
+         组队项目 ({{ stats.project }})
       </button>
       <button :class="{ active: activeTab === 'event' }" @click="activeTab = 'event'">
-        🎪 活动 ({{ stats.event }})
+         活动 ({{ stats.event }})
       </button>
       <button :class="{ active: activeTab === 'task' }" @click="activeTab = 'task'">
-        📋 任务 ({{ stats.task }})
+         任务 ({{ stats.task }})
       </button>
     </div>
 
     <div class="favorite-list">
       <div v-if="filteredFavorites.length === 0" class="empty-state">
-        <div class="empty-icon">⭐</div>
+        <div class="empty-icon"></div>
         <p>暂无收藏内容</p>
-        <p class="empty-hint">去浏览感兴趣的内容并添加收藏吧！</p>
+        <p class="empty-hint">去浏览感兴趣的内容并添加收藏吧</p>
       </div>
 
       <div
@@ -41,11 +41,11 @@
           <div class="favorite-desc">{{ favorite.targetData.description || favorite.targetData.content || '暂无描述' }}</div>
           <div class="favorite-meta">
             <span class="type-badge">{{ getTypeLabel(favorite.type) }}</span>
-            <span class="add-time">收藏于 {{ favorite.createdAt }}</span>
+            <span class="add-time">收藏于{{ favorite.createdAt }}</span>
           </div>
         </div>
         <button class="remove-btn" @click="removeFavorite(favorite)">
-          <span class="remove-icon">×</span>
+          <span class="remove-icon"></span>
         </button>
       </div>
     </div>
@@ -54,8 +54,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useFavoriteStore } from '../stores/favorite'
-import { useAuthStore } from '../stores/auth'
+import { useFavoriteStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 
 const favoriteStore = useFavoriteStore()
 const authStore = useAuthStore()
@@ -82,7 +82,7 @@ const filteredFavorites = computed(() => {
 })
 
 function getTypeIcon(type) {
-  return favoriteStore.favoriteTypes[type]?.icon || '📌'
+  return favoriteStore.favoriteTypes[type]?.icon || ''
 }
 
 function getTypeLabel(type) {
@@ -258,3 +258,4 @@ function removeFavorite(favorite) {
   }
 }
 </style>
+

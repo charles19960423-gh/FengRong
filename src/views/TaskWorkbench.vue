@@ -2,7 +2,7 @@
   <div class="workbench-page">
     <div class="workbench-header">
       <h1>任务工作台</h1>
-      <p>管理你的任务、草稿和统计数据</p>
+      <p>管理你的任务草稿和统计数据</p>
     </div>
 
     <div class="workbench-layout">
@@ -25,7 +25,7 @@
         <!-- 任务市场 -->
         <div v-if="currentTab === 'market'" class="panel">
           <div class="panel-header">
-            <h2>📋 任务市场</h2>
+            <h2> 任务市场</h2>
             <div class="search-bar">
               <input 
                 v-model="searchKeyword" 
@@ -33,7 +33,7 @@
                 placeholder="搜索任务..."
                 class="search-input"
               />
-              <button class="search-btn">🔍</button>
+              <button class="search-btn"></button>
             </div>
           </div>
           <div class="filter-row">
@@ -76,8 +76,8 @@
               <h3>{{ task.title }}</h3>
               <p class="task-desc">{{ task.description }}</p>
               <div class="task-info">
-                <span>📍 {{ task.location }}</span>
-                <span>⏰ {{ task.deadline }}</span>
+                <span> {{ task.location }}</span>
+                <span>?{{ task.deadline }}</span>
               </div>
               <div class="task-footer">
                 <span class="reward">{{ task.reward }}</span>
@@ -90,13 +90,13 @@
                 class="accept-btn"
                 @click.stop="acceptMarketTask(task.id)"
               >
-                🤝 接取任务
+                 接取任务
               </button>
               <div 
                 v-if="task.status === 'pending' && isOwnTask(task)" 
                 class="own-task-badge"
               >
-                ⚠️ 自己发布的任务
+                 自己发布的任
               </div>
             </div>
           </div>
@@ -105,7 +105,7 @@
         <!-- 我领取的 -->
         <div v-if="currentTab === 'accepted'" class="panel">
           <div class="panel-header">
-            <h2>👤 我领取的任务</h2>
+            <h2>我领取的任务</h2>
             <span class="count-badge">{{ acceptedTasks.length }} 个任务</span>
           </div>
           <div class="task-list">
@@ -121,8 +121,8 @@
                 <h4>{{ task.title }}</h4>
                 <p>{{ task.description }}</p>
                 <div class="task-meta">
-                  <span>⏰ {{ task.deadline }}</span>
-                  <span>🎯 {{ task.reward }}</span>
+                  <span>?{{ task.deadline }}</span>
+                  <span> {{ task.reward }}</span>
                 </div>
               </div>
               <div class="task-progress">
@@ -137,21 +137,73 @@
                   class="action-btn primary"
                   @click="completeTask(task.id)"
                 >
-                  ✅ 完成
+                  ?完成
                 </button>
                 <button 
                   v-if="task.status === 'in-progress'" 
                   class="action-btn secondary"
                   @click="cancelAcceptTask(task.id)"
                 >
-                  🚫 取消
+                   取消
                 </button>
               </div>
             </div>
           </div>
           <div v-if="acceptedTasks.length === 0" class="empty-state">
-            <div class="empty-icon">📭</div>
+            <div class="empty-icon"></div>
             <p>暂无领取的任务</p>
+            <button class="empty-action" @click="currentTab = 'market'">去任务市场</button>
+          </div>
+        </div>
+
+        <!-- 我的收藏 -->
+        <div v-if="currentTab === 'favorites'" class="panel">
+          <div class="panel-header">
+            <h2>我的收藏</h2>
+            <span class="count-badge">{{ favoriteTasks.length }} 个任务</span>
+          </div>
+          <div class="task-grid">
+            <div 
+              v-for="task in favoriteTasks" 
+              :key="task.id" 
+              class="market-task-card"
+              @click="showTaskDetail(task)"
+            >
+              <div class="task-header">
+                <span class="status-badge" :class="task.status">{{ task.statusText }}</span>
+                <span class="difficulty-tag">{{ getDifficultyText(task.difficulty) }}</span>
+                <button 
+                  class="favorite-btn active"
+                  @click.stop="handleFavorite(task.id)"
+                  title="取消收藏"
+                >
+                  
+                </button>
+              </div>
+              <h3>{{ task.title }}</h3>
+              <p class="task-desc">{{ task.description }}</p>
+              <div class="task-info">
+                <span> {{ task.location }}</span>
+                <span>?{{ task.deadline }}</span>
+              </div>
+              <div class="task-footer">
+                <span class="reward">{{ task.reward }}</span>
+                <span v-if="task.category" class="category-tag" :style="{ backgroundColor: getCategoryColor(task.category) }">
+                  {{ getCategoryIcon(task.category) }} {{ getCategoryLabel(task.category) }}
+                </span>
+              </div>
+              <button 
+                v-if="task.status === 'pending' && !isOwnTask(task)" 
+                class="accept-btn"
+                @click.stop="acceptMarketTask(task.id)"
+              >
+                 接取任务
+              </button>
+            </div>
+          </div>
+          <div v-if="favoriteTasks.length === 0" class="empty-state">
+            <div class="empty-icon"></div>
+            <p>暂无收藏的任务</p>
             <button class="empty-action" @click="currentTab = 'market'">去任务市场</button>
           </div>
         </div>
@@ -159,7 +211,7 @@
         <!-- 我发布的 -->
         <div v-if="currentTab === 'published'" class="panel">
           <div class="panel-header">
-            <h2>📝 我发布的任务</h2>
+            <h2>我发布的任务</h2>
             <span class="count-badge">{{ publishedTasks.length }} 个任务</span>
           </div>
           <div class="filter-tabs">
@@ -185,9 +237,9 @@
                 <h4>{{ task.title }}</h4>
                 <p>{{ task.description }}</p>
                 <div class="task-meta">
-                  <span>⏰ {{ task.deadline }}</span>
-                  <span>🎯 {{ task.reward }}</span>
-                  <span v-if="task.assignee">👤 {{ getAssigneeName(task.assignee) }}</span>
+                  <span>?{{ task.deadline }}</span>
+                  <span> {{ task.reward }}</span>
+                  <span v-if="task.assignee"> {{ getAssigneeName(task.assignee) }}</span>
                 </div>
               </div>
               <div class="task-progress">
@@ -202,7 +254,7 @@
                     class="action-btn primary"
                     @click="handleEdit(task)"
                   >
-                    ✏️ 编辑
+                     编辑
                   </button>
                 </template>
                 <button 
@@ -210,29 +262,29 @@
                   class="action-btn secondary"
                   @click="cancelTask(task.id)"
                 >
-                  ❌ 取消
+                  ?取消
                 </button>
                 <button 
                   v-if="task.status === 'in-progress' && task.applicants.length > 0" 
                   class="action-btn secondary"
                   @click="showApplicants(task)"
                 >
-                  👥 申请人 ({{ task.applicants.length }})
+                   申请({{ task.applicants.length }})
                 </button>
               </div>
             </div>
           </div>
           <div v-if="filteredPublishedTasks.length === 0" class="empty-state">
-            <div class="empty-icon">📭</div>
+            <div class="empty-icon"></div>
             <p>暂无发布的任务</p>
             <router-link to="/publish" class="empty-action">去发布任务</router-link>
           </div>
         </div>
 
-        <!-- 草稿箱 -->
+        <!-- 草稿-->
         <div v-if="currentTab === 'drafts'" class="panel">
           <div class="panel-header">
-            <h2>📋 草稿箱</h2>
+            <h2>草稿</h2>
             <span class="count-badge">{{ myDrafts.length }} 个草稿</span>
           </div>
           <div class="draft-list">
@@ -244,25 +296,25 @@
               <div class="draft-content">
                 <h4>{{ draft.title || '未命名任务' }}</h4>
                 <p class="draft-meta">
-                  <span>📅 {{ formatDate(draft.updatedAt) }}</span>
-                  <span v-if="draft.reward">🎯 {{ draft.reward }}</span>
+                  <span> {{ formatDate(draft.updatedAt) }}</span>
+                  <span v-if="draft.reward"> {{ draft.reward }}</span>
                 </p>
               </div>
               <div class="draft-actions">
                 <button class="action-btn primary" @click="editDraft(draft.id)">
-                  ✏️ 编辑
+                   编辑
                 </button>
                 <button class="action-btn success" @click="publishDraft(draft.id)">
-                  🚀 发布
+                   发布
                 </button>
                 <button class="action-btn danger" @click="deleteDraft(draft.id)">
-                  🗑️ 删除
+                  ?删除
                 </button>
               </div>
             </div>
           </div>
           <div v-if="myDrafts.length === 0" class="empty-state">
-            <div class="empty-icon">📝</div>
+            <div class="empty-icon"></div>
             <p>暂无任务草稿</p>
             <router-link to="/publish" class="empty-action">去发布任务</router-link>
           </div>
@@ -271,32 +323,32 @@
         <!-- 统计分析 -->
         <div v-if="currentTab === 'analytics'" class="panel">
           <div class="panel-header">
-            <h2>📈 统计分析</h2>
+            <h2>统计分析</h2>
           </div>
           <div class="stats-grid">
             <div class="stat-card">
-              <div class="stat-icon">📊</div>
+              <div class="stat-icon"></div>
               <div class="stat-info">
                 <span class="stat-value">{{ myStats.totalPublished }}</span>
                 <span class="stat-label">发布任务</span>
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon">✅</div>
+              <div class="stat-icon"></div>
               <div class="stat-info">
                 <span class="stat-value">{{ myStats.totalCompleted }}</span>
                 <span class="stat-label">完成任务</span>
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon">💰</div>
+              <div class="stat-icon"></div>
               <div class="stat-info">
                 <span class="stat-value">{{ myStats.totalEarned }}</span>
                 <span class="stat-label">累计收入</span>
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-icon">📉</div>
+              <div class="stat-icon"></div>
               <div class="stat-info">
                 <span class="stat-value">{{ myStats.completionRate }}%</span>
                 <span class="stat-label">完成率</span>
@@ -304,7 +356,7 @@
             </div>
           </div>
           <div class="chart-section">
-            <h3>任务状态分布</h3>
+            <h3>任务状态分析</h3>
             <div class="pie-chart">
               <div 
                 v-for="(value, key) in statusDistribution" 
@@ -331,16 +383,16 @@
     <!-- 任务详情弹窗 -->
     <div v-if="showDetailModal" class="modal-overlay" @click="showDetailModal = false">
       <div class="modal-content" @click.stop>
-        <button class="modal-close" @click="showDetailModal = false">✕</button>
+        <button class="modal-close" @click="showDetailModal = false">×</button>
         <h3>{{ selectedTask?.title }}</h3>
         <div class="modal-body">
           <p>{{ selectedTask?.description }}</p>
           <div class="detail-info">
-            <span>📍 {{ selectedTask?.location }}</span>
-            <span>⏰ {{ selectedTask?.deadline }}</span>
-            <span>🎯 {{ selectedTask?.reward }}</span>
+            <span>{{ selectedTask?.location }}</span>
+            <span>{{ selectedTask?.deadline }}</span>
+            <span>{{ selectedTask?.reward }}</span>
             <span v-if="selectedTask?.requiredIdentity">
-              🏷️ {{ getIdentityName(selectedTask.requiredIdentity) }}
+              {{ getIdentityName(selectedTask.requiredIdentity) }}
             </span>
           </div>
         </div>
@@ -349,7 +401,7 @@
           class="modal-action"
           @click="acceptMarketTask(selectedTask.id); showDetailModal = false"
         >
-          🤝 接取任务
+           接取任务
         </button>
       </div>
     </div>
@@ -358,8 +410,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useAuthStore } from '../stores/auth'
-import { useTaskStore } from '../stores/task'
+import { useAuthStore } from '@/stores'
+import { useTaskStore } from '@/stores'
 
 const authStore = useAuthStore()
 const taskStore = useTaskStore()
@@ -376,18 +428,19 @@ const showMyTasks = ref(false)
 
 const publishFilters = [
   { label: '全部', value: 'all' },
-  { label: '待接取', value: 'pending' },
+  { label: '待接收', value: 'pending' },
   { label: '进行中', value: 'in-progress' },
   { label: '已完成', value: 'completed' },
   { label: '已取消', value: 'cancelled' }
 ]
 
 const sidebarTabs = computed(() => [
-  { icon: '📋', label: '任务市场', value: 'market' },
-  { icon: '👤', label: '我领取的', value: 'accepted', badge: authStore.isLoggedIn ? taskStore.getAcceptedTasks(authStore.currentUser?.phone).length : 0 },
-  { icon: '📝', label: '我发布的', value: 'published', badge: authStore.isLoggedIn ? taskStore.getMyPublishedTasks(authStore.currentUser?.phone).length : 0 },
-  { icon: '📋', label: '草稿箱', value: 'drafts', badge: authStore.isLoggedIn ? taskStore.getDraftsByPublisher(authStore.currentUser?.phone).length : 0 },
-  { icon: '📈', label: '统计分析', value: 'analytics' }
+  { icon: '', label: '任务市场', value: 'market' },
+  { icon: '', label: '我领取的', value: 'accepted', badge: authStore.isLoggedIn ? taskStore.getAcceptedTasks(authStore.currentUser?.phone).length : 0 },
+  { icon: '', label: '我发布的', value: 'published', badge: authStore.isLoggedIn ? taskStore.getMyPublishedTasks(authStore.currentUser?.phone).length : 0 },
+  { icon: '', label: '我的收藏', value: 'favorites', badge: authStore.isLoggedIn ? taskStore.getFavoriteTasks(authStore.currentUser?.phone).length : 0 },
+  { icon: '', label: '草稿', value: 'drafts', badge: authStore.isLoggedIn ? taskStore.getDraftsByPublisher(authStore.currentUser?.phone).length : 0 },
+  { icon: '', label: '统计分析', value: 'analytics' }
 ])
 
 const acceptedTasks = computed(() => {
@@ -408,6 +461,11 @@ const filteredPublishedTasks = computed(() => {
 const myDrafts = computed(() => {
   if (!authStore.isLoggedIn) return []
   return taskStore.getDraftsByPublisher(authStore.currentUser.phone)
+})
+
+const favoriteTasks = computed(() => {
+  if (!authStore.isLoggedIn) return []
+  return taskStore.getFavoriteTasks(authStore.currentUser.phone)
 })
 
 const filteredMarketTasks = computed(() => {
@@ -490,17 +548,17 @@ const statusDistribution = computed(() => {
 
 function getStatusIcon(status) {
   const icons = {
-    'pending': '🔔',
-    'in-progress': '📋',
-    'completed': '✅',
-    'cancelled': '❌'
+    'pending': '',
+    'in-progress': '',
+    'completed': '✓',
+    'cancelled': '×'
   }
-  return icons[status] || '📋'
+  return icons[status] || ''
 }
 
 function getStatusText(status) {
   const texts = {
-    'pending': '待接取',
+    'pending': '待接收',
     'in-progress': '进行中',
     'completed': '已完成',
     'cancelled': '已取消'
@@ -579,7 +637,7 @@ function acceptMarketTask(taskId) {
   if (!success) {
     authStore.incrementFailCount()
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `😔 接取失败！成功率 ${Math.round(successRate * 100)}%`, type: 'error' }
+      detail: { message: ` 接取失败成功率 ${Math.round(successRate * 100)}%`, type: 'error' }
     }))
     return
   }
@@ -587,7 +645,7 @@ function acceptMarketTask(taskId) {
   const result = taskStore.acceptTask(taskId, authStore.currentUser.phone)
   if (result.success) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '🎉 任务接取成功！', type: 'success' }
+      detail: { message: '任务接取成功', type: 'success' }
     }))
   } else {
     window.dispatchEvent(new CustomEvent('notification', {
@@ -600,7 +658,7 @@ function completeTask(taskId) {
   const result = taskStore.completeTask(taskId, authStore.currentUser.phone)
   if (result.success) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '🎉 任务完成！奖励已发放', type: 'success' }
+      detail: { message: ' 任务完成奖励已发放', type: 'success' }
     }))
   } else {
     window.dispatchEvent(new CustomEvent('notification', {
@@ -613,7 +671,7 @@ function cancelAcceptTask(taskId) {
   const result = taskStore.cancelAccept(taskId, authStore.currentUser.phone)
   if (result.success) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '任务已取消接取', type: 'success' }
+      detail: { message: '任务已取消接收', type: 'success' }
     }))
   } else {
     window.dispatchEvent(new CustomEvent('notification', {
@@ -655,7 +713,7 @@ function canEdit(task) {
 
 function getEditTip(task) {
   if (task.status === 'in-progress' && task.applicants && task.applicants.length > 0) {
-    return '⚠️ 需要VIP3+'
+    return ' 需要VIP3+'
   }
   return ''
 }
@@ -677,7 +735,7 @@ function handleEdit(task) {
   
   if (task.status === 'in-progress' && task.applicants && task.applicants.length > 0 && authStore.currentUser.vipLevel < 3) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '任务已有申请人，需要VIP3+才能编辑', type: 'warning' }
+      detail: { message: '任务已有申请人需要VIP3+才能编辑', type: 'warning' }
     }))
     return
   }
@@ -687,7 +745,7 @@ function handleEdit(task) {
 
 function showApplicants(task) {
   window.dispatchEvent(new CustomEvent('notification', {
-    detail: { message: `申请人：${task.applicants.length} 人`, type: 'info' }
+    detail: { message: `申请人${task.applicants.length} 人`, type: 'info' }
   }))
 }
 
@@ -700,7 +758,7 @@ function publishDraft(draftId) {
   const result = taskStore.publishDraft(draftId)
   if (result) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '🎉 任务发布成功！', type: 'success' }
+      detail: { message: '任务发布成功', type: 'success' }
     }))
   } else {
     window.dispatchEvent(new CustomEvent('notification', {
@@ -720,6 +778,38 @@ function deleteDraft(draftId) {
       detail: { message: '删除失败', type: 'error' }
     }))
   }
+}
+
+function handleFavorite(taskId) {
+  if (!authStore.isLoggedIn) {
+    window.dispatchEvent(new CustomEvent('notification', {
+      detail: { message: '请先登录', type: 'warning' }
+    }))
+    return
+  }
+
+  const result = taskStore.toggleFavorite(taskId, authStore.currentUser.phone)
+  if (result.success) {
+    const message = result.isFavorite ? '已添加收藏' : '已取消收藏'
+    window.dispatchEvent(new CustomEvent('notification', {
+      detail: { message, type: 'success' }
+    }))
+  }
+}
+
+function getCategoryIcon(category) {
+  const categoryInfo = taskStore.taskCategories[category]
+  return categoryInfo ? categoryInfo.icon : ''
+}
+
+function getCategoryLabel(category) {
+  const categoryInfo = taskStore.taskCategories[category]
+  return categoryInfo ? categoryInfo.label : category
+}
+
+function getCategoryColor(category) {
+  const categoryInfo = taskStore.taskCategories[category]
+  return categoryInfo ? categoryInfo.color : '#6b7280'
 }
 </script>
 

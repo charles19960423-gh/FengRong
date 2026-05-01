@@ -1,12 +1,12 @@
-<template>
+﻿<template>
   <div class="publish-page">
     <div v-if="authStore.isClient" class="client-redirect">
       <div class="redirect-card">
-        <div class="redirect-icon">🏢</div>
-        <h2>欢迎，{{ authStore.currentUser?.companyName }}</h2>
+        <div class="redirect-icon"></div>
+        <h2>欢迎{{ authStore.currentUser?.companyName }}</h2>
         <p>客户用户请点击下方按钮进入任务发布页面</p>
         <button class="redirect-btn" @click="goToClientConsole">
-          🏢 进入客户控制台
+           进入客户控制台
         </button>
       </div>
     </div>
@@ -16,10 +16,10 @@
       <div class="header-row">
         <div>
           <h1>
-            {{ isEditMode ? '⚙️ 编辑任务委托' : '📝 发布新任务委托' }}
+            {{ isEditMode ? ' 编辑任务委托' : ' 发布新任务委托' }}
           </h1>
           <p>
-            {{ isEditMode ? '修改任务信息，注意有人报名后会限制可编辑字段' : '填写任务信息，发布你的悬赏委托' }}
+            {{ isEditMode ? '修改任务信息注意有人报名后会限制可编辑字段' : '填写任务信息发布你的悬赏委托' }}
           </p>
         </div>
         <button v-if="isEditMode" class="exit-edit-btn" @click="exitEditMode">
@@ -27,7 +27,7 @@
         </button>
       </div>
       <div v-if="isEditMode && editPermission.reason" class="edit-permission-tip">
-        ⚠️ {{ editPermission.reason }}
+         {{ editPermission.reason }}
       </div>
     </div>
 
@@ -46,25 +46,25 @@
 
       <form @submit.prevent="submitForm" class="publish-form">
         <div class="form-section">
-          <h2 class="section-title">📋 基本信息</h2>
+          <h2 class="section-title"> 基本信息</h2>
           
           <div class="form-group">
             <label>任务标题 / Title</label>
             <input 
               v-model="form.title" 
               type="text" 
-              placeholder="如：产品发布会活动执行"
+              placeholder="如产品发布会活动执行"
               @blur="validateTitle"
             />
-            <span v-if="errors.title" class="error-text">⚠️ {{ errors.title }}</span>
+            <span v-if="errors.title" class="error-text"> {{ errors.title }}</span>
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>悬赏奖励方式</label>
               <select v-model="form.rewardType" @change="calculateTotalCost">
-                <option value="gold">💰 金币</option>
-                <option value="pearl">💎 淡水珍珠</option>
+                <option value="gold"> 金币</option>
+                <option value="pearl"> 淡水珍珠</option>
               </select>
             </div>
             <div class="form-group">
@@ -75,7 +75,7 @@
                 placeholder="输入奖励数量"
                 @input="calculateTotalCost"
               />
-              <span v-if="errors.rewardAmount" class="error-text">⚠️ {{ errors.rewardAmount }}</span>
+              <span v-if="errors.rewardAmount" class="error-text"> {{ errors.rewardAmount }}</span>
             </div>
           </div>
 
@@ -85,18 +85,18 @@
               <span>{{ getRewardText(form.rewardAmount) }}</span>
             </div>
             <div v-if="form.isUrgent" class="cost-row urgent">
-              <span>加急费用 (+20%)</span>
+              <span>加急费用(+20%)</span>
               <span>+{{ getRewardText(Math.floor(parseInt(form.rewardAmount) * 0.2)) }}</span>
             </div>
             <div class="cost-row total">
-              <span>💰 总费用</span>
+              <span>总费用</span>
               <span class="total-amount">{{ getRewardText(totalCost) }}</span>
             </div>
             <div class="balance-info">
               <span v-if="form.rewardType === 'gold'">当前金币: {{ authStore.currentUser?.coins || 0 }}</span>
               <span v-else>当前珍珠: {{ authStore.currentUser?.pearls || 0 }}</span>
               <span :class="{ warning: !canAfford }">
-                {{ canAfford ? '✓ 余额充足' : '✗ 余额不足' }}
+                {{ canAfford ? '?余额充足' : '?余额不足' }}
               </span>
             </div>
           </div>
@@ -104,26 +104,26 @@
           <div class="form-group">
             <label>任务难度等级</label>
             <select v-model="form.difficulty">
-              <option value="normal">🔹 普通 - 入门任务</option>
-              <option value="good">🔸 精良 - 标准任务</option>
-              <option value="epic">🔶 史诗 - 高级任务</option>
-              <option value="legendary">⭐ 传说 - 史诗级挑战</option>
+              <option value="normal">普通 - 入门任务</option>
+              <option value="good">精良 - 标准任务</option>
+              <option value="epic">史诗 - 高级任务</option>
+              <option value="legendary">传说 - 史诗级挑战</option>
             </select>
           </div>
         </div>
 
         <div class="form-section">
-          <h2 class="section-title">📝 任务详情</h2>
+          <h2 class="section-title"> 任务详情</h2>
           
           <div class="form-group">
             <label>任务描述 / Details</label>
             <textarea 
               v-model="form.description" 
-              placeholder="请描述任务内容、要求、时间需求..."
+              placeholder="请描述任务内容要求时间需.."
               rows="6"
               @blur="validateDescription"
             ></textarea>
-            <span v-if="errors.description" class="error-text">⚠️ {{ errors.description }}</span>
+            <span v-if="errors.description" class="error-text"> {{ errors.description }}</span>
             <span class="char-count">{{ form.description.length }}/500</span>
           </div>
 
@@ -133,10 +133,10 @@
               <input 
                 v-model="form.location" 
                 type="text" 
-                placeholder="如：迷雾森林 / 线上远程"
+                placeholder="如迷雾森林 / 线上远程"
                 @blur="validateLocation"
               />
-              <span v-if="errors.location" class="error-text">⚠️ {{ errors.location }}</span>
+              <span v-if="errors.location" class="error-text"> {{ errors.location }}</span>
             </div>
             <div class="form-group">
               <label>截止日期</label>
@@ -145,28 +145,28 @@
                 type="date" 
                 @blur="validateDeadline"
               />
-              <span v-if="errors.deadline" class="error-text">⚠️ {{ errors.deadline }}</span>
+              <span v-if="errors.deadline" class="error-text"> {{ errors.deadline }}</span>
             </div>
           </div>
 
           <div class="form-group">
             <label>合作方式</label>
             <select v-model="form.cooperationType">
-              <option value="project">📅 3天项目制 (推荐)</option>
-              <option value="long-term">🤝 长期合作</option>
-              <option value="specified">🎯 指定对接</option>
+              <option value="project"> 3天项目制 (推荐)</option>
+              <option value="long-term"> 长期合作</option>
+              <option value="specified"> 指定对接</option>
             </select>
           </div>
         </div>
 
         <div class="form-section">
-          <h2 class="section-title">⚡ 高级选项</h2>
+          <h2 class="section-title">?高级选项</h2>
           
           <div class="form-group checkbox-group">
             <label class="checkbox-label">
               <input type="checkbox" v-model="form.isUrgent" @change="calculateTotalCost" />
-              <span class="checkbox-icon">⚡</span>
-              <span>加急24h 优先处理</span>
+              <span class="checkbox-icon"></span>
+              <span>加急 4h 优先处理</span>
               <span class="fee-hint">(+20%费用)</span>
             </label>
           </div>
@@ -174,7 +174,7 @@
           <div class="form-group checkbox-group">
             <label class="checkbox-label">
               <input type="checkbox" v-model="form.allowShare" />
-              <span class="checkbox-icon">📤</span>
+              <span class="checkbox-icon"></span>
               <span>允许分享此任务</span>
             </label>
           </div>
@@ -183,21 +183,21 @@
         <div class="form-actions">
           <template v-if="!isEditMode">
             <button type="button" class="action-btn secondary" @click="showPreview = true">
-              👁️ 预览
+              ?预览
             </button>
             <button type="button" class="action-btn secondary" @click="resetForm">
-              🗑️ 重置
+              ?重置
             </button>
             <button type="submit" class="action-btn primary" :disabled="isSubmitting || !canAfford || !isFormValid">
-              {{ isSubmitting ? '⏳ 发布中...' : '🚀 发布任务' }}
+              {{ isSubmitting ? '?发布..' : ' 发布任务' }}
             </button>
           </template>
           <template v-else>
             <button type="button" class="action-btn secondary" @click="exitEditMode">
-              🚫 取消
+               取消
             </button>
             <button type="button" class="action-btn primary" @click="submitEdit" :disabled="!editPermission.canEdit">
-              💾 保存修改
+               保存修改
             </button>
           </template>
         </div>
@@ -205,12 +205,12 @@
     </div>
 
     <div class="tips-section">
-      <h3>💡 发布小贴士</h3>
+      <h3>发布小贴士</h3>
       <ul class="tips-list">
-        <li>📌 任务标题要清晰明确，便于冒险者快速理解</li>
-        <li>💰 合理的奖励能吸引更多优秀的冒险者</li>
-        <li>📝 详细的任务描述能减少沟通成本</li>
-        <li>⚡ 加急服务需要额外支付20%的费用</li>
+        <li>任务标题要清晰明确便于冒险者快速理解</li>
+        <li>合理的奖励能吸引更多优秀的冒险者</li>
+        <li>详细的任务描述能减少沟通成本</li>
+        <li>加急服务需要额外支付20%的费用</li>
       </ul>
     </div>
 
@@ -218,25 +218,25 @@
     <div v-if="showPreview" class="modal-overlay" @click.self="showPreview = false">
       <div class="modal-content preview-modal">
         <div class="modal-header">
-          <h3>👁️ 任务预览</h3>
-          <button class="close-btn" @click="showPreview = false">✕</button>
+          <h3>任务预览</h3>
+          <button class="close-btn" @click="showPreview = false">×</button>
         </div>
         <div class="preview-body">
           <div class="preview-title">{{ form.title || '未填写标题' }}</div>
           <div class="preview-meta">
             <span>{{ getDifficultyText() }}</span>
-            <span>📍 {{ form.location || '未填写' }}</span>
-            <span>⏰ {{ form.deadline || '未设置' }}</span>
+            <span>{{ form.location || '未填写' }}</span>
+            <span>📅 {{ form.deadline || '未设置' }}</span>
           </div>
           <div class="preview-reward">
-            💰 奖励: {{ getRewardText(totalCost) }}
+             奖励: {{ getRewardText(totalCost) }}
           </div>
           <div class="preview-description">
             {{ form.description || '未填写描述' }}
           </div>
           <div class="preview-tags">
             <span v-if="form.isUrgent" class="tag urgent">⚡ 加急</span>
-            <span v-if="form.allowShare" class="tag share">📤 可分享</span>
+            <span v-if="form.allowShare" class="tag share">可分享</span>
           </div>
         </div>
         <div class="modal-footer">
@@ -252,9 +252,9 @@
 <script setup>
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
-import { useTaskStore } from '../stores/task'
-import { useTransactionStore } from '../stores/transaction'
+import { useAuthStore } from '@/stores'
+import { useTaskStore } from '@/stores'
+import { useTransactionStore } from '@/stores'
 
 const router = useRouter()
 const route = useRoute()
@@ -281,9 +281,9 @@ const errors = reactive({
 })
 
 const publishTabs = [
-  { value: 'task', label: '任务委托', icon: '📋' },
-  { value: 'team', label: '组队招募', icon: '👥' },
-  { value: 'trade', label: '物品交易', icon: '📦' }
+  { value: 'task', label: '任务委托', icon: '' },
+  { value: 'team', label: '组队招募', icon: '' },
+  { value: 'trade', label: '物品交易', icon: '' }
 ]
 
 const form = reactive({
@@ -355,18 +355,18 @@ function calculateTotalCost() {
 function getRewardText(amount) {
   const num = parseInt(amount) || 0
   const types = {
-    gold: `💰 ${num.toLocaleString()} 金币`,
-    pearl: `💎 ${num} 珍珠`
+    gold: ` ${num.toLocaleString()} 金币`,
+    pearl: ` ${num} 珍珠`
   }
   return types[form.rewardType] || ''
 }
 
 function getDifficultyText() {
   const diffs = {
-    normal: '🔹 普通',
-    good: '🔸 精良',
-    epic: '🔶 史诗',
-    legendary: '⭐ 传说'
+    normal: '普通',
+    good: '精良',
+    epic: '史诗',
+    legendary: '传说'
   }
   return diffs[form.difficulty] || ''
 }
@@ -444,7 +444,7 @@ async function submitForm() {
 
   if (!canAfford.value) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: `${form.rewardType === 'gold' ? '金币' : '珍珠'}不足，无法发布任务`, type: 'warning' }
+      detail: { message: `${form.rewardType === 'gold' ? '金币' : '珍珠'}不足无法发布任务`, type: 'warning' }
     }))
     return
   }
@@ -567,13 +567,13 @@ async function doSubmit() {
     localStorage.removeItem('publish_draft')
 
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '🎉 任务发布成功！', type: 'success' }
+      detail: { message: '任务发布成功', type: 'success' }
     }))
 
     router.push('/tasks')
   } catch (error) {
     window.dispatchEvent(new CustomEvent('notification', {
-      detail: { message: '发布失败，请重试', type: 'error' }
+      detail: { message: '发布失败请重试', type: 'error' }
     }))
   } finally {
     isSubmitting.value = false
@@ -1105,3 +1105,5 @@ function resetForm() {
   }
 }
 </style>
+
+

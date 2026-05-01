@@ -1,13 +1,13 @@
-<template>
+﻿<template>
   <div class="order-page">
     <div class="page-header">
-      <h1>📋 订单管理</h1>
+      <h1> 订单管理</h1>
       <p>查看和管理您的订单</p>
     </div>
 
     <div class="stats-bar">
       <div class="stat-item">
-        <span class="stat-value">¥{{ formatNumber(orderStats.totalAmount) }}</span>
+        <span class="stat-value">{{ formatNumber(orderStats.totalAmount) }}</span>
         <span class="stat-label">累计消费</span>
       </div>
       <div class="stat-item">
@@ -25,22 +25,22 @@
         全部 ({{ userOrders.length }})
       </button>
       <button :class="{ active: activeTab === 'pending_payment' }" @click="activeTab = 'pending_payment'">
-        ⏳ 待支付 ({{ pendingOrders.length }})
+        ?待支({{ pendingOrders.length }})
       </button>
       <button :class="{ active: activeTab === 'processing' }" @click="activeTab = 'processing'">
-        🔄 进行中 ({{ processingOrders.length }})
+         进行({{ processingOrders.length }})
       </button>
       <button :class="{ active: activeTab === 'completed' }" @click="activeTab = 'completed'">
-        ✅ 已完成 ({{ completedOrders.length }})
+        ?已完({{ completedOrders.length }})
       </button>
       <button :class="{ active: activeTab === 'cancelled' }" @click="activeTab = 'cancelled'">
-        ❌ 已取消 ({{ cancelledOrders.length }})
+        ?已取({{ cancelledOrders.length }})
       </button>
     </div>
 
     <div class="order-list">
       <div v-if="filteredOrders.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无相关订单</p>
       </div>
 
@@ -66,18 +66,18 @@
         <div class="order-items">
           <div v-for="(item, index) in order.items" :key="index" class="order-item">
             <span class="item-name">{{ item.name }}</span>
-            <span class="item-price">¥{{ item.price }} × {{ item.quantity }}{{ item.unit }}</span>
+            <span class="item-price">{{ item.price }}  {{ item.quantity }}{{ item.unit }}</span>
           </div>
         </div>
 
         <div class="order-footer">
           <div class="order-info">
-            <span class="order-id">订单号: {{ order.id.slice(-8) }}</span>
+            <span class="order-id">订单 {{ order.id.slice(-8) }}</span>
             <span class="order-time">{{ order.createdAt }}</span>
           </div>
           <div class="order-total">
             <span class="total-label">合计:</span>
-            <span class="total-amount">¥{{ order.actualAmount }}</span>
+            <span class="total-amount">{{ order.actualAmount }}</span>
           </div>
         </div>
 
@@ -90,7 +90,7 @@
 
     <div v-if="showDetailModal" class="modal-overlay" @click.self="showDetailModal = false">
       <div class="modal-content order-detail-modal">
-        <button class="close-btn" @click="showDetailModal = false">×</button>
+        <button class="close-btn" @click="showDetailModal = false"></button>
         
         <div v-if="selectedOrder" class="order-detail">
           <div class="detail-header">
@@ -135,9 +135,9 @@
               <div v-for="(item, index) in selectedOrder.items" :key="index" class="detail-item">
                 <div class="item-info">
                   <span class="item-name">{{ item.name }}</span>
-                  <span class="item-unit">×{{ item.quantity }}{{ item.unit }}</span>
+                  <span class="item-unit">{{ item.quantity }}{{ item.unit }}</span>
                 </div>
-                <span class="item-total">¥{{ item.price * item.quantity }}</span>
+                <span class="item-total">{{ item.price * item.quantity }}</span>
               </div>
             </div>
           </div>
@@ -145,21 +145,21 @@
           <div class="detail-summary">
             <div class="summary-row">
               <span class="summary-label">商品总额</span>
-              <span class="summary-value">¥{{ selectedOrder.totalAmount }}</span>
+              <span class="summary-value">{{ selectedOrder.totalAmount }}</span>
             </div>
             <div v-if="selectedOrder.discountAmount > 0" class="summary-row discount">
               <span class="summary-label">优惠券抵扣</span>
-              <span class="summary-value">-¥{{ selectedOrder.discountAmount }}</span>
+              <span class="summary-value">-{{ selectedOrder.discountAmount }}</span>
             </div>
             <div class="summary-row total">
               <span class="summary-label">实付金额</span>
-              <span class="summary-value">¥{{ selectedOrder.actualAmount }}</span>
+              <span class="summary-value">{{ selectedOrder.actualAmount }}</span>
             </div>
           </div>
 
           <div class="detail-actions">
             <button v-if="selectedOrder.status === 'pending_payment'" class="action-btn primary" @click="handlePay(selectedOrder.id)">
-              立即支付 ¥{{ selectedOrder.actualAmount }}
+              立即支付 {{ selectedOrder.actualAmount }}
             </button>
             <button v-if="selectedOrder.status === 'pending_payment'" class="action-btn" @click="handleCancel(selectedOrder.id)">
               取消订单
@@ -174,8 +174,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useOrderStore } from '../stores/order'
-import { useAuthStore } from '../stores/auth'
+import { useOrderStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 
 const orderStore = useOrderStore()
 const authStore = useAuthStore()
@@ -228,7 +228,7 @@ const orderStats = computed(() => {
 })
 
 function getTypeIcon(type) {
-  return orderStore.orderTypes[type]?.icon || '📦'
+  return orderStore.orderTypes[type]?.icon || ''
 }
 
 function getTypeLabel(type) {
@@ -236,7 +236,7 @@ function getTypeLabel(type) {
 }
 
 function getStatusIcon(status) {
-  return orderStore.orderStatuses[status]?.icon || '📦'
+  return orderStore.orderStatuses[status]?.icon || ''
 }
 
 function getStatusLabel(status) {
@@ -647,3 +647,4 @@ function handleCancel(orderId) {
   }
 }
 </style>
+

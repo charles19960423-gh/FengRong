@@ -1,19 +1,19 @@
 <template>
   <div class="support-page">
     <div class="page-header">
-      <h1>💬 客服中心</h1>
+      <h1> 客服中心</h1>
       <p>获取帮助和支持</p>
     </div>
 
     <div class="tabs">
       <button :class="{ active: activeTab === 'faq' }" @click="activeTab = 'faq'">
-        📖 帮助中心
+         帮助中心
       </button>
       <button :class="{ active: activeTab === 'contact' }" @click="activeTab = 'contact'">
-        📞 联系客服
+         联系客服
       </button>
       <button :class="{ active: activeTab === 'feedback' }" @click="activeTab = 'feedback'">
-        📝 意见反馈
+         意见反馈
       </button>
     </div>
 
@@ -55,7 +55,7 @@
           <div class="faq-header">
             <span class="faq-icon">{{ getCategoryIcon(item.category) }}</span>
             <span class="faq-title">{{ item.question }}</span>
-            <span class="faq-arrow" :class="{ expanded: expandedFAQ === item.id }">▶</span>
+            <span class="faq-arrow" :class="{ expanded: expandedFAQ === item.id }">></span>
           </div>
           <div v-if="expandedFAQ === item.id" class="faq-content">
             {{ item.answer }}
@@ -66,16 +66,16 @@
 
     <div v-if="activeTab === 'contact'" class="contact-section">
       <div class="contact-card">
-        <div class="contact-icon">💬</div>
+        <div class="contact-icon"></div>
         <div class="contact-info">
           <div class="contact-title">在线客服</div>
-          <div class="contact-desc">工作日 9:00 - 21:00</div>
+          <div class="contact-desc">工作9:00 - 21:00</div>
         </div>
         <button class="contact-btn" @click="startChat">开始对话</button>
       </div>
 
       <div class="contact-card">
-        <div class="contact-icon">📧</div>
+        <div class="contact-icon"></div>
         <div class="contact-info">
           <div class="contact-title">邮箱</div>
           <div class="contact-desc">support@fengrong.com</div>
@@ -83,7 +83,7 @@
       </div>
 
       <div class="contact-card">
-        <div class="contact-icon">📱</div>
+        <div class="contact-icon"></div>
         <div class="contact-info">
           <div class="contact-title">电话</div>
           <div class="contact-desc">400-888-8888</div>
@@ -91,10 +91,10 @@
       </div>
 
       <div class="contact-card">
-        <div class="contact-icon">⏰</div>
+        <div class="contact-icon"></div>
         <div class="contact-info">
           <div class="contact-title">服务时间</div>
-          <div class="contact-desc">周一至周日 9:00 - 22:00</div>
+          <div class="contact-desc">周一至周9:00 - 22:00</div>
         </div>
       </div>
     </div>
@@ -105,10 +105,10 @@
           <label>反馈类型</label>
           <select v-model="feedbackForm.type">
             <option value="">请选择反馈类型</option>
-            <option value="bug">🐛 问题反馈</option>
-            <option value="feature">✨ 功能建议</option>
-            <option value="complaint">😤 投诉</option>
-            <option value="other">💬 其他</option>
+            <option value="bug"> 问题反馈</option>
+            <option value="feature">功能建议</option>
+            <option value="complaint"> 投诉</option>
+            <option value="other"> 其他</option>
           </select>
         </div>
         <div class="form-group">
@@ -131,10 +131,10 @@
       <div class="modal-content chat-modal">
         <div class="chat-header">
           <div class="chat-title">在线客服</div>
-          <button class="close-btn" @click="showChatModal = false">×</button>
+          <button class="close-btn" @click="showChatModal = false"></button>
         </div>
         <div class="chat-messages">
-          <div class="system-message">客服小美已上线，请问有什么可以帮助您的？</div>
+          <div class="system-message">客服小美已上线请问有什么可以帮助您的</div>
           <div
             v-for="msg in chatMessages"
             :key="msg.id"
@@ -178,87 +178,87 @@ const feedbackForm = reactive({
 })
 
 const categories = [
-  { id: 'account', name: '账号相关', icon: '👤' },
-  { id: 'task', name: '任务相关', icon: '📋' },
-  { id: 'payment', name: '支付相关', icon: '💰' },
-  { id: 'coupon', name: '优惠券', icon: '🎫' },
-  { id: 'event', name: '活动相关', icon: '🎪' }
+  { id: 'account', name: '账号相关', icon: '' },
+  { id: 'task', name: '任务相关', icon: '' },
+  { id: 'payment', name: '支付相关', icon: '' },
+  { id: 'coupon', name: '优惠券', icon: '' },
+  { id: 'event', name: '活动相关', icon: '' }
 ]
 
 const faqItems = [
   {
     id: 'faq-001',
     category: 'account',
-    question: '如何修改密码？',
-    answer: '您可以进入「我的」-「设置」-「安全设置」页面，点击「修改密码」按钮，按照提示输入原密码和新密码即可完成修改。'
+    question: '如何修改密码',
+    answer: '您可以进入我的设置安全设置页面点击修改密码按钮按照提示输入原密码和新密码即可完成修改'
   },
   {
     id: 'faq-002',
     category: 'account',
-    question: '忘记密码怎么办？',
-    answer: '在登录页面点击「忘记密码」，输入您的手机号，系统会发送验证码到您的手机，通过验证码验证后即可重置密码。'
+    question: '忘记密码怎么办',
+    answer: '在登录页面点击忘记密码输入您的手机号系统会发送验证码到您的手机通过验证码验证后即可重置密码'
   },
   {
     id: 'faq-003',
     category: 'task',
-    question: '如何发布任务？',
-    answer: '进入「发布」页面，选择任务类型，填写任务详情、预算、截止时间等信息，点击发布即可。任务会在审核通过后显示在任务列表中。'
+    question: '如何发布任务',
+    answer: '进入发布页面选择任务类型填写任务详情预算截止时间等信息点击发布即可任务会在审核通过后显示在任务列表中'
   },
   {
     id: 'faq-004',
     category: 'task',
-    question: '任务完成后如何结算？',
-    answer: '任务完成并验收通过后，赏金会自动转入您的账户余额中。您可以在「钱包」页面查看余额并进行提现操作。'
+    question: '任务完成后如何结算',
+    answer: '任务完成并验收通过后赏金会自动转入您的账户余额中您可以在钱包页面查看余额并进行提现操作'
   },
   {
     id: 'faq-005',
     category: 'payment',
-    question: '支持哪些支付方式？',
-    answer: '目前支持微信支付和支付宝两种支付方式。充值时选择您偏好的支付方式即可完成支付。'
+    question: '支持哪些支付方式',
+    answer: '目前支持微信支付和支付宝两种支付方式充值时选择您偏好的支付方式即可完成支付'
   },
   {
     id: 'faq-006',
     category: 'payment',
-    question: '如何申请提现？',
-    answer: '进入「钱包」页面，点击「提现」按钮，选择提现方式（微信或支付宝），输入提现金额和收款账户信息，提交后等待审核即可。'
+    question: '如何申请提现',
+    answer: '进入钱包页面点击提现按钮选择提现方式微信或支付宝输入提现金额和收款账户信息提交后等待审核即可'
   },
   {
     id: 'faq-007',
     category: 'coupon',
-    question: '优惠券如何使用？',
-    answer: '在结算订单时，系统会自动显示可用的优惠券。您可以选择使用优惠券抵扣部分金额。优惠券有使用门槛和有效期限制，请在有效期内使用。'
+    question: '优惠券如何使用',
+    answer: '在结算订单时系统会自动显示可用的优惠券您可以选择使用优惠券抵扣部分金额优惠券有使用门槛和有效期限制请在有效期内使用'
   },
   {
     id: 'faq-008',
     category: 'coupon',
-    question: '如何获取优惠券？',
-    answer: '您可以通过完成任务、达成成就、参与活动等方式获取优惠券。也可以在「优惠券中心」领取平台发放的优惠券。'
+    question: '如何获取优惠券',
+    answer: '您可以通过完成任务达成成就参与活动等方式获取优惠券也可以在优惠券中心领取平台发放的优惠券'
   },
   {
     id: 'faq-009',
     category: 'event',
-    question: '如何报名参加活动？',
-    answer: '进入「聚会」页面，选择您感兴趣的活动，点击「立即报名」按钮，按照提示完成报名流程即可。部分活动需要支付费用。'
+    question: '如何报名参加活动',
+    answer: '进入聚会页面选择您感兴趣的活动点击立即报名按钮按照提示完成报名流程即可部分活动需要支付费用'
   },
   {
     id: 'faq-010',
     category: 'event',
-    question: '活动取消后如何退款？',
-    answer: '如果您报名的活动被取消，系统会自动将费用退还至您的账户余额中。您可以在「钱包」页面查看退款记录。'
+    question: '活动取消后如何退款',
+    answer: '如果您报名的活动被取消系统会自动将费用退还至您的账户余额中您可以在钱包页面查看退款记录'
   }
 ]
 
 const autoReplies = [
-  '好的，我已收到您的问题，正在为您查询相关信息...',
-  '感谢您的反馈，我们会尽快处理您的问题。',
-  '您可以在帮助中心查找更多相关信息。',
-  '请详细描述您的问题，以便我更好地帮助您。',
-  '您的问题已记录，我们会在1-3个工作日内回复您。'
+  '好的我已收到您的问题正在为您查询相关信息...',
+  '感谢您的反馈我们会尽快处理您的问题',
+  '您可以在帮助中心查找更多相关信息',
+  '请详细描述您的问题以便我更好地帮助您',
+  '您的问题已记录我们会在1-3个工作日内回复您'
 ]
 
 function getCategoryIcon(category) {
   const cat = categories.find(c => c.id === category)
-  return cat?.icon || '📖'
+  return cat?.icon || ''
 }
 
 const filteredFAQ = computed(() => {
@@ -328,7 +328,7 @@ function submitFeedback() {
     return
   }
 
-  alert('反馈提交成功！感谢您的宝贵意见，我们会尽快处理。')
+  alert('反馈提交成功感谢您的宝贵意见我们会尽快处理')
   
   feedbackForm.type = ''
   feedbackForm.title = ''
@@ -672,3 +672,4 @@ function submitFeedback() {
   }
 }
 </style>
+

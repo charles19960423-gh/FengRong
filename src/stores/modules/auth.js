@@ -36,10 +36,8 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const isLoggedIn = computed(() => !!token.value && !!currentUser.value)
-
   const isClient = computed(() => currentUser.value?.role === 'client')
-
-  const isAdmin = computed(() => currentUser.value?.role === 'admin' || currentUser.value?.role === 'admin')
+  const isAdmin = computed(() => currentUser.value?.role === 'admin')
 
   const currentDiscount = computed(() => {
     if (!currentUser.value) return 1

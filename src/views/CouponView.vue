@@ -1,28 +1,28 @@
-<template>
+﻿<template>
   <div class="coupon-page">
     <div class="page-header">
-      <h1>🎫 优惠券中心</h1>
+      <h1>优惠券中心</h1>
       <p>查看和管理您的优惠券</p>
     </div>
 
     <div class="tabs">
       <button :class="{ active: activeTab === 'available' }" @click="activeTab = 'available'">
-        📦 可用优惠券 ({{ availableCoupons.length }})
+        可用优惠券({{ availableCoupons.length }})
       </button>
       <button :class="{ active: activeTab === 'used' }" @click="activeTab = 'used'">
-        ✅ 已使用 ({{ usedCoupons.length }})
+        已使用({{ usedCoupons.length }})
       </button>
       <button :class="{ active: activeTab === 'expired' }" @click="activeTab = 'expired'">
-        ⏰ 已过期 ({{ expiredCoupons.length }})
+        已过期({{ expiredCoupons.length }})
       </button>
       <button :class="{ active: activeTab === 'receive' }" @click="activeTab = 'receive'">
-        🎁 领取优惠券
+        领取优惠券
       </button>
     </div>
 
     <div v-if="activeTab === 'available'" class="coupon-list">
       <div v-if="availableCoupons.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无可用优惠券</p>
       </div>
       <div
@@ -33,7 +33,7 @@
         <div class="coupon-left">
           <div class="coupon-icon">{{ coupon.template?.icon }}</div>
           <div class="coupon-value">
-            <span class="value-symbol">¥</span>
+            <span class="value-symbol"></span>
             <span class="value-amount">{{ coupon.template?.value }}</span>
           </div>
           <div class="coupon-condition">
@@ -55,7 +55,7 @@
 
     <div v-if="activeTab === 'used'" class="coupon-list">
       <div v-if="usedCoupons.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无已使用的优惠券</p>
       </div>
       <div
@@ -66,7 +66,7 @@
         <div class="coupon-left">
           <div class="coupon-icon">{{ coupon.template?.icon }}</div>
           <div class="coupon-value used-value">
-            <span class="value-symbol">¥</span>
+            <span class="value-symbol"></span>
             <span class="value-amount">{{ coupon.template?.value }}</span>
           </div>
         </div>
@@ -74,7 +74,7 @@
           <div class="coupon-name">{{ coupon.template?.name }}</div>
           <div class="coupon-meta">
             <span class="used-date">使用时间: {{ coupon.usedAt }}</span>
-            <span class="order-id">订单号: {{ coupon.orderId?.slice(-8) }}</span>
+            <span class="order-id">订单 {{ coupon.orderId?.slice(-8) }}</span>
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@
 
     <div v-if="activeTab === 'expired'" class="coupon-list">
       <div v-if="expiredCoupons.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无已过期的优惠券</p>
       </div>
       <div
@@ -93,7 +93,7 @@
         <div class="coupon-left">
           <div class="coupon-icon">{{ coupon.template?.icon }}</div>
           <div class="coupon-value expired-value">
-            <span class="value-symbol">¥</span>
+            <span class="value-symbol"></span>
             <span class="value-amount">{{ coupon.template?.value }}</span>
           </div>
         </div>
@@ -108,9 +108,9 @@
     </div>
 
     <div v-if="activeTab === 'receive'" class="receive-section">
-      <h2>🎁 可领取的优惠券</h2>
+      <h2>可领取的优惠券</h2>
       <div v-if="availableTemplates.length === 0" class="empty-state">
-        <div class="empty-icon">🎉</div>
+        <div class="empty-icon"></div>
         <p>当前没有可领取的优惠券</p>
       </div>
       <div class="receive-list">
@@ -131,7 +131,7 @@
             </div>
           </div>
           <div class="receive-value">
-            <span class="value-symbol">¥</span>
+            <span class="value-symbol"></span>
             <span class="value-amount">{{ template.value }}</span>
           </div>
           <button class="receive-btn" @click="receiveCoupon(template.id)">
@@ -145,8 +145,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useCouponStore } from '../stores/coupon'
-import { useAuthStore } from '../stores/auth'
+import { useCouponStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 
 const couponStore = useCouponStore()
 const authStore = useAuthStore()
@@ -473,3 +473,4 @@ function receiveCoupon(templateId) {
   }
 }
 </style>
+

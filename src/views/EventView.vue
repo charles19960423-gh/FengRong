@@ -1,8 +1,8 @@
 <template>
   <div class="event-page">
     <div class="page-header">
-      <h1>🎪 线下聚会</h1>
-      <p>传媒行业线下活动，同行聚会、经验分享、工作坊等</p>
+      <h1> 线下聚会</h1>
+      <p>传媒行业线下活动同行聚会经验分享工作坊</p>
     </div>
 
     <div class="stats-bar">
@@ -32,10 +32,10 @@
 
     <div class="tabs">
       <button :class="{ active: currentTab === 'discover' }" @click="currentTab = 'discover'">
-        🔍 发现活动
+         发现活动
       </button>
       <button :class="{ active: currentTab === 'my-events' }" @click="currentTab = 'my-events'" v-if="authStore.isLoggedIn">
-        📋 我的活动
+         我的活动
       </button>
     </div>
 
@@ -75,27 +75,27 @@
           <p class="card-description">{{ event.description }}</p>
           <div class="card-info">
             <div class="info-item">
-              <span class="info-icon">📅</span>
+              <span class="info-icon"></span>
               <span>{{ event.eventDate }} {{ event.eventTime }}</span>
             </div>
             <div class="info-item">
-              <span class="info-icon">📍</span>
+              <span class="info-icon"></span>
               <span>{{ event.venue }}</span>
             </div>
             <div class="info-item">
-              <span class="info-icon">💰</span>
-              <span>{{ event.ticketPrice === 0 ? '免费' : '¥' + event.ticketPrice }}</span>
+              <span class="info-icon"></span>
+              <span>{{ event.ticketPrice === 0 ? '免费' : '' + event.ticketPrice }}</span>
             </div>
           </div>
           <div class="card-footer">
-            <span class="host">👤 {{ event.hostName }}</span>
-            <span class="attendees">👥 {{ event.attendees.length }}{{ event.capacity ? '/' + event.capacity : '' }}</span>
+            <span class="host"> {{ event.hostName }}</span>
+            <span class="attendees"> {{ event.participants }}{{ event.capacity ? '/' + event.capacity : '' }}</span>
           </div>
         </div>
       </div>
 
       <div v-if="filteredEvents.length === 0" class="empty-state">
-        <div class="empty-icon">🎪</div>
+        <div class="empty-icon"></div>
         <p>暂无相关活动</p>
         <button class="empty-action" @click="showCreateModal = true" v-if="authStore.isLoggedIn">创建第一个活动</button>
       </div>
@@ -129,7 +129,7 @@
       </div>
 
       <div v-if="myEvents.length === 0" class="empty-state">
-        <div class="empty-icon">📋</div>
+        <div class="empty-icon"></div>
         <p>你还没有参加或创建的活动</p>
       </div>
     </div>
@@ -140,7 +140,7 @@
         <form @submit.prevent="createEvent">
           <div class="form-group">
             <label>活动名称</label>
-            <input v-model="newEvent.title" type="text" placeholder="如：枫榕赏金酒馆线下聚会" required />
+            <input v-model="newEvent.title" type="text" placeholder="如枫榕赏金酒馆线下聚会" required />
           </div>
           <div class="form-group">
             <label>活动类型</label>
@@ -166,11 +166,11 @@
           </div>
           <div class="form-group">
             <label>活动时长</label>
-            <input v-model="newEvent.duration" type="text" placeholder="如：3小时" />
+            <input v-model="newEvent.duration" type="text" placeholder="如3小时" />
           </div>
           <div class="form-group">
             <label>活动地点</label>
-            <input v-model="newEvent.venue" type="text" placeholder="如：上海市静安区某某酒吧" required />
+            <input v-model="newEvent.venue" type="text" placeholder="如上海市静安区某某酒吧" required />
           </div>
           <div class="form-group">
             <label>详细地址</label>
@@ -188,7 +188,7 @@
           </div>
           <div class="form-group">
             <label>标签 (用逗号分隔)</label>
-            <input v-model="tagsInput" type="text" placeholder="如：社交,行业交流,同行聚会" />
+            <input v-model="tagsInput" type="text" placeholder="如社交,行业交流,同行聚会" />
           </div>
           <div class="modal-actions">
             <button type="button" class="btn-cancel" @click="showCreateModal = false">取消</button>
@@ -213,64 +213,51 @@
           <p class="detail-description">{{ selectedEvent.description }}</p>
           <div class="detail-info">
             <div class="info-row">
-              <span class="info-label">📅 日期时间</span>
+              <span class="info-label"> 日期时间</span>
               <span>{{ selectedEvent.eventDate }} {{ selectedEvent.eventTime }}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">⏱️ 活动时长</span>
+              <span class="info-label"> 活动时长</span>
               <span>{{ selectedEvent.duration }}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">📍 活动地点</span>
+              <span class="info-label"> 活动地点</span>
               <span>{{ selectedEvent.venue }}</span>
             </div>
             <div v-if="selectedEvent.address" class="info-row">
-              <span class="info-label">🏠 详细地址</span>
+              <span class="info-label"> 详细地址</span>
               <span>{{ selectedEvent.address }}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">👤 主办方</span>
+              <span class="info-label">主办方</span>
               <span>{{ selectedEvent.hostName }}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">💰 门票价格</span>
-              <span>{{ selectedEvent.ticketPrice === 0 ? '免费' : '¥' + selectedEvent.ticketPrice }}</span>
+              <span class="info-label">门票价格</span>
+              <span>{{ selectedEvent.ticketPrice === 0 ? '免费' : '' + selectedEvent.ticketPrice }}</span>
             </div>
             <div class="info-row">
-              <span class="info-label">👥 报名人数</span>
-              <span>{{ selectedEvent.attendees.length }}{{ selectedEvent.capacity ? '/' + selectedEvent.capacity : '' }}人</span>
+              <span class="info-label">报名人数</span>
+              <span>{{ selectedEvent.participants }}{{ selectedEvent.capacity ? '/' + selectedEvent.capacity : '' }}</span>
             </div>
           </div>
           <div class="detail-tags">
             <span v-for="tag in selectedEvent.tags" :key="tag" class="tag">#{{ tag }}</span>
           </div>
 
-          <div v-if="selectedEvent.pendingApplications.length > 0 && selectedEvent.hostId === authStore.currentUser?.phone" class="applications-section">
-            <h4>报名申请 ({{ selectedEvent.pendingApplications.length }})</h4>
-            <div class="applications-list">
-              <div v-for="app in selectedEvent.pendingApplications" :key="app.userId" class="application-item">
-                <div class="app-info">
-                  <span class="app-name">{{ app.nickname }}</span>
-                  <span class="app-message">{{ app.message || '无留言' }}</span>
-                  <span class="app-time">{{ app.applyTime }}</span>
-                </div>
-                <div class="app-actions">
-                  <button class="btn-accept" @click="handleConfirm(app.userId)">确认</button>
-                  <button class="btn-reject" @click="handleReject(app.userId)">拒绝</button>
-                </div>
-              </div>
-            </div>
+          <div v-if="selectedEvent.hostId === authStore.currentUser?.phone" class="applications-section">
+            <h4>报名申请 (0)</h4>
           </div>
 
           <div class="attendees-section">
-            <h4>已报名 ({{ selectedEvent.attendees.length }})</h4>
+            <h4>已报({{ selectedEvent.participants }})</h4>
             <div class="attendees-list">
-              <div v-for="attendee in selectedEvent.attendees.slice(0, 10)" :key="attendee.userId" class="attendee-item">
-                <span class="attendee-avatar">👤</span>
-                <span class="attendee-name">{{ attendee.nickname }}</span>
+              <div v-for="reg in eventStore.registrations.filter(r => r.eventId === selectedEvent.id).slice(0, 10)" :key="reg.id" class="attendee-item">
+                <span class="attendee-avatar"></span>
+                <span class="attendee-name">{{ reg.userName }}</span>
               </div>
-              <div v-if="selectedEvent.attendees.length > 10" class="more-attendees">
-                还有 {{ selectedEvent.attendees.length - 10 }} 人
+              <div v-if="selectedEvent.participants > 10" class="more-attendees">
+                还有 {{ selectedEvent.participants - 10 }} 人
               </div>
             </div>
           </div>
@@ -301,8 +288,8 @@
         <h2>报名参加活动</h2>
         <form @submit.prevent="submitApplication">
           <div class="form-group">
-            <label>留言 (可选)</label>
-            <textarea v-model="applyForm.message" placeholder="说点什么..." rows="3"></textarea>
+            <label>留言 (可</label>
+            <textarea v-model="applyForm.message" placeholder="说点什.." rows="3"></textarea>
           </div>
           <div class="modal-actions">
             <button type="button" class="btn-cancel" @click="showApplyModal = false">取消</button>
@@ -316,8 +303,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useEventStore } from '../stores/event'
-import { useAuthStore } from '../stores/auth'
+import { useEventStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 
 const eventStore = useEventStore()
 const authStore = useAuthStore()
@@ -334,7 +321,7 @@ const tagsInput = ref('')
 
 const newEvent = ref({
   title: '',
-  type: 'gathering',
+  type: 'activity',
   description: '',
   eventDate: '',
   eventTime: '',
@@ -374,14 +361,16 @@ const myEvents = computed(() => {
 function canApply(event) {
   if (!authStore.isLoggedIn || event.status === 'completed' || event.status === 'cancelled') return false
   if (event.hostId === authStore.currentUser?.phone) return false
-  if (event.attendees.some(a => a.userId === authStore.currentUser?.phone)) return false
-  if (event.pendingApplications.some(a => a.userId === authStore.currentUser?.phone)) return false
+  const existingReg = eventStore.registrations.find(
+    r => r.eventId === event.id && r.userId === authStore.currentUser?.phone
+  )
+  if (existingReg) return false
   return true
 }
 
 function isAttending(event) {
   if (!authStore.currentUser?.phone) return false
-  return event.attendees.some(a => a.userId === authStore.currentUser.phone)
+  return eventStore.registrations.some(r => r.eventId === event.id && r.userId === authStore.currentUser.phone)
 }
 
 function isHost(event) {
@@ -413,7 +402,7 @@ function createEvent() {
   showCreateModal.value = false
   newEvent.value = {
     title: '',
-    type: 'gathering',
+    type: 'activity',
     description: '',
     eventDate: '',
     eventTime: '',
@@ -451,7 +440,7 @@ function submitApplication() {
 
   if (result.success) {
     showApplyModal.value = false
-    alert('报名申请已提交！')
+    alert('报名申请已提交')
     selectedEvent.value = eventStore.getEventById(selectedEvent.value.id)
     applyForm.value = { message: '' }
   } else {
@@ -943,3 +932,4 @@ onMounted(() => {
   }
 }
 </style>
+

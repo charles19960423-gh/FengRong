@@ -1,13 +1,13 @@
 <template>
   <div class="milestone-page">
     <div class="page-header">
-      <h1>📊 里程碑中心</h1>
-      <p>追踪年度、季度、月度任务进度</p>
+      <h1>里程碑中心</h1>
+      <p>追踪年度季度月度任务进度</p>
     </div>
 
     <div class="progress-overview">
       <div class="progress-card annual">
-        <div class="progress-icon">📅</div>
+        <div class="progress-icon"></div>
         <div class="progress-info">
           <h3>年度目标</h3>
           <div class="progress-bar-container">
@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="progress-card quarterly">
-        <div class="progress-icon">🗓️</div>
+        <div class="progress-icon"></div>
         <div class="progress-info">
           <h3>Q{{ currentQuarter }} 季度目标</h3>
           <div class="progress-bar-container">
@@ -27,9 +27,9 @@
         </div>
       </div>
       <div class="progress-card monthly">
-        <div class="progress-icon">📆</div>
+        <div class="progress-icon"></div>
         <div class="progress-info">
-          <h3>{{ currentMonth }} 月目标</h3>
+          <h3>{{ currentMonth }}月目标</h3>
           <div class="progress-bar-container">
             <div class="progress-bar" :style="{ width: taskStore.monthlyProgress + '%' }"></div>
           </div>
@@ -54,10 +54,10 @@
         <option v-for="year in availableYears" :key="year" :value="year">{{ year }}年</option>
       </select>
       <button v-if="currentCycle === 'quarterly'" class="quarter-select" @click="showQuarterPicker = !showQuarterPicker">
-        Q{{ selectedQuarter }} ▼
+        Q{{ selectedQuarter }}
       </button>
       <button v-if="currentCycle === 'monthly'" class="month-select" @click="showMonthPicker = !showMonthPicker">
-        {{ selectedMonth }}月 ▼
+        {{ selectedMonth }}月
       </button>
       <button class="create-btn" @click="showCreateModal = true">+ 创建里程碑</button>
     </div>
@@ -85,10 +85,10 @@
         </div>
         <p class="milestone-description">{{ milestone.description }}</p>
         <div class="milestone-meta">
-          <span v-if="milestone.cycle === 'quarterly'">📅 {{ milestone.year }}年 Q{{ milestone.quarter }}</span>
-          <span v-else-if="milestone.cycle === 'monthly'">📅 {{ milestone.year }}年 {{ milestone.month }}月</span>
-          <span v-else>📅 {{ milestone.year }}年</span>
-          <span>📋 {{ getSubTasksCount(milestone.id) }} 个子任务</span>
+          <span v-if="milestone.cycle === 'quarterly'"> {{ milestone.year }}?Q{{ milestone.quarter }}</span>
+          <span v-else-if="milestone.cycle === 'monthly'"> {{ milestone.year }}?{{ milestone.month }}></span>
+          <span v-else> {{ milestone.year }}></span>
+          <span> {{ getSubTasksCount(milestone.id) }} 个子任务</span>
         </div>
         <div class="milestone-progress">
           <div class="progress-bar-container">
@@ -113,20 +113,20 @@
               :class="subtask.status"
             >
               <span class="subtask-status">
-                {{ subtask.status === 'completed' ? '✅' : subtask.status === 'in-progress' ? '🔄' : '⏳' }}
+                {{ subtask.status === 'completed' ? '✓' : subtask.status === 'in-progress' ? '进行中' : '未开始' }}
               </span>
               <span class="subtask-title">{{ subtask.title }}</span>
               <span class="subtask-deadline">{{ subtask.deadline }}</span>
             </div>
             <div v-if="getSubTasks(milestone.id).length === 0" class="empty-subtasks">
-              暂无子任务，点击「生成子任务」自动创建
+              暂无子任务点击生成子任务自动创建
             </div>
           </div>
         </div>
       </div>
 
       <div v-if="filteredMilestones.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
+        <div class="empty-icon"></div>
         <p>暂无里程碑</p>
         <button class="empty-action" @click="showCreateModal = true">创建第一个里程碑</button>
       </div>
@@ -138,7 +138,7 @@
         <form @submit.prevent="createMilestone">
           <div class="form-group">
             <label>里程碑名称</label>
-            <input v-model="newMilestone.title" type="text" placeholder="如：2024年度核心目标" required />
+            <input v-model="newMilestone.title" type="text" placeholder="如2024年度核心目标" required />
           </div>
           <div class="form-group">
             <label>描述</label>
@@ -148,9 +148,9 @@
             <div class="form-group">
               <label>周期</label>
               <select v-model="newMilestone.cycle">
-                <option value="annual">📅 年度</option>
-                <option value="quarterly">🗓️ 季度</option>
-                <option value="monthly">📆 月度</option>
+                <option value="annual"> 年度</option>
+                <option value="quarterly">?季度</option>
+                <option value="monthly"> 月度</option>
               </select>
             </div>
             <div class="form-group">
@@ -184,8 +184,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useTaskStore } from '../stores/task'
-import { useAuthStore } from '../stores/auth'
+import { useTaskStore } from '@/stores'
+import { useAuthStore } from '@/stores'
 
 const taskStore = useTaskStore()
 const authStore = useAuthStore()
@@ -212,9 +212,9 @@ const availableYears = computed(() => {
 })
 
 const cycleTabs = [
-  { value: 'annual', label: '年度', icon: '📅' },
-  { value: 'quarterly', label: '季度', icon: '🗓️' },
-  { value: 'monthly', label: '月度', icon: '📆' }
+  { value: 'annual', label: '年度', icon: '' },
+  { value: 'quarterly', label: '季度', icon: '' },
+  { value: 'monthly', label: '月度', icon: '' }
 ]
 
 const newMilestone = ref({
@@ -288,7 +288,7 @@ function generateSubTasks(milestone) {
   const cycle = milestone.cycle === 'annual' ? 'quarterly' : 'monthly'
   const subtasks = taskStore.createSubTasksFromMilestone(milestone.id, cycle)
   if (subtasks.length > 0) {
-    alert(`成功生成 ${subtasks.length} 个子任务！`)
+    alert(`成功生成 ${subtasks.length} 个子任务`)
   }
 }
 
@@ -680,3 +680,4 @@ onMounted(() => {
   }
 }
 </style>
+
